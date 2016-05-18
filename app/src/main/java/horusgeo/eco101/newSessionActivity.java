@@ -22,7 +22,7 @@ public class newSessionActivity extends AppCompatActivity {
 
         WebView myWebView = (WebView) findViewById(R.id.webView);
         assert myWebView != null;
-        myWebView.loadUrl("file:///android_asset/www/leaflet.html");
+        myWebView.loadUrl("file:///android_asset/www/teste.html");
 //        myWebView.loadUrl("http://www.globo.com");
 
         WebSettings webSettings = myWebView.getSettings();

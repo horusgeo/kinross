@@ -22,4 +22,5 @@
     <string name="por_favor_selecione_uma_op_o">Por favor, selecione uma opção:</string>
     <string name="continuar">Continuar</string>
     <string name="title_activity_new_session">newSessionActivity</string>
+    <string name="fazer_download_e_continuar">Fazer Download e Continuar</string>
 </resources>
