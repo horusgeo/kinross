@@ -5,12 +5,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
-public class newSessionActivity extends AppCompatActivity {
+public class NewSessionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,17 +24,28 @@ public class newSessionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+    }
 
-        WebView myWebView = (WebView) findViewById(R.id.webView);
-        assert myWebView != null;
-        myWebView.loadUrl("file:///android_asset/www/teste.html");
-//        myWebView.loadUrl("http://www.globo.com");
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus){
+        ImageView img = (ImageView) findViewById(R.id.mapNewSession);
+        Log.w("IMAGE SIZE", "Width = " + img.getWidth());
+        Log.w("IMAGE SIZE", "Height = " + img.getHeight());
 
-        WebSettings webSettings = myWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
 
-        myWebView.setWebViewClient(new WebViewClient());
 
     }
 
+//    private void createSections(){
+//        ImageButton buttons[];
+//
+//        ImageButton aux = new ImageButton(this);
+//        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,400);
+//        aux.setLayoutParams();
+//
+//    }
+
 }
+
+
+

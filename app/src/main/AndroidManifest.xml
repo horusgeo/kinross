@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -23,15 +24,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".homeActivity"
+            android:name=".HomeActivity"
             android:label="Início"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".newSessionActivity"
+            android:name=".NewSessionActivity"
             android:label="Selecione a(s) sessão(ões):"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ContinueSessionActivity"
+            android:label="@string/title_activity_continue_session"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CloseSessionActivity"
+            android:label="@string/title_activity_close_session"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MapActivity"
+            android:label="@string/title_activity_map"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

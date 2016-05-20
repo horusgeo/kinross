@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "eco101@horusgeo.com.br:eco101", "teste@teste:teste"
+            "cappe:eco101","teste:teste"
     };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -177,11 +177,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
         }
+//        } else if (!isEmailValid(email)) {
+//            mEmailView.setError(getString(R.string.error_invalid_email));
+//            focusView = mEmailView;
+//            cancel = true;
+//        }
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -336,8 +337,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(LoginActivity.this, homeActivity.class);
-                String[] pieces = mEmail.split("@");
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                String[] pieces = mEmail.split(":");
                 intent.putExtra("PersonID", pieces[0]);
                 startActivity(intent);
 //                finish();

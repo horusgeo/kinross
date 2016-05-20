@@ -2,8 +2,6 @@ package horusgeo.eco101;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,7 +9,7 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-public class homeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +80,12 @@ public class homeActivity extends AppCompatActivity {
     private void goNext(int radioId){
         Intent intent;
         if(radioId == R.id.novaSessao){
-            intent = new Intent(this, newSessionActivity.class);
+            intent = new Intent(this, NewSessionActivity.class);
             startActivity(intent);
         }
         if(radioId == R.id.continuarSessao){
-//            intent = new Intent(this, continueSessionActivity.class);
-//            startActivity(intent);
+            intent = new Intent(this, MapActivity.class);
+            startActivity(intent);
         }
         if(radioId == R.id.encerrarSessao){
 //            intent = new Intent(this, closeSessionActivity.class);

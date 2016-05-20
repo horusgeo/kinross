@@ -9,17 +9,14 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".NewSessionActivity"
-    tools:showIn="@layout/activity_new_session">
+    tools:context="horusgeo.eco101.MapActivity"
+    tools:showIn="@layout/activity_map">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/mapNewSession"
-        android:layout_alignParentTop="true"
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/mapView"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/mapstart"
-        android:layout_alignParentEnd="false"
-        android:adjustViewBounds="true" />
-
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 </RelativeLayout>

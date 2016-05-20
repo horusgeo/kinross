@@ -23,4 +23,8 @@
     <string name="continuar">Continuar</string>
     <string name="title_activity_new_session">newSessionActivity</string>
     <string name="fazer_download_e_continuar">Fazer Download e Continuar</string>
+    <string name="title_activity_continue_session">ContinueSessionActivity</string>
+    <string name="title_activity_close_session">CloseSessionActivity</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="login">Login</string>
 </resources>
