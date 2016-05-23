@@ -27,4 +27,8 @@
     <string name="title_activity_close_session">CloseSessionActivity</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="login">Login</string>
+    <string name="latitude">Latitude:</string>
+    <string name="longitude">Longitude:</string>
+    <string name="ponto_1">Ponto 1</string>
+    <string name="_0_0">0,0</string>
 </resources>
