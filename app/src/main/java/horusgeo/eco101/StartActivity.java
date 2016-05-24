@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-public class HomeActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

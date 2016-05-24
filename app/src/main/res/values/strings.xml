@@ -31,4 +31,11 @@
     <string name="longitude">Longitude:</string>
     <string name="ponto_1">Ponto 1</string>
     <string name="_0_0">0,0</string>
+    <string name="title_activity_home">Home</string>
+    <string name="escolha_uma_op_o">Escolha uma opção:</string>
+    <string name="novo_cadastro">Novo Cadastro</string>
+    <string name="editar_cadastro">Editar Cadastro</string>
+    <string name="enviar_cadastros">Enviar Cadastros</string>
+    <string name="excluir_cadastro">Excluir Cadastro</string>
+    <string name="title_activity_register">RegisterActivity</string>
 </resources>

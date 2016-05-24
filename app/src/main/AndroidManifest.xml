@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".StartActivity"
             android:label="Início"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -41,7 +41,15 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MapActivity"
-            android:label="@string/title_activity_map"
+            android:label="Mapa"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".InitialActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

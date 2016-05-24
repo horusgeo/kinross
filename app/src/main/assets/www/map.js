@@ -27,3 +27,11 @@ function clickPoints(){
     myMap.on('click', onMapClick);
 
 }
+
+//function savePropertiesPoints(){
+
+//    properties.push(propertyPolygon);
+
+//    myMap.off('click', )
+
+//}

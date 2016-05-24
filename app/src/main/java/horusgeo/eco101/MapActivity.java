@@ -182,7 +182,21 @@ public class MapActivity extends AppCompatActivity {
 
         });
 
+        okFAB.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                hideEndPointInputFAB();
+                myWebView.loadUrl("javascript:savePropertiesPoints()");
+            }
+        });
 
+        cancelFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideEndPointInputFAB();
+
+            }
+        });
 
     }
 
@@ -281,12 +295,28 @@ public class MapActivity extends AppCompatActivity {
         cancelFAB.startAnimation(show_cancelFAB);
         cancelFAB.setClickable(true);
 
-//        FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) fab.getLayoutParams();
-//        layoutParams3.rightMargin -= (int) (fab3.getWidth() * 0);
-//        layoutParams3.bottomMargin -= (int) (fab3.getHeight() * 0);
-//        fab.setLayoutParams(layoutParams3);
-//        fab.startAnimation(hide_fab);
+//        TODO: change fab color to reflect being false clickable
         fab.setClickable(false);
+    }
+
+    private void hideEndPointInputFAB(){
+
+        FrameLayout.LayoutParams layoutParams1 = (FrameLayout.LayoutParams) okFAB.getLayoutParams();
+        layoutParams1.rightMargin += (int) (fab1.getWidth() * -1.7);
+        layoutParams1.bottomMargin += (int) (fab1.getHeight() * 0);
+        okFAB.setLayoutParams(layoutParams1);
+        okFAB.startAnimation(hide_okFAB);
+        okFAB.setClickable(false);
+
+        FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) cancelFAB.getLayoutParams();
+        layoutParams2.rightMargin += (int) (fab1.getWidth() * -3.4);
+        layoutParams2.bottomMargin += (int) (fab1.getHeight() * 0);
+        cancelFAB.setLayoutParams(layoutParams2);
+        cancelFAB.startAnimation(hide_cancelFAB);
+        cancelFAB.setClickable(false);
+
+//        TODO: change fab color to reflect being true clickable
+        fab.setClickable(true);
     }
 
 
