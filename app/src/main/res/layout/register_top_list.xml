@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#424242">
+
+    <TextView
+        android:id="@+id/registerTopics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:textSize="18sp"
+        android:textColor="#ffffff"
+        android:layout_weight="0.9" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonEdit"
+        android:src="@mipmap/ic_create_white_18dp"
+        android:layout_weight="0.1" />
+
+</LinearLayout>

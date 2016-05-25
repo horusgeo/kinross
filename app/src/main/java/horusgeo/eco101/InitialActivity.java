@@ -49,7 +49,7 @@ public class InitialActivity extends AppCompatActivity {
         addCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(InitialActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(InitialActivity.this, CadastroActivity.class);
                 intent.putExtra("nomeProprietario", "Novo Cadatro");
                 startActivity(intent);
             }

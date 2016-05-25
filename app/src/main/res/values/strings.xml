@@ -38,4 +38,7 @@
     <string name="enviar_cadastros">Enviar Cadastros</string>
     <string name="excluir_cadastro">Excluir Cadastro</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_cadastro">Cadastro</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
