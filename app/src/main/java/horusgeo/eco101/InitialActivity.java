@@ -50,7 +50,8 @@ public class InitialActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(InitialActivity.this, CadastroActivity.class);
-                intent.putExtra("nomeProprietario", "Novo Cadatro");
+                intent.putExtra("tipo", "new");
+                intent.putExtra("string", "Novo Cadatro");
                 startActivity(intent);
             }
         });
@@ -80,11 +81,11 @@ public class InitialActivity extends AppCompatActivity {
     }
 
     public void callEditPropertyDialog(){
-        List<Register> registers = db.getAllRegisters();
+        final List<Register> registers = db.getAllIdNameRegisters();
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(InitialActivity.this);
 //        builderSingle.setIcon(R.drawable.ic_launcher);
-        builderSingle.setTitle("Selecione a Propriedade");
+        builderSingle.setTitle("Selecione o Proprietario");
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 InitialActivity.this,
@@ -93,7 +94,7 @@ public class InitialActivity extends AppCompatActivity {
         for(Register temp : registers){
             arrayAdapter.add(temp.get_nome_proprietario());
         }
-        registers = null;
+
         builderSingle.setNegativeButton(
                 "Cancel",
                 new DialogInterface.OnClickListener() {
@@ -108,9 +109,10 @@ public class InitialActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String strName = arrayAdapter.getItem(which);
+                        String strName = registers.get(which).get_id_prop();
                         Intent intent = new Intent(InitialActivity.this, RegisterActivity.class);
-                        intent.putExtra("nomeProprietario", strName);
+                        intent.putExtra("tipo", "edit");
+                        intent.putExtra("string", strName);
                         startActivity(intent);
                     }
                 });

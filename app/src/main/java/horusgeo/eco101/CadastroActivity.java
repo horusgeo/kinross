@@ -1,6 +1,7 @@
 package horusgeo.eco101;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.ViewStub;
+import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,6 +37,10 @@ public class CadastroActivity extends AppCompatActivity {
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    Register cadastro;
+
+    DBHandler db;
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -46,6 +53,23 @@ public class CadastroActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        cadastro = new Register();
+
+        db = new DBHandler(this, null, null, 1);
+
+        Intent intent = getIntent();
+
+        String tipo = intent.getStringExtra("tipo");
+        String text1 = intent.getStringExtra("text1");
+
+        if(tipo.equals("new")){
+            setTitle(text1);
+        }else if(tipo.equals("edit")){
+
+        }
+
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -56,13 +80,64 @@ public class CadastroActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setOnTabSelectedListener(
+                new TabLayout.ViewPagerOnTabSelectedListener(mViewPager){
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab){
+                        super.onTabSelected(tab);
+
+                        switch(tab.getPosition()){
+                            case 0:
+                                loadCadastroRelatorio();
+                                break;
+                            case 1:
+                                loadCadastroProp();
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab){
+                        super.onTabUnselected(tab);
+
+                        switch(tab.getPosition()){
+                            case 0:
+                                saveCadastroRelatorio();
+                                break;
+                            case 1:
+                                saveCadastroProp();
+                                break;
+//                            case 2:
+//                                saveCadastroConj();
+//                                break;
+//                            case 3:
+//                                saveCadastroEndRes();
+//                                break;
+//                            case 4:
+//                                saveCadastroEndObj();
+//                                break;
+//                            case 5:
+//                                saveCadastroIdProp();
+//                                break;
+//                            case 6:
+//                                saveCadastroBenf();
+//                                break;
+//                            case 7:
+//                                saveCadastroPlant();
+//                                break;
+//                            case 8:
+//                                saveCadastroDesc();
+//                                break;
+                        }
+                    }
+                }
+        );
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                saveCadastro();
             }
         });
 
@@ -222,4 +297,99 @@ public class CadastroActivity extends AppCompatActivity {
             return null;
         }
     }
+
+    void saveCadastroRelatorio(){
+        TextView nomeProjeto = (TextView) findViewById(R.id.projetoText);
+        TextView idProp = (TextView) findViewById(R.id.idPropText);
+        TextView localVisita = (TextView) findViewById(R.id.localText);
+        TextView dataVisita = (TextView) findViewById(R.id.dataText);
+
+        cadastro.set_nome_projeto(nomeProjeto.getText().toString());
+        cadastro.set_id_prop(idProp.getText().toString());
+        cadastro.set_local_visita(localVisita.getText().toString());
+        cadastro.set_data_visita(dataVisita.getText().toString());
+
+    }
+
+    void loadCadastroRelatorio(){
+        TextView nomeProjeto = (TextView) findViewById(R.id.projetoText);
+        TextView idProp = (TextView) findViewById(R.id.idPropText);
+        TextView localVisita = (TextView) findViewById(R.id.localText);
+        TextView dataVisita = (TextView) findViewById(R.id.dataText);
+
+        nomeProjeto.setText(cadastro.get_nome_projeto());
+        idProp.setText(cadastro.get_id_prop());
+        localVisita.setText(cadastro.get_local_visita());
+        dataVisita.setText(cadastro.get_data_visita());
+
+    }
+
+    void saveCadastroProp(){
+
+        TextView nome = (TextView) findViewById(R.id.nomeText);
+        TextView nacio = (TextView) findViewById(R.id.nacionalidadeText);
+        TextView prof = (TextView) findViewById(R.id.profissaoText);
+        TextView doc = (TextView) findViewById(R.id.identidadeText);
+        TextView doctp = (TextView) findViewById(R.id.idTipoText);
+        //TextView docph = (TextView) mView.findViewById(R.id.id);
+        TextView cpf = (TextView) findViewById(R.id.cpfText);
+        //TextView cpfph = (TextView) mView.findViewById(R.id.dataText);
+        TextView tel1 = (TextView) findViewById(R.id.propTel1);
+        TextView tel2 = (TextView) findViewById(R.id.propTel2);
+        TextView email = (TextView) findViewById(R.id.emailText);
+        TextView anot = (TextView) findViewById(R.id.anotacoesText);
+
+        cadastro.set_nome_proprietario(nome.getText().toString());
+        cadastro.set_nacionalidade_prop(nacio.getText().toString());
+        cadastro.set_profissao_prop(prof.getText().toString());
+        cadastro.set_doc_id_prop(doc.getText().toString());
+        cadastro.set_doc_id_tipo_prop(doctp.getText().toString());
+        cadastro.set_cpf_prop(cpf.getText().toString());
+        cadastro.set_tel_prop_1(tel1.getText().toString());
+        cadastro.set_tel_prop_2(tel2.getText().toString());
+        cadastro.set_email_prop(email.getText().toString());
+        cadastro.set_anotacoes_prop(anot.getText().toString());
+
+    }
+
+    public void loadCadastroProp(){
+        TextView nome = (TextView) findViewById(R.id.nomeText);
+        TextView nacio = (TextView) findViewById(R.id.nacionalidadeText);
+        TextView prof = (TextView) findViewById(R.id.profissaoText);
+        TextView doc = (TextView) findViewById(R.id.identidadeText);
+        TextView doctp = (TextView) findViewById(R.id.idTipoText);
+        //TextView docph = (TextView) mView.findViewById(R.id.id);
+        TextView cpf = (TextView) findViewById(R.id.cpfText);
+        //TextView cpfph = (TextView) mView.findViewById(R.id.dataText);
+        TextView tel1 = (TextView) findViewById(R.id.propTel1);
+        TextView tel2 = (TextView) findViewById(R.id.propTel2);
+        TextView email = (TextView) findViewById(R.id.emailText);
+        TextView anot = (TextView) findViewById(R.id.anotacoesText);
+
+        nome.setText(cadastro.get_nome_proprietario());
+        nacio.setText(cadastro.get_nacionalidade_prop());
+        prof.setText(cadastro.get_profissao_prop());
+        doc.setText(cadastro.get_doc_id_prop());
+        doctp.setText(cadastro.get_doc_id_tipo_prop());
+        cpf.setText(cadastro.get_cpf_prop());
+        tel1.setText(cadastro.get_tel_prop_1());
+        tel2.setText(cadastro.get_tel_prop_2());
+        email.setText(cadastro.get_email_prop());
+        anot.setText(cadastro.get_anotacoes_prop());
+    }
+
+
+    public void saveCadastro(){
+
+        db.addRegister(cadastro);
+        db.addProp(cadastro);
+
+        Intent intent = new Intent(CadastroActivity.this, InitialActivity.class);
+        intent.putExtra("texto", "1 - Cadastro realizado com sucesso!");
+        startActivity(intent);
+
+    }
+
+
+
 }

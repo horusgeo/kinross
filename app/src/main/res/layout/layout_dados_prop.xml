@@ -218,7 +218,7 @@
             android:layout_height="wrap_content"
             android:inputType="phone"
             android:ems="10"
-            android:id="@+id/editText"
+            android:id="@+id/propTel1"
             android:layout_weight="0.5" />
 
         <TextView
@@ -233,7 +233,7 @@
             android:layout_height="wrap_content"
             android:inputType="phone"
             android:ems="10"
-            android:id="@+id/editText2"
+            android:id="@+id/propTel2"
             android:layout_weight="0.5" />
     </LinearLayout>
 
@@ -286,56 +286,6 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:layout_gravity="center_horizontal" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Adicionar arquivo?   "
-            android:id="@+id/addFileLabel" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/photoDadosPropButton"
-            android:src="@mipmap/ic_photo_camera_black_24dp"
-            android:background="@android:color/transparent" />
-
-        <Space
-            android:layout_width="30dp"
-            android:layout_height="match_parent" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/uploadDadosPropButton"
-            android:src="@mipmap/ic_file_upload_black_24dp"
-            android:background="@android:color/transparent" />
-
-    </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Arquivos:"
-        android:id="@+id/filesLabel" />
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/filesDadosProp"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
