@@ -25,6 +25,7 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+
 public class CadastroActivity extends AppCompatActivity {
 
     /**
@@ -38,8 +39,11 @@ public class CadastroActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     Register cadastro;
+    String idBck;
 
     DBHandler db;
+
+    boolean editTable;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -61,12 +65,15 @@ public class CadastroActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         String tipo = intent.getStringExtra("tipo");
-        String text1 = intent.getStringExtra("text1");
+        String text1 = intent.getStringExtra("string");
 
         if(tipo.equals("new")){
             setTitle(text1);
+            editTable = false;
         }else if(tipo.equals("edit")){
-
+            cadastro = db.getRegister(text1);
+            idBck = cadastro.get_id_prop();
+            editTable = true;
         }
 
 
@@ -87,10 +94,10 @@ public class CadastroActivity extends AppCompatActivity {
                         super.onTabSelected(tab);
 
                         switch(tab.getPosition()){
-                            case 0:
+                            case 1:
                                 loadCadastroRelatorio();
                                 break;
-                            case 1:
+                            case 2:
                                 loadCadastroProp();
                                 break;
                         }
@@ -101,10 +108,10 @@ public class CadastroActivity extends AppCompatActivity {
                         super.onTabUnselected(tab);
 
                         switch(tab.getPosition()){
-                            case 0:
+                            case 1:
                                 saveCadastroRelatorio();
                                 break;
-                            case 1:
+                            case 2:
                                 saveCadastroProp();
                                 break;
 //                            case 2:
@@ -142,6 +149,8 @@ public class CadastroActivity extends AppCompatActivity {
         });
 
     }
+
+
 
 
     @Override
@@ -197,54 +206,45 @@ public class CadastroActivity extends AppCompatActivity {
 
             switch (getArguments().getInt(ARG_SECTION_NUMBER)){
                 case 1:
-                    rootView = inflater.inflate(R.layout.layout_relatorio, container, false);
+                    rootView = inflater.inflate(R.layout.layout_initial_tab, container, false);
                     break;
                 case 2:
-                    rootView = inflater.inflate(R.layout.layout_dados_prop, container, false);
+                    rootView = inflater.inflate(R.layout.layout_relatorio, container, false);
                     break;
                 case 3:
-                    rootView = inflater.inflate(R.layout.layout_dados_conj, container, false);
+                    rootView = inflater.inflate(R.layout.layout_dados_prop, container, false);
                     break;
                 case 4:
-                    rootView = inflater.inflate(R.layout.layout_end_residencial, container, false);
+                    rootView = inflater.inflate(R.layout.layout_dados_conj, container, false);
                     break;
                 case 5:
-                    rootView = inflater.inflate(R.layout.layout_end_obj, container, false);
+                    rootView = inflater.inflate(R.layout.layout_end_residencial, container, false);
                     break;
                 case 6:
-                    rootView = inflater.inflate(R.layout.layout_id_prop, container, false);
+                    rootView = inflater.inflate(R.layout.layout_end_obj, container, false);
                     break;
                 case 7:
-                    rootView = inflater.inflate(R.layout.layout_benf, container, false);
+                    rootView = inflater.inflate(R.layout.layout_id_prop, container, false);
                     break;
                 case 8:
-                    rootView = inflater.inflate(R.layout.layout_plant, container, false);
+                    rootView = inflater.inflate(R.layout.layout_benf, container, false);
                     break;
                 case 9:
-                    rootView = inflater.inflate(R.layout.layout_descricao, container, false);
+                    rootView = inflater.inflate(R.layout.layout_plant, container, false);
                     break;
                 case 10:
+                    rootView = inflater.inflate(R.layout.layout_descricao, container, false);
+                    break;
+                case 11:
                     rootView = inflater.inflate(R.layout.layout_map, container, false);
                     break;
                 default:
                     rootView = inflater.inflate(R.layout.layout_relatorio, container, false);
 
             }
-
-//            rootView = inflater.inflate(R.layout.fragment_cadastro, container, false);
-
-
             return rootView;
         }
 
-
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_cadastro, container, false);
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-//            return rootView;
-//        }
     }
 
     /**
@@ -274,24 +274,26 @@ public class CadastroActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Relatório";
+                    return "Eco - 101";
                 case 1:
-                    return "Dados Proprietário";
+                    return "Relatório";
                 case 2:
-                    return "Dados Cônjuge";
+                    return "Dados Proprietário";
                 case 3:
-                    return "Endereço Residencial";
+                    return "Dados Cônjuge";
                 case 4:
-                    return "Endereço Objeto";
+                    return "Endereço Residencial";
                 case 5:
-                    return "Identificação da Propriedade";
+                    return "Endereço Objeto";
                 case 6:
-                    return "Benfeitoria";
+                    return "Identificação da Propriedade";
                 case 7:
-                    return "Plantações";
+                    return "Benfeitoria";
                 case 8:
-                    return "Descrição da Visita";
+                    return "Plantações";
                 case 9:
+                    return "Descrição da Visita";
+                case 10:
                     return "Mapa";
             }
             return null;
@@ -339,6 +341,7 @@ public class CadastroActivity extends AppCompatActivity {
         TextView email = (TextView) findViewById(R.id.emailText);
         TextView anot = (TextView) findViewById(R.id.anotacoesText);
 
+
         cadastro.set_nome_proprietario(nome.getText().toString());
         cadastro.set_nacionalidade_prop(nacio.getText().toString());
         cadastro.set_profissao_prop(prof.getText().toString());
@@ -381,8 +384,15 @@ public class CadastroActivity extends AppCompatActivity {
 
     public void saveCadastro(){
 
-        db.addRegister(cadastro);
-        db.addProp(cadastro);
+        saveCadastroProp();
+        saveCadastroRelatorio();
+
+        if(editTable){
+            db.updateRegister(cadastro, idBck);
+        }else {
+            db.addRegister(cadastro);
+            db.addProp(cadastro);
+        }
 
         Intent intent = new Intent(CadastroActivity.this, InitialActivity.class);
         intent.putExtra("texto", "1 - Cadastro realizado com sucesso!");

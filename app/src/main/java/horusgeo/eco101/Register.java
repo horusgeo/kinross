@@ -13,7 +13,6 @@ public class Register {
     private String _data_visita;
 
     private String _nome_proprietario;
-    private String _sobrenome_proprietario;
     private String _nacionalidade_prop;
     private String _profissao_prop;
     private String _estado_civil;
@@ -152,14 +151,6 @@ public class Register {
 
     public void set_data_visita(String _data_visita) {
         this._data_visita = _data_visita;
-    }
-
-    public String get_sobrenome_proprietario() {
-        return _sobrenome_proprietario;
-    }
-
-    public void set_sobrenome_proprietario(String _sobrenome_proprietario) {
-        this._sobrenome_proprietario = _sobrenome_proprietario;
     }
 
     public String get_profissao_prop() {

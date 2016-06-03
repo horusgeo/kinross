@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "registersDB.db";
+    private static final String DATABASE_NAME = "eco101DB.db";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_REGISTERS = "registers";
     private static final String TABLE_PROP = "proprietarios";
@@ -37,7 +37,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final String ID_PROP = "_id_prop";
     private static final String NOME_PROPRIETARIO = "nome_proprietario";
-    private static final String SOBRENOME_PROPRIETARIO = "sobrenome_proprietario";
     private static final String NACIONALIDADE_PROPRIETARIO = "nacionalidade_proprietario";
     private static final String PROFISSAO_PROPRIETARIO = "profissao_proprietario";
     private static final String ESTADO_CIVIL = "estado_civil";
@@ -129,7 +128,7 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.e("SQL", "onCreate");
-        String CREATE_REGISTER_TABLE = "CREATE TABLE" + TABLE_REGISTERS + "(" +
+        String CREATE_REGISTER_TABLE = "CREATE TABLE " + TABLE_REGISTERS + "(" +
                 ID + " INTEGER PRIMARY KEY," +
                 NOME_PROJETO + " TEXT," +
                 ID_PROPRIETARIO + " TEXT," +
@@ -138,10 +137,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 ")";
         db.execSQL(CREATE_REGISTER_TABLE);
 
-        String CREATE_PROP_TABLE = "CREATE TABLE" + TABLE_PROP + "(" +
+        String CREATE_PROP_TABLE = "CREATE TABLE " + TABLE_PROP + "(" +
                 ID + " INTEGER PRIMARY KEY," +
                 NOME_PROPRIETARIO + " TEXT," +
-                SOBRENOME_PROPRIETARIO + " TEXT," +
                 NACIONALIDADE_PROPRIETARIO + " TEXT," +
                 PROFISSAO_PROPRIETARIO + " TEXT," +
                 ESTADO_CIVIL + " TEXT," +
@@ -153,7 +151,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 TEL_PROPRIETARIO_1 + " TEXT," +
                 TEL_PROPRIETARIO_2 + " TEXT," +
                 EMAIL_PROPRIETARIO + " TEXT," +
-                ID_PROP + " FOREIGN KEY("+ID_PROP+") REFERENCES " + TABLE_REGISTERS + "("+ ID_PROPRIETARIO +")" +
+                ANOTACOES_PROPRIETARIO + " TEXT," +
+                ID_PROP + " TEXT" +
                 ")";
 
 
@@ -165,8 +164,11 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REGISTERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROP);
         onCreate(db);
     }
+
+    //Add Registers
 
     public void addRegister(Register cadastro) {
 
@@ -188,7 +190,6 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(NOME_PROPRIETARIO, cadastro.get_nome_proprietario());
-        values.put(SOBRENOME_PROPRIETARIO, cadastro.get_sobrenome_proprietario());
         values.put(NACIONALIDADE_PROPRIETARIO, cadastro.get_nacionalidade_prop());
         values.put(PROFISSAO_PROPRIETARIO, cadastro.get_profissao_prop());
         values.put(ESTADO_CIVIL, cadastro.get_estado_civil());
@@ -209,104 +210,62 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Register findRegisterByName(String nomeProprietario) {
-        String query = "Select * FROM " + TABLE_PROP + " WHERE " + NOME_PROPRIETARIO + " = " + nomeProprietario;
+    //Update Registers
+
+    public void updateRegister(Register cadastro, String idBck){
+
+        ContentValues values = new ContentValues();
+
+        values.put(NOME_PROJETO, cadastro.get_nome_projeto());
+        values.put(ID_PROPRIETARIO, cadastro.get_id_prop());
+        values.put(LOCAL_VISITA, cadastro.get_local_visita());
+        values.put(DATA_VISITA, cadastro.get_data_visita());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery(query, null);
-
-        Register cadastro = new Register();
-
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            cadastro.set_nome_proprietario(cursor.getString(1));
-            cadastro.set_sobrenome_proprietario(cursor.getString(2));
-            cadastro.set_nacionalidade_prop(cursor.getString(3));
-            cadastro.set_profissao_prop(cursor.getString(4));
-            cadastro.set_estado_civil(cursor.getString(5));
-            cadastro.set_doc_id_prop(cursor.getString(6));
-            cadastro.set_doc_id_photo_prop(cursor.getString(7));
-            cadastro.set_doc_id_tipo_prop(cursor.getString(8));
-            cadastro.set_cpf_prop(cursor.getString(9));
-            cadastro.set_cpf_photo_prop(cursor.getString(10));
-            cadastro.set_tel_prop_1(cursor.getString(11));
-            cadastro.set_tel_prop_2(cursor.getString(12));
-            cadastro.set_email_prop(cursor.getString(13));
-            cadastro.set_anotacoes_prop(cursor.getString(14));
-
-            cursor.close();
-        } else {
-            cadastro = null;
-        }
-
-        String chave = cursor.getString(15);
-
-        query = "SELECT * FROM " + TABLE_REGISTERS + " WHERE " + TABLE_REGISTERS + "." + ID_PROPRIETARIO + " = " + TABLE_PROP + "." + ID_PROP;
-        cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst() && cadastro!=null) {
-            cursor.moveToFirst();
-            cadastro.set_nome_projeto(cursor.getString(1));
-            cadastro.set_id_prop(cursor.getString(2));
-            cadastro.set_local_visita(cursor.getString(3));
-            cadastro.set_data_visita(cursor.getString(4));
-            cursor.close();
-        }
-
+        db.update(TABLE_REGISTERS, values, ID + "=" + cadastro.get_id(), null);
         db.close();
-        return cadastro;
+
+        updateRegisterProp(cadastro, idBck);
+
     }
 
-    public boolean deleteRegisterByName(String nomeProprietario) {
+    public void updateRegisterProp(Register cadastro, String idBck){
 
-        boolean result = false;
+        ContentValues values = new ContentValues();
 
-        String query = "Select * FROM " + TABLE_REGISTERS + " WHERE " + NOME_PROPRIETARIO + " =  \"" + nomeProprietario + "\"";
+        values.put(NOME_PROPRIETARIO, cadastro.get_nome_proprietario());
+        values.put(NACIONALIDADE_PROPRIETARIO, cadastro.get_nacionalidade_prop());
+        values.put(PROFISSAO_PROPRIETARIO, cadastro.get_profissao_prop());
+        values.put(ESTADO_CIVIL, cadastro.get_estado_civil());
+        values.put(DOC_ID_PROPRIETARIO, cadastro.get_doc_id_prop());
+        values.put(DOC_ID_PHOTO_PROPRIETARIO, cadastro.get_doc_id_photo_prop());
+        values.put(DOC_ID_TIPO_PROPRIETARIO, cadastro.get_doc_id_tipo_prop());
+        values.put(CPF_PROPRIETARIO, cadastro.get_cpf_prop());
+        values.put(CPF_PHOTO_PROPRIETARIO, cadastro.get_cpf_photo_prop());
+        values.put(TEL_PROPRIETARIO_1, cadastro.get_tel_prop_1());
+        values.put(TEL_PROPRIETARIO_2, cadastro.get_tel_prop_2());
+        values.put(EMAIL_PROPRIETARIO, cadastro.get_email_prop());
+        values.put(ANOTACOES_PROPRIETARIO, cadastro.get_anotacoes_prop());
+        values.put(ID_PROP, cadastro.get_id_prop());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery(query, null);
-
-        Register cadastro = new Register();
-
-        if (cursor.moveToFirst()) {
-            cadastro.set_id(Integer.parseInt(cursor.getString(0)));
-            db.delete(TABLE_REGISTERS, ID + " = ?",
-                    new String[] { String.valueOf(cadastro.get_id()) });
-            cursor.close();
-            result = true;
+        if(cadastro.get_id_prop().equals(idBck)){
+            db.update(TABLE_PROP, values, ID_PROP + "=" + cadastro.get_id_prop(), null);
+        }else{
+            db.update(TABLE_PROP, values, ID_PROP + "=" + idBck, null);
         }
+
         db.close();
-        return result;
     }
 
-    public List<Register> getAllRegisters() {
-        List<Register> registerList = new ArrayList<Register>();
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_REGISTERS;
 
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Register register = new Register(Integer.parseInt(cursor.getString(0)),
-                        cursor.getString(5), cursor.getString(2),
-                        cursor.getString(1), cursor.getString(3),
-                        cursor.getString(4));
-                registerList.add(register);
-            } while (cursor.moveToNext());
-        }
-        db.close();
-        // return contact list
-        return registerList;
-    }
+    //Get Registers
 
     public List<Register> getAllIdNameRegisters(){
         List<Register> registerList = new ArrayList<Register>();
-        String selectQuery = "SELECT  * FROM " + TABLE_REGISTERS;
+        String selectQuery = "SELECT * FROM " + TABLE_REGISTERS;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -316,25 +275,15 @@ public class DBHandler extends SQLiteOpenHelper {
                 Register register = new Register();
                 register.set_id_prop(cursor.getString(2));
 
-                String query = "SELECT " + NOME_PROPRIETARIO +" FROM " + TABLE_PROP + " WHERE " + TABLE_REGISTERS + "." + ID_PROPRIETARIO + " = " + TABLE_PROP + "." + ID_PROP;
+                String query = "SELECT " + NOME_PROPRIETARIO +" FROM " + TABLE_PROP + " WHERE " + register.get_id_prop() + " = " + ID_PROP;
                 Cursor cursorProp = db.rawQuery(query, null);
+                cursorProp.moveToFirst();
                 register.set_nome_proprietario(cursorProp.getString(0));
                 registerList.add(register);
             }while(cursor.moveToNext());
         }
         db.close();
         return registerList;
-    }
-
-    public int getRegistersCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_REGISTERS;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
-
-        // return count
-        db.close();
-        return cursor.getCount();
     }
 
     public Register getRegister(String idProp){
@@ -348,10 +297,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             cursor.moveToFirst();
-            register.set_nome_projeto(cursor.getString(0));
-            register.set_id_prop(cursor.getString(1));
-            register.set_local_visita(cursor.getString(2));
-            register.set_data_visita(cursor.getString(3));
+            register.set_id(Integer.parseInt(cursor.getString(0)));
+            register.set_nome_projeto(cursor.getString(1));
+            register.set_id_prop(cursor.getString(2));
+            register.set_local_visita(cursor.getString(3));
+            register.set_data_visita(cursor.getString(4));
             cursor.close();
         }
 
@@ -361,8 +311,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             cursor.moveToFirst();
-            register.set_nome_proprietario(cursor.getString(0));
-            register.set_sobrenome_proprietario(cursor.getString(1));
+            register.set_nome_proprietario(cursor.getString(1));
             register.set_nacionalidade_prop(cursor.getString(2));
             register.set_profissao_prop(cursor.getString(3));
             register.set_estado_civil(cursor.getString(4));
@@ -380,5 +329,47 @@ public class DBHandler extends SQLiteOpenHelper {
         return register;
     }
 
+    //Delete Registers
+
+    public void deleteRegister(String idProp) {
+
+        boolean result = false;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_REGISTERS, ID_PROPRIETARIO + " = " + idProp, null);
+        db.delete(TABLE_PROP, ID_PROP + " = " + idProp, null);
+
+        db.close();
+
+    }
+
+
+    //Useful Functions
+
+    public boolean isRegisterEmpty(){
+        String countQuery = "SELECT  * FROM " + TABLE_REGISTERS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        db.close();
+        if(count == 0)
+            return true;
+        else
+            return false;
+    }
+
+    public int getRegistersCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_REGISTERS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+
+        // return count
+        db.close();
+        return count;
+    }
 
 }

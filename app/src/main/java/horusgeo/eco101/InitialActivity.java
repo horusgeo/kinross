@@ -1,16 +1,27 @@
 package horusgeo.eco101;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 public class InitialActivity extends AppCompatActivity {
@@ -73,7 +84,7 @@ public class InitialActivity extends AppCompatActivity {
         sendCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                callSendDB();
             }
         });
 
@@ -85,7 +96,8 @@ public class InitialActivity extends AppCompatActivity {
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(InitialActivity.this);
 //        builderSingle.setIcon(R.drawable.ic_launcher);
-        builderSingle.setTitle("Selecione o Proprietario");
+        builderSingle.setTitle("Selecione o Proprietário");
+
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 InitialActivity.this,
@@ -110,7 +122,7 @@ public class InitialActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String strName = registers.get(which).get_id_prop();
-                        Intent intent = new Intent(InitialActivity.this, RegisterActivity.class);
+                        Intent intent = new Intent(InitialActivity.this, CadastroActivity.class);
                         intent.putExtra("tipo", "edit");
                         intent.putExtra("string", strName);
                         startActivity(intent);
@@ -121,11 +133,11 @@ public class InitialActivity extends AppCompatActivity {
     }
 
     public void callDeletePropertyDialog(){
-        List<Register> registers = db.getAllRegisters();
+        final List<Register> registers = db.getAllIdNameRegisters();
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(InitialActivity.this);
 //        builderSingle.setIcon(R.drawable.ic_launcher);
-        builderSingle.setTitle("Selecione a Propriedade");
+        builderSingle.setTitle("Selecione o Proprietário");
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 InitialActivity.this,
@@ -134,7 +146,6 @@ public class InitialActivity extends AppCompatActivity {
         for(Register temp : registers){
             arrayAdapter.add(temp.get_nome_proprietario());
         }
-        registers = null;
         builderSingle.setNegativeButton(
                 "Cancel",
                 new DialogInterface.OnClickListener() {
@@ -149,13 +160,26 @@ public class InitialActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String strName = arrayAdapter.getItem(which);
-                        db.deleteRegisterByName(strName);
+                        String strName = registers.get(which).get_id_prop();
+                        db.deleteRegister(strName);
                         dialog.dismiss();
                     }
                 });
         builderSingle.show();
 
+    }
+
+    public void callSendDB() throws IOException {
+
+        URL url = new URL("ftp://horusgeo:eco101web@ftp.horusgeo.com.br/teste");
+        URLConnection urlConnection = url.openConnection();
+        File file = new File("/data/data/horusgeo.eco101/databases/eco101.db");
+
+        try{
+            urlConnection.setDoOutput(true);
+            OutputStream os = new BufferedOutputStream(urlConnection.getOutputStream());
+            os.
+        }
     }
 
 }
