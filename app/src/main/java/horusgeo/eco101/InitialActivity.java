@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +18,9 @@ import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -23,6 +28,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 
 public class InitialActivity extends AppCompatActivity {
 
@@ -32,6 +40,8 @@ public class InitialActivity extends AppCompatActivity {
     Button sendCadastro;
     FloatingActionButton fab;
     DBHandler db;
+
+    private static final int BUFFER_SIZE = 4096;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +94,8 @@ public class InitialActivity extends AppCompatActivity {
         sendCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callSendDB();
+                SendDB sendDB = new SendDB();
+                sendDB.execute((Void) null);
             }
         });
 
@@ -171,15 +182,86 @@ public class InitialActivity extends AppCompatActivity {
 
     public void callSendDB() throws IOException {
 
-        URL url = new URL("ftp://horusgeo:eco101web@ftp.horusgeo.com.br/teste");
+        URL url = new URL("ftp://horusgeo:eco101web@ftp.horusgeo.com.br/public_ftp/incoming/");
         URLConnection urlConnection = url.openConnection();
-        File file = new File("/data/data/horusgeo.eco101/databases/eco101.db");
+        File file = new File("/data/data/horusgeo.eco101/databases/eco101DB.db");
+        FileInputStream inputStream = new FileInputStream(file);
 
         try{
             urlConnection.setDoOutput(true);
-            OutputStream os = new BufferedOutputStream(urlConnection.getOutputStream());
-            os.
+            OutputStream outputStream = new BufferedOutputStream(urlConnection.getOutputStream());
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bytesRead = -1;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+        }catch (IOException ex) {
+            ex.printStackTrace();
         }
+    }
+
+
+    private class SendDB extends AsyncTask<Void, Void, Boolean> {
+
+        SendDB(){
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params){
+
+            //Log.d("HorusGeo", "Antes do try");
+
+            FTPClient client = new FTPClient();
+            Boolean teste;
+            try{
+                client.connect("ftp.horusgeo.com.br", 21);
+                Log.d("HorusGeo", "Connect");
+
+                teste = client.login("horusgeo", "eco101web");
+                Log.d("HorusGeo", "Connect " + teste);
+
+                client.enterLocalPassiveMode();
+
+                client.setFileType(FTP.BINARY_FILE_TYPE, FTP.BINARY_FILE_TYPE);
+                client.setFileTransferMode(FTP.BINARY_FILE_TYPE);
+
+                File file = new File("/data/data/horusgeo.eco101/databases/eco101DB.db");
+                FileInputStream inputStream = new FileInputStream(file);
+
+                Boolean result = client.storeFile("/public_ftp/incoming/eco101.db", inputStream);
+                Log.d("HorusGeo", "Connect " + result);
+
+                inputStream.close();
+                client.logout();
+
+                return result;
+
+            }catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            Log.d("HorusGeo", "Return False");
+            return false;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            Toast toast;
+            Log.d("HorusGeo", "Toast");
+            if(result){
+                Log.d("HorusGeo", "Toast True");
+                toast = Toast.makeText(getApplicationContext(), "Upload ok!", Toast.LENGTH_LONG);
+            }else{
+                Log.d("HorusGeo", "Toast False");
+                toast = Toast.makeText(getApplicationContext(), "Upload not ok!", Toast.LENGTH_LONG);
+            }
+            toast.show();
+
+        }
+
     }
 
 }
