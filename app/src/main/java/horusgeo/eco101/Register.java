@@ -55,11 +55,13 @@ public class Register {
     private String _compl_end_obj;
     private String _bairro_end_obj;
     private String _cep_end_obj;
-    private String _p_ref_ond_obj;
+    private String _p_ref_end_obj;
 
     private String _zoneamento;
     private String _topografia;
-    private String _infraestrutura;
+    private String _infraredeel;
+    private String _infrasintel;
+    private String _infraabasagua;
     private String _manacial;
     private String _obs_id_prop;
 
@@ -465,15 +467,7 @@ public class Register {
         this._cep_end_obj = _cep_end_obj;
     }
 
-    public String get_p_ref_ond_obj() {
-        return _p_ref_ond_obj;
-    }
-
-    public void set_p_ref_ond_obj(String _p_ref_ond_obj) {
-        this._p_ref_ond_obj = _p_ref_ond_obj;
-    }
-
-    public String get_zoneamento() {
+   public String get_zoneamento() {
         return _zoneamento;
     }
 
@@ -489,15 +483,7 @@ public class Register {
         this._topografia = _topografia;
     }
 
-    public String get_infraestrutura() {
-        return _infraestrutura;
-    }
-
-    public void set_infraestrutura(String _infraestrutura) {
-        this._infraestrutura = _infraestrutura;
-    }
-
-    public String get_manacial() {
+      public String get_manacial() {
         return _manacial;
     }
 
@@ -543,5 +529,37 @@ public class Register {
 
     public void set_responsavel(String _responsavel) {
         this._responsavel = _responsavel;
+    }
+
+    public String get_p_ref_end_obj() {
+        return _p_ref_end_obj;
+    }
+
+    public void set_p_ref_end_obj(String _p_ref_end_obj) {
+        this._p_ref_end_obj = _p_ref_end_obj;
+    }
+
+    public String get_infraredeel() {
+        return _infraredeel;
+    }
+
+    public void set_infraredeel(String _infraredeel) {
+        this._infraredeel = _infraredeel;
+    }
+
+    public String get_infrasintel() {
+        return _infrasintel;
+    }
+
+    public void set_infrasintel(String _infrasintel) {
+        this._infrasintel = _infrasintel;
+    }
+
+    public String get_infraabasagua() {
+        return _infraabasagua;
+    }
+
+    public void set_infraabasagua(String _infraabasagua) {
+        this._infraabasagua = _infraabasagua;
     }
 }

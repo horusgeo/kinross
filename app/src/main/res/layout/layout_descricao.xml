@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:inputType="time"
             android:ems="10"
-            android:id="@+id/editText3"
+            android:id="@+id/horarioChegada"
             android:layout_weight="1" />
 
         <TextView
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:inputType="time"
             android:ems="10"
-            android:id="@+id/editText5"
+            android:id="@+id/horarioSaida"
             android:layout_weight="1" />
     </LinearLayout>
 

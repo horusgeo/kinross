@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
@@ -40,8 +42,9 @@ public class InitialActivity extends AppCompatActivity {
     Button sendCadastro;
     FloatingActionButton fab;
     DBHandler db;
+    TextView warnInitialText;
 
-    private static final int BUFFER_SIZE = 4096;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,21 @@ public class InitialActivity extends AppCompatActivity {
         sendCadastro = (Button) findViewById(R.id.sendRegister);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        Intent intent = getIntent();
+        String tipo = intent.getStringExtra("tipo");
+        String texto = intent.getStringExtra("texto");
+
+        warnInitialText = (TextView) findViewById(R.id.warnInitialText);
+
+        if(tipo.equals("ok")){
+            warnInitialText.setText(texto);
+            warnInitialText.setTextColor(Color.GREEN);
+        }else if(tipo.equals("start")){
+            warnInitialText.setText(texto);
+            warnInitialText.setTextColor(Color.BLUE);
+        }
+
 
         db = new DBHandler(this, null, null, 1);
 
@@ -180,31 +198,6 @@ public class InitialActivity extends AppCompatActivity {
 
     }
 
-    public void callSendDB() throws IOException {
-
-        URL url = new URL("ftp://horusgeo:eco101web@ftp.horusgeo.com.br/public_ftp/incoming/");
-        URLConnection urlConnection = url.openConnection();
-        File file = new File("/data/data/horusgeo.eco101/databases/eco101DB.db");
-        FileInputStream inputStream = new FileInputStream(file);
-
-        try{
-            urlConnection.setDoOutput(true);
-            OutputStream outputStream = new BufferedOutputStream(urlConnection.getOutputStream());
-            byte[] buffer = new byte[BUFFER_SIZE];
-            int bytesRead = -1;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-
-            inputStream.close();
-            outputStream.close();
-
-        }catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-
     private class SendDB extends AsyncTask<Void, Void, Boolean> {
 
         SendDB(){
@@ -220,21 +213,18 @@ public class InitialActivity extends AppCompatActivity {
             Boolean teste;
             try{
                 client.connect("ftp.horusgeo.com.br", 21);
-                Log.d("HorusGeo", "Connect");
 
                 teste = client.login("horusgeo", "eco101web");
-                Log.d("HorusGeo", "Connect " + teste);
 
                 client.enterLocalPassiveMode();
 
                 client.setFileType(FTP.BINARY_FILE_TYPE, FTP.BINARY_FILE_TYPE);
                 client.setFileTransferMode(FTP.BINARY_FILE_TYPE);
 
-                File file = new File("/data/data/horusgeo.eco101/databases/eco101DB.db");
+                File file = new File("/data/data/horusgeo.eco101/databases/eco101.db");
                 FileInputStream inputStream = new FileInputStream(file);
 
                 Boolean result = client.storeFile("/public_ftp/incoming/eco101.db", inputStream);
-                Log.d("HorusGeo", "Connect " + result);
 
                 inputStream.close();
                 client.logout();

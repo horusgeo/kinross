@@ -52,12 +52,12 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Profissão:  "
-            android:id="@+id/conjProfText" />
+            android:id="@+id/conjProfLabel" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/editText4"
+            android:id="@+id/conjProfText"
             android:layout_weight="0.25" />
     </LinearLayout>
 
