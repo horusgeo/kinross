@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.LinkAddress;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -28,15 +32,24 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.graphics.Bitmap;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+
 
 
 public class CadastroActivity extends AppCompatActivity {
@@ -61,7 +74,12 @@ public class CadastroActivity extends AppCompatActivity {
 
     int tabSelected;
 
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+//    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+//    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
+
+    private static final int CAPTURE_IMAGE_ID_PROP = 100;
+    private static final int CAPTURE_IMAGE_CPF_PROP = 200;
+
     private static Uri fileUri;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -194,9 +212,6 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -263,14 +278,14 @@ public class CadastroActivity extends AppCompatActivity {
                     idPhoto.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            takePhoto(getActivity());
+                            takePhoto(getActivity(), CAPTURE_IMAGE_ID_PROP);
                         }
                     });
 
                     cpfPhoto.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            takePhoto(getActivity());
+                            takePhoto(getActivity(), CAPTURE_IMAGE_CPF_PROP);
                         }
                     });
                     break;
@@ -707,17 +722,91 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
-    public static void takePhoto(Activity activity){
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAPTURE_IMAGE_ID_PROP) {
+            if (resultCode == RESULT_OK) {
+                callAddThumbProp(CAPTURE_IMAGE_ID_PROP);
+
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Foto cancelada!", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Alguma coisa deu errado!", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (requestCode == CAPTURE_IMAGE_CPF_PROP) {
+            if (resultCode == RESULT_OK) {
+                callAddThumbProp(CAPTURE_IMAGE_CPF_PROP);
+            } else if (resultCode == RESULT_CANCELED) {
+                // User cancelled the video capture
+            } else {
+                // Video capture failed, advise user
+            }
+        }
+    }
+
+    public static void takePhoto(Activity activity, int type){
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-
         // start the image capture Intent
-        activity.startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        activity.startActivityForResult(intent, type);
 
 
+    }
+
+    public void callAddThumbProp(int type){
+
+        if(type == CAPTURE_IMAGE_ID_PROP){
+            ImageView img = (ImageView) findViewById(R.id.idPropPhoto);
+            img.setImageBitmap(decodeSampledBitmapFromFile(100, 100));
+        }else if(type == CAPTURE_IMAGE_CPF_PROP){
+            ImageView img = (ImageView) findViewById(R.id.cpfPropPhoto);
+            img.setImageBitmap(decodeSampledBitmapFromFile(100, 100));
+        }
+
+
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromFile(int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(fileUri.getPath(), options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(fileUri.getPath(), options);
     }
 
     private static Uri getOutputMediaFileUri(int type){
@@ -757,7 +846,6 @@ public class CadastroActivity extends AppCompatActivity {
 
         return mediaFile;
     }
-
 
 
 }
