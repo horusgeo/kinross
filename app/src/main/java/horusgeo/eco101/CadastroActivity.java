@@ -79,6 +79,8 @@ public class CadastroActivity extends AppCompatActivity {
 
     private static final int CAPTURE_IMAGE_ID_PROP = 100;
     private static final int CAPTURE_IMAGE_CPF_PROP = 200;
+    private static final int CAPTURE_IMAGE_ID_CONJ = 300;
+    private static final int CAPTURE_IMAGE_CPF_CONJ = 400;
 
     private static Uri fileUri;
 
@@ -272,17 +274,17 @@ public class CadastroActivity extends AppCompatActivity {
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.layout_dados_prop, container, false);
-                    ImageButton idPhoto = (ImageButton) rootView.findViewById(R.id.identPhotoButton);
-                    ImageButton cpfPhoto = (ImageButton) rootView.findViewById(R.id.cpfPhotoButton);
+                    ImageButton idPropPhoto = (ImageButton) rootView.findViewById(R.id.identPhotoButton);
+                    ImageButton cpfPropPhoto = (ImageButton) rootView.findViewById(R.id.cpfPhotoButton);
 
-                    idPhoto.setOnClickListener(new View.OnClickListener() {
+                    idPropPhoto.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             takePhoto(getActivity(), CAPTURE_IMAGE_ID_PROP);
                         }
                     });
 
-                    cpfPhoto.setOnClickListener(new View.OnClickListener() {
+                    cpfPropPhoto.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             takePhoto(getActivity(), CAPTURE_IMAGE_CPF_PROP);
@@ -291,6 +293,22 @@ public class CadastroActivity extends AppCompatActivity {
                     break;
                 case 4:
                     rootView = inflater.inflate(R.layout.layout_dados_conj, container, false);
+                    ImageButton idConjPhoto = (ImageButton) rootView.findViewById(R.id.conjDocIdButton);
+                    ImageButton cpfConjPhoto = (ImageButton) rootView.findViewById(R.id.conjCPFButton);
+
+                    idConjPhoto.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            takePhoto(getActivity(), CAPTURE_IMAGE_ID_CONJ);
+                        }
+                    });
+
+                    cpfConjPhoto.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            takePhoto(getActivity(), CAPTURE_IMAGE_CPF_CONJ);
+                        }
+                    });
                     break;
                 case 5:
                     rootView = inflater.inflate(R.layout.layout_end_residencial, container, false);
@@ -441,9 +459,7 @@ public class CadastroActivity extends AppCompatActivity {
         TextView doc = (TextView) findViewById(R.id.identidadeText);
         TextView doctp = (TextView) findViewById(R.id.idTipoText);
         RadioGroup est = (RadioGroup) findViewById(R.id.estadoCivilGroup);
-        //TextView docph = (TextView) mView.findViewById(R.id.id);
         TextView cpf = (TextView) findViewById(R.id.cpfText);
-        //TextView cpfph = (TextView) mView.findViewById(R.id.dataText);
         TextView tel1 = (TextView) findViewById(R.id.propTel1);
         TextView tel2 = (TextView) findViewById(R.id.propTel2);
         TextView email = (TextView) findViewById(R.id.emailText);
@@ -461,6 +477,15 @@ public class CadastroActivity extends AppCompatActivity {
         tel2.setText(cadastro.get_tel_prop_2());
         email.setText(cadastro.get_email_prop());
         anot.setText(cadastro.get_anotacoes_prop());
+        if(cadastro.getDocs()!=null) {
+            for (Docs temp : cadastro.getDocs()) {
+                if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_PROP))) {
+                    callAddThumb(CAPTURE_IMAGE_ID_PROP, temp.getPath());
+                } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_PROP))) {
+                    callAddThumb(CAPTURE_IMAGE_CPF_PROP, temp.getPath());
+                }
+            }
+        }
     }
 
     void saveCadastroConj(){
@@ -468,12 +493,9 @@ public class CadastroActivity extends AppCompatActivity {
         TextView nome = (TextView) findViewById(R.id.conjNomeText);
         TextView nacio = (TextView) findViewById(R.id.conjNacText);
         TextView prof = (TextView) findViewById(R.id.conjProfText);
-
         TextView doc = (TextView) findViewById(R.id.conjDocIdText);
         TextView doctp = (TextView) findViewById(R.id.conjTpOrgText);
-        //TextView docph = (TextView) mView.findViewById(R.id.id);
         TextView cpf = (TextView) findViewById(R.id.conjCPFText);
-        //TextView cpfph = (TextView) mView.findViewById(R.id.dataText);
         TextView tel1 = (TextView) findViewById(R.id.conjTel1Text);
         TextView tel2 = (TextView) findViewById(R.id.conjTel2Text);
         TextView anot = (TextView) findViewById(R.id.conjAnotText);
@@ -482,7 +504,6 @@ public class CadastroActivity extends AppCompatActivity {
         cadastro.set_nome_conj(nome.getText().toString());
         cadastro.set_nacionalidade_conj(nacio.getText().toString());
         cadastro.set_profissao_conj(prof.getText().toString());
-
         cadastro.set_doc_id_conj(doc.getText().toString());
         cadastro.set_doc_id_tipo_conj(doctp.getText().toString());
         cadastro.set_cpf_conj(cpf.getText().toString());
@@ -496,12 +517,9 @@ public class CadastroActivity extends AppCompatActivity {
         TextView nome = (TextView) findViewById(R.id.conjNomeText);
         TextView nacio = (TextView) findViewById(R.id.conjNacText);
         TextView prof = (TextView) findViewById(R.id.conjProfText);
-
         TextView doc = (TextView) findViewById(R.id.conjDocIdText);
         TextView doctp = (TextView) findViewById(R.id.conjTpOrgText);
-        //TextView docph = (TextView) mView.findViewById(R.id.id);
         TextView cpf = (TextView) findViewById(R.id.conjCPFText);
-        //TextView cpfph = (TextView) mView.findViewById(R.id.dataText);
         TextView tel1 = (TextView) findViewById(R.id.conjTel1Text);
         TextView tel2 = (TextView) findViewById(R.id.conjTel2Text);
         TextView anot = (TextView) findViewById(R.id.conjAnotText);
@@ -509,13 +527,22 @@ public class CadastroActivity extends AppCompatActivity {
         nome.setText(cadastro.get_nome_conj());
         nacio.setText(cadastro.get_nacionalidade_conj());
         prof.setText(cadastro.get_profissao_conj());
-
         doc.setText(cadastro.get_doc_id_conj());
         doctp.setText(cadastro.get_doc_id_tipo_conj());
         cpf.setText(cadastro.get_cpf_conj());
         tel1.setText(cadastro.get_tel_conj_1());
         tel2.setText(cadastro.get_tel_conj_2());
         anot.setText(cadastro.get_anotacoes_conj());
+
+        if(cadastro.getDocs()!=null) {
+            for (Docs temp : cadastro.getDocs()) {
+                if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_CONJ))) {
+                    callAddThumb(CAPTURE_IMAGE_ID_CONJ, temp.getPath());
+                } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_CONJ))) {
+                    callAddThumb(CAPTURE_IMAGE_CPF_CONJ, temp.getPath());
+                }
+            }
+        }
     }
 
     public void saveCadastroEndRes(){
@@ -712,11 +739,10 @@ public class CadastroActivity extends AppCompatActivity {
             db.addEndObj(cadastro);
             db.addIdProp(cadastro);
             db.addDesc(cadastro);
+            db.addDoc(cadastro);
             intent.putExtra("tipo", "ok");
             intent.putExtra("texto", "Cadastro atualizado com sucesso!");
         }
-
-
 
         startActivity(intent);
 
@@ -725,26 +751,16 @@ public class CadastroActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAPTURE_IMAGE_ID_PROP) {
-            if (resultCode == RESULT_OK) {
-                callAddThumbProp(CAPTURE_IMAGE_ID_PROP);
+        if (resultCode == RESULT_OK) {
 
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Foto cancelada!", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Alguma coisa deu errado!", Toast.LENGTH_LONG).show();
-            }
-        }
+            callAddThumb(requestCode, fileUri.getPath());
 
-        if (requestCode == CAPTURE_IMAGE_CPF_PROP) {
-            if (resultCode == RESULT_OK) {
-                callAddThumbProp(CAPTURE_IMAGE_CPF_PROP);
-            } else if (resultCode == RESULT_CANCELED) {
-                // User cancelled the video capture
-            } else {
-                // Video capture failed, advise user
-            }
+        } else if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(this, "Foto cancelada!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Alguma coisa deu errado!", Toast.LENGTH_LONG).show();
         }
+        cadastro.getDocs().add(new Docs(fileUri.getPath(), String.valueOf(resultCode)));
     }
 
     public static void takePhoto(Activity activity, int type){
@@ -759,16 +775,26 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
-    public void callAddThumbProp(int type){
+    public void callAddThumb(int type, String file){
+        ImageButton img = new ImageButton(this);
+        img.setImageBitmap(decodeSampledBitmapFromFile(file, 100, 100));
+        LinearLayout layout = null;
 
-        if(type == CAPTURE_IMAGE_ID_PROP){
-            ImageView img = (ImageView) findViewById(R.id.idPropPhoto);
-            img.setImageBitmap(decodeSampledBitmapFromFile(100, 100));
-        }else if(type == CAPTURE_IMAGE_CPF_PROP){
-            ImageView img = (ImageView) findViewById(R.id.cpfPropPhoto);
-            img.setImageBitmap(decodeSampledBitmapFromFile(100, 100));
+        switch (type){
+            case CAPTURE_IMAGE_ID_PROP:
+                layout = (LinearLayout) findViewById(R.id.idPropLayout);
+                break;
+            case CAPTURE_IMAGE_CPF_PROP:
+                layout = (LinearLayout) findViewById(R.id.cpfPropLayout);
+                break;
+            case CAPTURE_IMAGE_ID_CONJ:
+                layout = (LinearLayout) findViewById(R.id.idConjLayout);
+                break;
+            case CAPTURE_IMAGE_CPF_CONJ:
+                layout = (LinearLayout) findViewById(R.id.cpfConjLayout);
+                break;
         }
-
+        layout.addView(img);
 
     }
 
@@ -794,19 +820,19 @@ public class CadastroActivity extends AppCompatActivity {
         return inSampleSize;
     }
 
-    public static Bitmap decodeSampledBitmapFromFile(int reqWidth, int reqHeight) {
+    public static Bitmap decodeSampledBitmapFromFile(String file, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(fileUri.getPath(), options);
+        BitmapFactory.decodeFile(file, options);
 
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(fileUri.getPath(), options);
+        return BitmapFactory.decodeFile(file, options);
     }
 
     private static Uri getOutputMediaFileUri(int type){

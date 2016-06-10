@@ -1,8 +1,43 @@
 package horusgeo.eco101;
 
+import java.util.ArrayList;
+
 /**
  * Created by rafael on 24/05/2016.
  */
+
+class Docs{
+
+    private String path;
+    private String type;
+
+    Docs(){
+
+    }
+
+    Docs(String path, String type){
+        this.path = path;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+}
+
+
 public class Register {
 
     private int _id;
@@ -17,10 +52,8 @@ public class Register {
     private String _profissao_prop;
     private String _estado_civil;
     private String _doc_id_prop;
-    private String _doc_id_photo_prop;
     private String _doc_id_tipo_prop;
     private String _cpf_prop;
-    private String _cpf_photo_prop;
     private String _tel_prop_1;
     private String _tel_prop_2;
     private String _email_prop;
@@ -31,10 +64,8 @@ public class Register {
     private String _nacionalidade_conj;
     private String _profissao_conj;
     private String _doc_id_conj;
-    private String _doc_id_photo_conj;
     private String _doc_id_tipo_conj;
     private String _cpf_conj;
-    private String _cpf_photo_conj;
     private String _tel_conj_1;
     private String _tel_conj_2;
     private String _anotacoes_conj;
@@ -70,11 +101,13 @@ public class Register {
     private String _descricao_visita;
     private String _responsavel;
 
+    private ArrayList<Docs> docs;
+
 
     private String _latlng;
 
     public Register(){
-
+        docs = new ArrayList<Docs>();
     }
 
     public Register(int id, String nome_proprietario, String id_prop,
@@ -187,14 +220,6 @@ public class Register {
         this._doc_id_prop = _doc_id_prop;
     }
 
-    public String get_doc_id_photo_prop() {
-        return _doc_id_photo_prop;
-    }
-
-    public void set_doc_id_photo_prop(String _doc_id_photo_prop) {
-        this._doc_id_photo_prop = _doc_id_photo_prop;
-    }
-
     public String get_doc_id_tipo_prop() {
         return _doc_id_tipo_prop;
     }
@@ -211,15 +236,7 @@ public class Register {
         this._cpf_prop = _cpf_prop;
     }
 
-    public String get_cpf_photo_prop() {
-        return _cpf_photo_prop;
-    }
-
-    public void set_cpf_photo_prop(String _cpf_photo_prop) {
-        this._cpf_photo_prop = _cpf_photo_prop;
-    }
-
-    public String get_tel_prop_1() {
+   public String get_tel_prop_1() {
         return _tel_prop_1;
     }
 
@@ -291,13 +308,7 @@ public class Register {
         this._doc_id_conj = _doc_id_conj;
     }
 
-    public String get_doc_id_photo_conj() {
-        return _doc_id_photo_conj;
-    }
 
-    public void set_doc_id_photo_conj(String _doc_id_photo_conj) {
-        this._doc_id_photo_conj = _doc_id_photo_conj;
-    }
 
     public String get_doc_id_tipo_conj() {
         return _doc_id_tipo_conj;
@@ -315,15 +326,7 @@ public class Register {
         this._cpf_conj = _cpf_conj;
     }
 
-    public String get_cpf_photo_conj() {
-        return _cpf_photo_conj;
-    }
-
-    public void set_cpf_photo_conj(String _cpf_photo_conj) {
-        this._cpf_photo_conj = _cpf_photo_conj;
-    }
-
-    public String get_tel_conj_1() {
+   public String get_tel_conj_1() {
         return _tel_conj_1;
     }
 
@@ -562,4 +565,15 @@ public class Register {
     public void set_infraabasagua(String _infraabasagua) {
         this._infraabasagua = _infraabasagua;
     }
+
+    public ArrayList<Docs> getDocs() {
+        return docs;
+    }
+
+    public void setDocs(ArrayList<Docs> docs) {
+        this.docs = docs;
+    }
 }
+
+
+

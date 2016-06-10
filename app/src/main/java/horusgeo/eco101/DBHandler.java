@@ -26,7 +26,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TABLE_BENF = "benfeitorias";
     private static final String TABLE_PLANT = "plantacoes";
     private static final String TABLE_DESC = "descricao";
-
+    private static final String TABLE_DOCS = "documentos";
 
     private static final String ID = "_id";
 
@@ -41,7 +41,6 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String PROFISSAO_PROPRIETARIO = "profissao_proprietario";
     private static final String ESTADO_CIVIL = "estado_civil";
     private static final String DOC_ID_PROPRIETARIO = "doc_id_proprietario";
-    private static final String DOC_ID_PHOTO_PROPRIETARIO = "doc_id_photo_proprietario";
     private static final String DOC_ID_TIPO_PROPRIETARIO = "doc_id_tipo_proprietario";
     private static final String CPF_PROPRIETARIO = "cpf_proprietario";
     private static final String CPF_PHOTO_PROPRIETARIO = "cpf_photo_proprietario";
@@ -56,7 +55,6 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String NACIONALIDADE_CONJ = "nacionalidade_conj";
     private static final String PROFISSAO_CONJ = "profissao_conj";
     private static final String DOC_ID_CONJ = "doc_id_conj";
-    private static final String DOC_ID_PHOTO_CONJ = "doc_id_photo_conj";
     private static final String DOC_ID_TIPO_CONJ = "doc_id_tipo_conj";
     private static final String CPF_CONJ = "cpf_conj";
     private static final String CPF_PHOTO_CONJ = "cpf_photo_conj";
@@ -119,6 +117,10 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DESCRICAO_VISITA = "descricao_visita";
     private static final String RESPONSAVEL = "responsavel";
 
+    private static final String PATH = "path";
+    private static final String ID_DOC = "_id_doc";
+    private static final String TYPE = "type";
+
     private static final String LATLNG = "latlng";
 
     public DBHandler(Context context, String name,
@@ -145,10 +147,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 PROFISSAO_PROPRIETARIO + " TEXT," +
                 ESTADO_CIVIL + " TEXT," +
                 DOC_ID_PROPRIETARIO + " TEXT," +
-                DOC_ID_PHOTO_PROPRIETARIO + " TEXT," +
                 DOC_ID_TIPO_PROPRIETARIO + " TEXT," +
                 CPF_PROPRIETARIO + " TEXT," +
-                CPF_PHOTO_PROPRIETARIO + " TEXT," +
                 TEL_PROPRIETARIO_1 + " TEXT," +
                 TEL_PROPRIETARIO_2 + " TEXT," +
                 EMAIL_PROPRIETARIO + " TEXT," +
@@ -163,10 +163,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 NACIONALIDADE_CONJ + " TEXT," +
                 PROFISSAO_CONJ + " TEXT," +
                 DOC_ID_CONJ + " TEXT," +
-                DOC_ID_PHOTO_CONJ + " TEXT," +
                 DOC_ID_TIPO_CONJ + " TEXT," +
                 CPF_CONJ + " TEXT," +
-                CPF_PHOTO_CONJ + " TEXT," +
                 TEL_CONJ_1 + " TEXT," +
                 TEL_CONJ_2 + " TEXT," +
                 ANOTACOES_CONJ + " TEXT," +
@@ -225,6 +223,15 @@ public class DBHandler extends SQLiteOpenHelper {
                 ")";
         db.execSQL(CREATE_DESC_TABLE);
 
+        String CREATE_DOCS_TABLE = "CREATE TABLE " + TABLE_DOCS + "(" +
+                ID + " INTEGER PRIMARY KEY," +
+                PATH + " TEXT," +
+                ID_DOC + " TEXT," +
+                TYPE + " TEXT" +
+                ")";
+        db.execSQL(CREATE_DOCS_TABLE);
+
+
 
     }
 
@@ -232,6 +239,13 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REGISTERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROP);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONJ);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_END_RES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_END_OBJ);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ID_PROP);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DESC);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DOCS);
+
         onCreate(db);
     }
 
@@ -261,10 +275,8 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(PROFISSAO_PROPRIETARIO, cadastro.get_profissao_prop());
         values.put(ESTADO_CIVIL, cadastro.get_estado_civil());
         values.put(DOC_ID_PROPRIETARIO, cadastro.get_doc_id_prop());
-        values.put(DOC_ID_PHOTO_PROPRIETARIO, cadastro.get_doc_id_photo_prop());
         values.put(DOC_ID_TIPO_PROPRIETARIO, cadastro.get_doc_id_tipo_prop());
         values.put(CPF_PROPRIETARIO, cadastro.get_cpf_prop());
-        values.put(CPF_PHOTO_PROPRIETARIO, cadastro.get_cpf_photo_prop());
         values.put(TEL_PROPRIETARIO_1, cadastro.get_tel_prop_1());
         values.put(TEL_PROPRIETARIO_2, cadastro.get_tel_prop_2());
         values.put(EMAIL_PROPRIETARIO, cadastro.get_email_prop());
@@ -285,10 +297,8 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(NACIONALIDADE_CONJ, cadastro.get_nacionalidade_conj());
         values.put(PROFISSAO_CONJ, cadastro.get_profissao_conj());
         values.put(DOC_ID_CONJ, cadastro.get_doc_id_conj());
-        values.put(DOC_ID_PHOTO_CONJ, cadastro.get_doc_id_photo_conj());
         values.put(DOC_ID_TIPO_CONJ, cadastro.get_doc_id_tipo_conj());
         values.put(CPF_CONJ, cadastro.get_cpf_conj());
-        values.put(CPF_PHOTO_CONJ, cadastro.get_cpf_photo_conj());
         values.put(TEL_CONJ_1, cadastro.get_tel_conj_1());
         values.put(TEL_CONJ_2, cadastro.get_tel_conj_2());
         values.put(ANOTACOES_CONJ, cadastro.get_anotacoes_conj());
@@ -375,6 +385,25 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addDoc(Register cadastro){
+
+        ArrayList<Docs> docs = cadastro.getDocs();
+
+        ContentValues values = new ContentValues();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for(Docs temp : docs){
+            values.put(PATH, temp.getPath());
+            values.put(ID_DOC, cadastro.get_id_prop());
+            values.put(TYPE, temp.getType());
+
+            db.insert(TABLE_DOCS, null, values);
+        }
+        db.close();
+
+    }
+
     //Update Registers
 
     public void updateRegister(Register cadastro, String idBck){
@@ -396,7 +425,8 @@ public class DBHandler extends SQLiteOpenHelper {
         updateRegisterEndRes(cadastro, idBck);
         updateRegisterEndObj(cadastro, idBck);
         updateRegisterIdProp(cadastro, idBck);
-        updateRegsiterDesc(cadastro, idBck);
+        updateRegisterDesc(cadastro, idBck);
+        updateRegisterDoc(cadastro, idBck);
 
     }
 
@@ -409,10 +439,8 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(PROFISSAO_PROPRIETARIO, cadastro.get_profissao_prop());
         values.put(ESTADO_CIVIL, cadastro.get_estado_civil());
         values.put(DOC_ID_PROPRIETARIO, cadastro.get_doc_id_prop());
-        values.put(DOC_ID_PHOTO_PROPRIETARIO, cadastro.get_doc_id_photo_prop());
         values.put(DOC_ID_TIPO_PROPRIETARIO, cadastro.get_doc_id_tipo_prop());
         values.put(CPF_PROPRIETARIO, cadastro.get_cpf_prop());
-        values.put(CPF_PHOTO_PROPRIETARIO, cadastro.get_cpf_photo_prop());
         values.put(TEL_PROPRIETARIO_1, cadastro.get_tel_prop_1());
         values.put(TEL_PROPRIETARIO_2, cadastro.get_tel_prop_2());
         values.put(EMAIL_PROPRIETARIO, cadastro.get_email_prop());
@@ -437,10 +465,8 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(NACIONALIDADE_CONJ, cadastro.get_nacionalidade_conj());
         values.put(PROFISSAO_CONJ, cadastro.get_profissao_conj());
         values.put(DOC_ID_CONJ, cadastro.get_doc_id_conj());
-        values.put(DOC_ID_PHOTO_CONJ, cadastro.get_doc_id_photo_conj());
         values.put(DOC_ID_TIPO_CONJ, cadastro.get_doc_id_tipo_conj());
         values.put(CPF_CONJ, cadastro.get_cpf_conj());
-        values.put(CPF_PHOTO_CONJ, cadastro.get_cpf_photo_conj());
         values.put(TEL_CONJ_1, cadastro.get_tel_conj_1());
         values.put(TEL_CONJ_2, cadastro.get_tel_conj_2());
         values.put(ANOTACOES_CONJ, cadastro.get_anotacoes_conj());
@@ -534,7 +560,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public void updateRegsiterDesc(Register cadastro, String idBck) {
+    public void updateRegisterDesc(Register cadastro, String idBck) {
 
         ContentValues values = new ContentValues();
 
@@ -553,6 +579,24 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
         db.close();
+    }
+
+    public void updateRegisterDoc(Register cadastro, String idBck){
+
+        ArrayList<Docs> docs = cadastro.getDocs();
+
+        ContentValues values = new ContentValues();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for(Docs temp : docs){
+            values.put(PATH, temp.getPath());
+            values.put(ID_DOC, cadastro.get_id_prop());
+            values.put(TYPE, temp.getType());
+
+            db.update(TABLE_DOCS, values, PATH + "=" + temp.getPath(), null);
+        }
+
     }
 
 
