@@ -78,9 +78,12 @@ public class CadastroActivity extends AppCompatActivity {
 //    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 
     private static final int CAPTURE_IMAGE_ID_PROP = 100;
-    private static final int CAPTURE_IMAGE_CPF_PROP = 200;
-    private static final int CAPTURE_IMAGE_ID_CONJ = 300;
-    private static final int CAPTURE_IMAGE_CPF_CONJ = 400;
+    private static final int CAPTURE_IMAGE_CPF_PROP = 101;
+    private static final int CAPTURE_IMAGE_ID_CONJ = 102;
+    private static final int CAPTURE_IMAGE_CPF_CONJ = 103;
+    private static final int CAPTURE_IMAGE_END_RES = 104;
+    private static final int CAPTURE_IMAGE_END_OBJ = 105;
+    private static final int CAPTURE_IMAGE_IDENT_PROP = 106;
 
     private static Uri fileUri;
 
@@ -312,12 +315,36 @@ public class CadastroActivity extends AppCompatActivity {
                     break;
                 case 5:
                     rootView = inflater.inflate(R.layout.layout_end_residencial, container, false);
+                    ImageButton endResPhoto = (ImageButton) rootView.findViewById(R.id.photoEndResButton);
+
+                    endResPhoto.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            takePhoto(getActivity(), CAPTURE_IMAGE_END_RES);
+                        }
+                    });
                     break;
                 case 6:
                     rootView = inflater.inflate(R.layout.layout_end_obj, container, false);
+                    ImageButton endObjPhoto = (ImageButton) rootView.findViewById(R.id.photoEndObjButton);
+
+                    endObjPhoto.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            takePhoto(getActivity(), CAPTURE_IMAGE_END_OBJ);
+                        }
+                    });
                     break;
                 case 7:
                     rootView = inflater.inflate(R.layout.layout_id_prop, container, false);
+                    ImageButton identPropPhoto = (ImageButton) rootView.findViewById(R.id.photoIdPropButton);
+
+                    identPropPhoto.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            takePhoto(getActivity(), CAPTURE_IMAGE_IDENT_PROP);
+                        }
+                    });
                     break;
                 case 8:
                     rootView = inflater.inflate(R.layout.layout_benf, container, false);
@@ -477,7 +504,8 @@ public class CadastroActivity extends AppCompatActivity {
         tel2.setText(cadastro.get_tel_prop_2());
         email.setText(cadastro.get_email_prop());
         anot.setText(cadastro.get_anotacoes_prop());
-        if(cadastro.getDocs()!=null) {
+
+        if(!cadastro.isDocsEmpty()) {
             for (Docs temp : cadastro.getDocs()) {
                 if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_PROP))) {
                     callAddThumb(CAPTURE_IMAGE_ID_PROP, temp.getPath());
@@ -591,6 +619,13 @@ public class CadastroActivity extends AppCompatActivity {
         com.setText(cadastro.get_comarca_end_res());
         comuf.setText(cadastro.get_uf_com_end_res());
         pto.setText(cadastro.get_p_ref_end_res());
+        if(!cadastro.isDocsEmpty()) {
+            for (Docs temp : cadastro.getDocs()) {
+                if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_END_RES))) {
+                    callAddThumb(CAPTURE_IMAGE_END_RES, temp.getPath());
+                }
+            }
+        }
     }
 
     public void saveCadastroEndObj(){
@@ -623,6 +658,13 @@ public class CadastroActivity extends AppCompatActivity {
         bairro.setText(cadastro.get_bairro_end_obj());
         cep.setText(cadastro.get_cep_end_obj());
         pto.setText(cadastro.get_p_ref_end_obj());
+        if(!cadastro.isDocsEmpty()) {
+            for (Docs temp : cadastro.getDocs()) {
+                if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_END_OBJ))) {
+                    callAddThumb(CAPTURE_IMAGE_END_OBJ, temp.getPath());
+                }
+            }
+        }
     }
 
     public void saveCadastroIdProp(){
@@ -666,6 +708,14 @@ public class CadastroActivity extends AppCompatActivity {
         if(cadastro.get_infraabasagua() != null)
             infra3.setChecked(Boolean.parseBoolean(cadastro.get_infraabasagua()));
         obs.setText(cadastro.get_obs_id_prop());
+
+        if(!cadastro.isDocsEmpty()) {
+            for (Docs temp : cadastro.getDocs()) {
+                if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_IDENT_PROP))) {
+                    callAddThumb(CAPTURE_IMAGE_IDENT_PROP, temp.getPath());
+                }
+            }
+        }
 
     }
 
@@ -760,7 +810,8 @@ public class CadastroActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Alguma coisa deu errado!", Toast.LENGTH_LONG).show();
         }
-        cadastro.getDocs().add(new Docs(fileUri.getPath(), String.valueOf(resultCode)));
+
+        cadastro.getDocs().add(new Docs(fileUri.getPath(), String.valueOf(requestCode)));
     }
 
     public static void takePhoto(Activity activity, int type){
@@ -792,6 +843,15 @@ public class CadastroActivity extends AppCompatActivity {
                 break;
             case CAPTURE_IMAGE_CPF_CONJ:
                 layout = (LinearLayout) findViewById(R.id.cpfConjLayout);
+                break;
+            case CAPTURE_IMAGE_END_RES:
+                layout = (LinearLayout) findViewById(R.id.endResPhotoLayout);
+                break;
+            case CAPTURE_IMAGE_END_OBJ:
+                layout = (LinearLayout) findViewById(R.id.endObjPhotoLayout);
+                break;
+            case CAPTURE_IMAGE_IDENT_PROP:
+                layout = (LinearLayout) findViewById(R.id.idPropPhotoLayout);
                 break;
         }
         layout.addView(img);

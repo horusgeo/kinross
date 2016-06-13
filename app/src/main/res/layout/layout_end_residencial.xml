@@ -230,23 +230,25 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/uploadEndResButton"
                 android:src="@mipmap/ic_file_upload_black_24dp"
-                android:background="@android:color/transparent" />
+                android:background="@android:color/transparent"
+                android:visibility="invisible" />
         </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Arquivos:"
-            android:id="@+id/textView6" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="20dp" />
 
         <HorizontalScrollView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/filesEndRes" />
+            android:id="@+id/filesEndRes"
+            android:layout_gravity="center_horizontal" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/endResPhotoLayout"></LinearLayout>
+        </HorizontalScrollView>
         </LinearLayout>
 </ScrollView>

@@ -573,6 +573,10 @@ public class Register {
     public void setDocs(ArrayList<Docs> docs) {
         this.docs = docs;
     }
+
+    public Boolean isDocsEmpty(){
+        return docs.isEmpty();
+    }
 }
 
 
