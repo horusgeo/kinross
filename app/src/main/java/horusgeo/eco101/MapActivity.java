@@ -114,53 +114,53 @@ public class MapActivity extends AppCompatActivity {
             }
         });
 
-        fab1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final AlertDialog.Builder inputPointsDialog = new AlertDialog.Builder(MapActivity.this);
-
-                inputPointsDialog.setTitle("Defina os pontos:");
-
-                final LayoutInflater inflater = MapActivity.this.getLayoutInflater();
+//        fab1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final AlertDialog.Builder inputPointsDialog = new AlertDialog.Builder(MapActivity.this);
+//
+//                inputPointsDialog.setTitle("Defina os pontos:");
+//
+//                final LayoutInflater inflater = MapActivity.this.getLayoutInflater();
 //                AlertDialog dialog = inputPointsDialog.create();
 //                View dialogView = inflater.inflate(R.layout.inputpointslayout, dialogView);
-                inputPointsDialog.setView(inflater.inflate(R.layout.inputpointslayout, null))
-                    .setPositiveButton("Criar propriedade", new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-
-                        }
-                    })
-                    .setNeutralButton("Novo ponto", new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            LatLngPoints aux=null;
-                            TextView latInput = (TextView) findViewById(R.id.latInput);
-                            TextView lngInput = (TextView) findViewById(R.id.lngInput);
-                            TextView pointLabel = (TextView) findViewById(R.id.pointLabel);
-
-                            aux.lat = Double.parseDouble(latInput.getText().toString());
-                            aux.lng = Double.parseDouble(lngInput.getText().toString());
-
-                            points[points.length] = aux;
-
-                            pointCount+=1;
-                            pointLabel.setText("Ponto "+ pointCount);
-                            latInput.setText(R.string._0_0);
-                            lngInput.setText(R.string._0_0);
-                        }
-                    })
-                    .setNegativeButton("Editar Ponto", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+//                inputPointsDialog.setView(inflater.inflate(R.layout.inputpointslayout, null))
+//                    .setPositiveButton("Criar propriedade", new DialogInterface.OnClickListener(){
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int id) {
+//
+//                        }
+//                    })
+//                    .setNeutralButton("Novo ponto", new DialogInterface.OnClickListener(){
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            LatLngPoints aux=null;
+//                            TextView latInput = (TextView) findViewById(R.id.latInput);
+//                            TextView lngInput = (TextView) findViewById(R.id.lngInput);
+//                            TextView pointLabel = (TextView) findViewById(R.id.pointLabel);
+//
+//                            aux.lat = Double.parseDouble(latInput.getText().toString());
+//                            aux.lng = Double.parseDouble(lngInput.getText().toString());
+//
+//                            points[points.length] = aux;
+//
+//                            pointCount+=1;
+//                            pointLabel.setText("Ponto "+ pointCount);
+//                            latInput.setText(R.string._0_0);
+//                            lngInput.setText(R.string._0_0);
+//                        }
+//                    })
+//                    .setNegativeButton("Editar Ponto", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int id) {
 //                            LoginDialogFragment.this.getDialog().cancel();
-                        }
-                });
-
-                inputPointsDialog.show();
-
-            }
-
-        });
+//                        }
+//                });
+//
+//                inputPointsDialog.show();
+//
+//            }
+//
+//        });
 
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override

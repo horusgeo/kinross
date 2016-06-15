@@ -5,8 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 
+import com.opencsv.CSVWriter;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +20,8 @@ import java.util.List;
  * Created by rafael on 24/05/2016.
  */
 public class DBHandler extends SQLiteOpenHelper {
+
+    private static final int nTables = 8;
 
     private static final String DATABASE_NAME = "eco101.db";
     private static final int DATABASE_VERSION = 1;
@@ -99,7 +107,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TIPO_BENF = "tipo_benf";
     private static final String IDADE_BENF = "idade_benf";
     private static final String CONSERVACAO_BENF = "conservacao_benf";
-    private static final String PHOTO_BENF = "photo_benf";
+    private static final String ID_BENF_PHOTOS = "id_benf_photos";
     private static final String OBS_BENF = "obs_benf";
     private static final String ARQUIVOS_BENF = "arquivos_benf";
 
@@ -107,6 +115,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TIPO_PLANT = "tipo_plant";
     private static final String IDADE_PLANT = "idade_plant";
     private static final String COMPLEMENTO_PLANT = "conservacao_plant";
+    private static final String ID_PLANT_PHOTOS = "id_plant_photos";
     private static final String PHOTO_PLANT = "photo_plant";
     private static final String OBS_PLANT = "obs_plant";
     private static final String ARQUIVOS_PLANT = "arquivos_plant";
@@ -120,6 +129,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String PATH = "path";
     private static final String ID_DOC = "_id_doc";
     private static final String TYPE = "type";
+    private static final String NAME = "name";
 
     private static final String LATLNG = "latlng";
 
@@ -227,12 +237,30 @@ public class DBHandler extends SQLiteOpenHelper {
                 ID + " INTEGER PRIMARY KEY," +
                 PATH + " TEXT," +
                 ID_DOC + " TEXT," +
-                TYPE + " TEXT" +
+                TYPE + " TEXT," +
+                NAME + " TEXT" +
                 ")";
         db.execSQL(CREATE_DOCS_TABLE);
 
+        String CREATE_BENF_TABLE = "CREATE TABLE " + TABLE_BENF + "(" +
+                ID + " INTEGER PRIMARY KEY," +
+                TIPO_BENF + " TEXT," +
+                IDADE_BENF + " TEXT," +
+                CONSERVACAO_BENF + " TEXT," +
+                ID_BENF_PHOTOS + " TEXT," +
+                ID_BENF + " TEXT" +
+                ")";
+        db.execSQL(CREATE_BENF_TABLE);
 
-
+        String CREATE_PLANT_TABLE = "CREATE TABLE " + TABLE_PLANT + "(" +
+                ID + " INTEGER PRIMARY KEY," +
+                TIPO_PLANT + " TEXT," +
+                IDADE_PLANT + " TEXT," +
+                COMPLEMENTO_PLANT + " TEXT," +
+                ID_PLANT_PHOTOS + " TEXT," +
+                ID_PLANT + " TEXT" +
+                ")";
+        db.execSQL(CREATE_PLANT_TABLE);
     }
 
     @Override
@@ -245,7 +273,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ID_PROP);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DESC);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DOCS);
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BENF);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLANT);
         onCreate(db);
     }
 
@@ -394,14 +423,35 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         for(Docs temp : docs){
+            values.clear();
             values.put(PATH, temp.getPath());
             values.put(ID_DOC, cadastro.get_id_prop());
             values.put(TYPE, temp.getType());
+            values.put(NAME, temp.getType());
 
             db.insert(TABLE_DOCS, null, values);
         }
         db.close();
 
+    }
+
+    public void addBenf(Register cadastro){
+
+        ArrayList<Benfeitoria> benfs = cadastro.getBenf();
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for(Benfeitoria temp : benfs){
+            values.clear();
+            values.put(TIPO_BENF, temp.getTipo());
+            values.put(IDADE_BENF, temp.getIdade());
+            values.put(CONSERVACAO_BENF, temp.getConservacao());
+            values.put(ID_BENF_PHOTOS, temp.getIdBenf());
+            values.put(ID_BENF, cadastro.get_id_prop());
+
+            db.insert(TABLE_BENF, null, values);
+        }
+        db.close();
     }
 
     //Update Registers
@@ -593,9 +643,34 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(PATH, temp.getPath());
             values.put(ID_DOC, cadastro.get_id_prop());
             values.put(TYPE, temp.getType());
+            values.put(NAME, temp.getType());
 
             db.update(TABLE_DOCS, values, PATH + "=" + temp.getPath(), null);
         }
+
+    }
+
+    public void updateRegisterBenf(Register cadastro, String idBck){
+
+        ArrayList<Benfeitoria> benfs = cadastro.getBenf();
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for(Benfeitoria temp : benfs){
+            values.clear();
+            values.put(TIPO_BENF, temp.getTipo());
+            values.put(IDADE_BENF, temp.getIdade());
+            values.put(CONSERVACAO_BENF, temp.getConservacao());
+            values.put(ID_BENF_PHOTOS, temp.getIdBenf());
+            values.put(ID_BENF, cadastro.get_id_prop());
+
+            if (cadastro.get_id_prop().equals(idBck)) {
+                db.update(TABLE_BENF, values, ID_BENF + "=" + cadastro.get_id_prop(), null);
+            } else {
+                db.update(TABLE_BENF, values, ID_BENF + "=" + idBck, null);
+            }
+        }
+        db.close();
 
     }
 
@@ -746,6 +821,25 @@ public class DBHandler extends SQLiteOpenHelper {
             cursor.close();
         }
 
+        query = "SELECT * FROM " + TABLE_BENF + " WHERE " + ID_BENF + " = " + idProp;
+
+        cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                register.getBenf().add(new Benfeitoria(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4)));
+            }while(cursor.moveToNext());
+        }
+
+        query = "SELECT * FROM" + TABLE_DOCS + " WHERE " + ID_DOC + " = " + idProp;
+
+        cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                register.getDocs().add(new Docs(cursor.getString(1), cursor.getString(3), cursor.getString(4)));
+            }while(cursor.moveToNext());
+        }
         db.close();
 
         return register;
@@ -766,6 +860,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db.delete(TABLE_END_OBJ, ID_END_OBJ + " = " + idProp, null);
         db.delete(TABLE_ID_PROP, ID_ID_PROP + " = " + idProp, null);
         db.delete(TABLE_DESC, ID_DESC + " = " + idProp, null);
+        db.delete(TABLE_DOCS, ID_DOC + " = " + idProp, null);
+        db.delete(TABLE_BENF, ID_BENF + " = " + idProp, null);
 
         db.close();
 
@@ -798,5 +894,317 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return count;
     }
+
+    public int getBenfCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_BENF;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+
+        // return count
+        db.close();
+        return count;
+    }
+
+    public int getNTables(){
+        return nTables;
+    }
+
+    public String getTableNames(int n){
+        switch(n){
+            case 0:
+                return TABLE_REGISTERS;
+            case 1:
+                return TABLE_PROP;
+            case 2:
+                return TABLE_CONJ;
+            case 3:
+                return TABLE_END_RES;
+            case 4:
+                return TABLE_END_OBJ;
+            case 5:
+                return TABLE_ID_PROP;
+            case 6:
+                return TABLE_DESC;
+            case 7:
+                return TABLE_DOCS;
+        }
+        return "";
+    }
+
+//    Generate CSV Files
+
+    public File generateCSV(int n){
+        File file = null;
+        switch(n){
+            case 0:
+                file = tableRegisterToCSV();
+                break;
+            case 1:
+                file = tablePropToCSV();
+                break;
+            case 2:
+                file = tableConjToCSV();
+                break;
+            case 3:
+                file = tableEndResToCSV();
+                break;
+            case 4:
+                file = tableEndObjToCSV();
+                break;
+            case 5:
+                file = tableIdPropToCSV();
+                break;
+            case 6:
+                file = tableDescToCSV();
+                break;
+            case 7:
+                file = tableDocToCSV();
+                break;
+
+
+
+        }
+        return file;
+    }
+
+    public File tableRegisterToCSV() {
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_REGISTERS + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_REGISTERS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+            //file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()) {
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3), cursor.getString(4)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public File tablePropToCSV(){
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_PROP + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_PROP;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+//            file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()) {
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3), cursor.getString(4), cursor.getString(5),
+                            cursor.getString(6), cursor.getString(7), cursor.getString(8),
+                            cursor.getString(9), cursor.getString(10), cursor.getString(11),
+                            cursor.getString(12)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public File tableConjToCSV(){
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_CONJ + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_CONJ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+//            file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()) {
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3), cursor.getString(4), cursor.getString(5),
+                            cursor.getString(6), cursor.getString(7), cursor.getString(8),
+                            cursor.getString(9), cursor.getString(10)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public File tableEndResToCSV(){
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_END_RES + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_END_RES;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+//            file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()) {
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3), cursor.getString(4), cursor.getString(5),
+                            cursor.getString(6), cursor.getString(7), cursor.getString(8),
+                            cursor.getString(9), cursor.getString(10), cursor.getString(11)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public File tableEndObjToCSV(){
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_END_OBJ + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_END_OBJ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+//            file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()) {
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3), cursor.getString(4), cursor.getString(5),
+                            cursor.getString(6), cursor.getString(7)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public File tableIdPropToCSV(){
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_ID_PROP + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_ID_PROP;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+//            file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()) {
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3), cursor.getString(4), cursor.getString(5),
+                            cursor.getString(6), cursor.getString(7), cursor.getString(8)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public File tableDescToCSV(){
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_DESC + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_DESC;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+//            file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()) {
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3), cursor.getString(4), cursor.getString(5)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public File tableDocToCSV(){
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_DOCS + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_DOCS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+//            file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()){
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3), cursor.getString(4)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+
+
+
+
 
 }

@@ -1,8 +1,11 @@
 package horusgeo.eco101;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -32,6 +35,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -43,6 +47,8 @@ import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.Bitmap;
+
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -67,6 +73,7 @@ public class CadastroActivity extends AppCompatActivity {
     Register cadastro;
 
     String idBck;
+    static String idPropBenf;
 
     DBHandler db;
 
@@ -74,8 +81,6 @@ public class CadastroActivity extends AppCompatActivity {
 
     int tabSelected;
 
-//    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-//    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 
     private static final int CAPTURE_IMAGE_ID_PROP = 100;
     private static final int CAPTURE_IMAGE_CPF_PROP = 101;
@@ -348,6 +353,17 @@ public class CadastroActivity extends AppCompatActivity {
                     break;
                 case 8:
                     rootView = inflater.inflate(R.layout.layout_benf, container, false);
+                    Button benfButton = (Button) rootView.findViewById(R.id.benfButton);
+                    benfButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), BenfeitoriaActivity.class);
+                            intent.putExtra("idProp", idPropBenf);
+                            startActivity(intent);
+                        }
+                    });
+
+
                     break;
                 case 9:
                     rootView = inflater.inflate(R.layout.layout_plant, container, false);
@@ -432,6 +448,7 @@ public class CadastroActivity extends AppCompatActivity {
         cadastro.set_id_prop(idProp.getText().toString());
         cadastro.set_local_visita(localVisita.getText().toString());
         cadastro.set_data_visita(dataVisita.getText().toString());
+        idPropBenf = cadastro.get_id_prop();
 
     }
 
@@ -810,8 +827,8 @@ public class CadastroActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Alguma coisa deu errado!", Toast.LENGTH_LONG).show();
         }
-
-        cadastro.getDocs().add(new Docs(fileUri.getPath(), String.valueOf(requestCode)));
+        String[] name = fileUri.getPath().split("/");
+        cadastro.getDocs().add(new Docs(fileUri.getPath(), String.valueOf(requestCode), name[name.length-1]));
     }
 
     public static void takePhoto(Activity activity, int type){
@@ -932,6 +949,4 @@ public class CadastroActivity extends AppCompatActivity {
 
         return mediaFile;
     }
-
-
 }

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/benfTipoText"
+                android:layout_weight="0.25"
+                android:hint="Tipo"
+                android:editable="false"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:text="Tipo: " />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_weight="0.25" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/benfIdadeText"
+                android:layout_weight="0.25"
+                android:hint="Idade Aparente"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:text="Idade Aparente: " />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_weight="0.25" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/benfConservacaoText"
+                android:layout_weight="0.25"
+                android:hint="Conservação"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:text="Conservação: " />
+
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/horizontalScrollView5"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.8">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/benfPhotoLayout"></LinearLayout>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/benfPhotoButton"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:src="@mipmap/ic_photo_camera_black_24dp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_weight="0" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/benfEditButton"
+                android:layout_weight="0"
+                android:src="@mipmap/ic_create_black_24dp"
+                android:background="@android:color/transparent" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_weight="0" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/benfDelButton"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:src="@mipmap/ic_clear_black_24dp" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@android:color/darker_gray"/>
+
+
+</LinearLayout>

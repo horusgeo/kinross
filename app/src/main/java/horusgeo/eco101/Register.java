@@ -10,15 +10,18 @@ class Docs{
 
     private String path;
     private String type;
+    private String name;
 
     Docs(){
 
     }
 
-    Docs(String path, String type){
+    Docs(String path, String type, String name){
         this.path = path;
         this.type = type;
+        this.name = name;
     }
+
 
     public String getType() {
         return type;
@@ -35,8 +38,67 @@ class Docs{
     public void setPath(String path) {
         this.path = path;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
 
+class Benfeitoria{
+
+    private String tipo;
+    private String idade;
+    private String conservacao;
+    private String idBenf;
+
+
+    Benfeitoria(){
+    }
+
+    Benfeitoria(String tipo, String idade, String conservacao, String idBenf){
+        this.tipo = tipo;
+        this.idade = idade;
+        this.conservacao = conservacao;
+        this.idBenf = idBenf;
+    }
+
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getIdade() {
+        return idade;
+    }
+
+    public void setIdade(String idade) {
+        this.idade = idade;
+    }
+
+    public String getConservacao() {
+        return conservacao;
+    }
+
+    public void setConservacao(String conservacao) {
+        this.conservacao = conservacao;
+    }
+
+    public String getIdBenf() {
+        return idBenf;
+    }
+
+    public void setIdBenf(String idBenf) {
+        this.idBenf = idBenf;
+    }
+}
 
 public class Register {
 
@@ -103,11 +165,17 @@ public class Register {
 
     private ArrayList<Docs> docs;
 
+    private ArrayList<Benfeitoria> benf;
+
+    private ArrayList<Benfeitoria> plant;
+
 
     private String _latlng;
 
     public Register(){
         docs = new ArrayList<Docs>();
+        benf = new ArrayList<Benfeitoria>();
+        plant = new ArrayList<Benfeitoria>();
     }
 
     public Register(int id, String nome_proprietario, String id_prop,
@@ -576,6 +644,22 @@ public class Register {
 
     public Boolean isDocsEmpty(){
         return docs.isEmpty();
+    }
+
+    public ArrayList<Benfeitoria> getBenf() {
+        return benf;
+    }
+
+    public void setBenf(ArrayList<Benfeitoria> benf) {
+        this.benf = benf;
+    }
+
+    public ArrayList<Benfeitoria> getPlant() {
+        return plant;
+    }
+
+    public void setPlant(ArrayList<Benfeitoria> plant) {
+        this.plant = plant;
     }
 }
 

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -18,11 +19,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.opencsv.CSVWriter;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -220,13 +224,18 @@ public class InitialActivity extends AppCompatActivity {
 
                 client.setFileType(FTP.BINARY_FILE_TYPE, FTP.BINARY_FILE_TYPE);
                 client.setFileTransferMode(FTP.BINARY_FILE_TYPE);
-
-                File file = new File("/data/data/horusgeo.eco101/databases/eco101.db");
-                FileInputStream inputStream = new FileInputStream(file);
-
-                Boolean result = client.storeFile("/public_ftp/incoming/eco101.db", inputStream);
-
-                inputStream.close();
+                int count = 0;
+                Boolean result = false;
+                while(count < db.getNTables()){
+                    File file = db.generateCSV(count);
+                    Log.d("HorusGeo", String.valueOf(count));
+                    Log.d("HorusGeo", file.getPath());
+                    FileInputStream inputStream = new FileInputStream(file);
+                    String[] name = file.getPath().split("/");
+                    result = client.storeFile("/public_ftp/incoming/"+ name[name.length-1], inputStream);
+                    inputStream.close();
+                    count++;
+                }
                 client.logout();
 
                 return result;
