@@ -10,15 +10,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 public class BenfeitoriaActivity extends AppCompatActivity {
 
     String idProp;
-    Register cadastro;
+    ArrayList<Benfeitoria> benfs;
+    ArrayList<Docs> docs;
     TextView tipoText;
     TextView idadeText;
     TextView consvText;
@@ -33,12 +37,12 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-
         idProp = intent.getStringExtra("idProp");
-        db = new DBHandler(this, null, null, 1);
-        cadastro = new Register();
 
-        cadastro = db.getRegister(idProp);
+        db = new DBHandler(this, null, null, 1);
+
+        benfs = db.getBenfeitoria(idProp);
+        docs = db.getDocs(idProp);
 
         ImageButton benfAddButton = (ImageButton) findViewById(R.id.addBenfButton);
 
@@ -76,9 +80,10 @@ public class BenfeitoriaActivity extends AppCompatActivity {
                     idadeText = (TextView) findViewById(R.id.benfIdadeText);
                     consvText = (TextView) findViewById(R.id.benfConservText);
 
-                    cadastro.getBenf().add(new Benfeitoria(tipoText.getText().toString(), idadeText.getText().toString(),
-                            consvText.getText().toString(), String.valueOf(1000 + db.getBenfCount())));
+                    benfs.add(new Benfeitoria(tipoText.getText().toString(), idadeText.getText().toString(),
+                            consvText.getText().toString(), String.valueOf(1000 + db.getBenfCount()), idProp));
 
+                    addBenf(benfs.get(benfs.size()-1));
                 }
             })
             .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -87,6 +92,22 @@ public class BenfeitoriaActivity extends AppCompatActivity {
                 }
         });
         builderSingle.show();
+    }
+
+    public void addBenf(Benfeitoria benf){
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View rootView = inflater.inflate(R.layout.dados_benf, null);
+
+        TextView tipo = (TextView) rootView.findViewById(R.id.benfTipoLabel);
+        TextView idade = (TextView) rootView.findViewById(R.id.benfIdadeLabel);
+        TextView conserv = (TextView) rootView.findViewById(R.id.benfConservacaoLabel);
+        TextView idBenf = (TextView) rootView.findViewById(R.id.idBenfInvText);
+
+        tipo.setText("Tipo: " + benf.getTipo());
+        idade.setText("Tipo: " + benf.getIdade());
+        conserv.setText("Tipo: " + benf.getConservacao());
+        idBenf.setText("Tipo: " + benf.getIdBenf());
 
 
     }

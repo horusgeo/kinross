@@ -236,9 +236,9 @@ public class DBHandler extends SQLiteOpenHelper {
         String CREATE_DOCS_TABLE = "CREATE TABLE " + TABLE_DOCS + "(" +
                 ID + " INTEGER PRIMARY KEY," +
                 PATH + " TEXT," +
-                ID_DOC + " TEXT," +
                 TYPE + " TEXT," +
                 NAME + " TEXT" +
+                ID_DOC + " TEXT," +
                 ")";
         db.execSQL(CREATE_DOCS_TABLE);
 
@@ -414,9 +414,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addDoc(Register cadastro){
-
-        ArrayList<Docs> docs = cadastro.getDocs();
+    public void addDoc(ArrayList<Docs> docs){
 
         ContentValues values = new ContentValues();
 
@@ -425,9 +423,9 @@ public class DBHandler extends SQLiteOpenHelper {
         for(Docs temp : docs){
             values.clear();
             values.put(PATH, temp.getPath());
-            values.put(ID_DOC, cadastro.get_id_prop());
             values.put(TYPE, temp.getType());
             values.put(NAME, temp.getType());
+            values.put(ID_DOC, temp.getIdProp());
 
             db.insert(TABLE_DOCS, null, values);
         }
@@ -435,9 +433,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public void addBenf(Register cadastro){
+    public void addBenf(ArrayList<Benfeitoria> benfs){
 
-        ArrayList<Benfeitoria> benfs = cadastro.getBenf();
         ContentValues values = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -447,7 +444,7 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(IDADE_BENF, temp.getIdade());
             values.put(CONSERVACAO_BENF, temp.getConservacao());
             values.put(ID_BENF_PHOTOS, temp.getIdBenf());
-            values.put(ID_BENF, cadastro.get_id_prop());
+            values.put(ID_BENF, temp.getIdProp());
 
             db.insert(TABLE_BENF, null, values);
         }
@@ -456,7 +453,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //Update Registers
 
-    public void updateRegister(Register cadastro, String idBck){
+    public void updateRegister(Register cadastro, ArrayList<Benfeitoria> benf, ArrayList<Docs> docs, String idBck){
 
         ContentValues values = new ContentValues();
 
@@ -476,7 +473,8 @@ public class DBHandler extends SQLiteOpenHelper {
         updateRegisterEndObj(cadastro, idBck);
         updateRegisterIdProp(cadastro, idBck);
         updateRegisterDesc(cadastro, idBck);
-        updateRegisterDoc(cadastro, idBck);
+        updateRegisterDoc(docs, idBck);
+        updateRegisterBenf(benf, idBck);
 
     }
 
@@ -631,9 +629,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateRegisterDoc(Register cadastro, String idBck){
-
-        ArrayList<Docs> docs = cadastro.getDocs();
+    public void updateRegisterDoc(ArrayList<Docs> docs, String idBck){
 
         ContentValues values = new ContentValues();
 
@@ -641,18 +637,19 @@ public class DBHandler extends SQLiteOpenHelper {
 
         for(Docs temp : docs){
             values.put(PATH, temp.getPath());
-            values.put(ID_DOC, cadastro.get_id_prop());
             values.put(TYPE, temp.getType());
             values.put(NAME, temp.getType());
-
-            db.update(TABLE_DOCS, values, PATH + "=" + temp.getPath(), null);
+            values.put(ID_DOC, temp.getIdProp());
+            if(temp.getIdProp().equals(idBck))
+                db.update(TABLE_DOCS, values, ID_DOC + "=" + temp.getIdProp(), null);
+            else
+                db.update(TABLE_DOCS, values, ID_DOC + "=" + idBck, null);
         }
 
     }
 
-    public void updateRegisterBenf(Register cadastro, String idBck){
+    public void updateRegisterBenf(ArrayList<Benfeitoria> benfs, String idBck){
 
-        ArrayList<Benfeitoria> benfs = cadastro.getBenf();
         ContentValues values = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -662,10 +659,10 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(IDADE_BENF, temp.getIdade());
             values.put(CONSERVACAO_BENF, temp.getConservacao());
             values.put(ID_BENF_PHOTOS, temp.getIdBenf());
-            values.put(ID_BENF, cadastro.get_id_prop());
+            values.put(ID_BENF, temp.getIdProp());
 
-            if (cadastro.get_id_prop().equals(idBck)) {
-                db.update(TABLE_BENF, values, ID_BENF + "=" + cadastro.get_id_prop(), null);
+            if (temp.getIdProp().equals(idBck)) {
+                db.update(TABLE_BENF, values, ID_BENF + "=" + temp.getIdProp(), null);
             } else {
                 db.update(TABLE_BENF, values, ID_BENF + "=" + idBck, null);
             }
@@ -701,7 +698,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return registerList;
     }
 
-    public Register getRegister(String idProp){
+    public Register getRegister(String idProp) {
         Register register = new Register();
 
         String query = "SELECT * FROM " + TABLE_REGISTERS + " WHERE " + ID_PROPRIETARIO + " = " + idProp;
@@ -710,7 +707,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(query, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             register.set_id(Integer.parseInt(cursor.getString(0)));
             register.set_nome_projeto(cursor.getString(1));
@@ -724,7 +721,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         cursor = db.rawQuery(query, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             register.set_nome_proprietario(cursor.getString(1));
             register.set_nacionalidade_prop(cursor.getString(2));
@@ -744,7 +741,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         cursor = db.rawQuery(query, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             register.set_nome_conj(cursor.getString(1));
             register.set_nacionalidade_conj(cursor.getString(2));
@@ -762,7 +759,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         cursor = db.rawQuery(query, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             register.set_rua_end_res(cursor.getString(1));
             register.set_n_end_res(cursor.getString(2));
@@ -781,7 +778,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         cursor = db.rawQuery(query, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             register.set_rua_end_obj(cursor.getString(1));
             register.set_n_end_obj(cursor.getString(2));
@@ -796,7 +793,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         cursor = db.rawQuery(query, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             register.set_zoneamento(cursor.getString(1));
             register.set_topografia(cursor.getString(2));
@@ -812,7 +809,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         cursor = db.rawQuery(query, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             register.set_horario_chegada(cursor.getString(1));
             register.set_horario_saida(cursor.getString(2));
@@ -820,29 +817,61 @@ public class DBHandler extends SQLiteOpenHelper {
             register.set_responsavel(cursor.getString(4));
             cursor.close();
         }
-
-        query = "SELECT * FROM " + TABLE_BENF + " WHERE " + ID_BENF + " = " + idProp;
-
-        cursor = db.rawQuery(query, null);
-
-        if(cursor.moveToFirst()){
-            do{
-                register.getBenf().add(new Benfeitoria(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4)));
-            }while(cursor.moveToNext());
-        }
-
-        query = "SELECT * FROM" + TABLE_DOCS + " WHERE " + ID_DOC + " = " + idProp;
-
-        cursor = db.rawQuery(query, null);
-
-        if(cursor.moveToFirst()){
-            do{
-                register.getDocs().add(new Docs(cursor.getString(1), cursor.getString(3), cursor.getString(4)));
-            }while(cursor.moveToNext());
-        }
         db.close();
 
         return register;
+    }
+
+    public ArrayList<Benfeitoria> getBenfeitoria(String idProp) {
+
+        ArrayList<Benfeitoria> list = new ArrayList<Benfeitoria>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_BENF + " WHERE " + ID_BENF + " = " + idProp;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Benfeitoria benf = new Benfeitoria();
+                benf.setTipo(cursor.getString(1));
+                benf.setIdade(cursor.getString(2));
+                benf.setConservacao(cursor.getString(3));
+                benf.setIdBenf(cursor.getString(4));
+                benf.setIdProp(cursor.getString(5));
+                list.add(benf);
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+        return list;
+    }
+
+    public ArrayList<Docs> getDocs(String idProp){
+
+        ArrayList<Docs> list = new ArrayList<Docs>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT * FROM" + TABLE_DOCS + " WHERE " + ID_DOC + " = " + idProp;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                Docs docs = new Docs();
+                docs.setPath(cursor.getString(1));
+                docs.setType(cursor.getString(2));
+                docs.setName(cursor.getString(3));
+                docs.setIdProp(cursor.getString(4));
+                list.add(docs);
+            }while(cursor.moveToNext());
+        }
+
+        db.close();
+        return list;
+
     }
 
     //Delete Registers

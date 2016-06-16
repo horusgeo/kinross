@@ -12,12 +12,12 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2">
+            android:layout_weight="0.5">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/benfTipoText"
+                android:id="@+id/benfTipoLabel"
                 android:layout_weight="0.25"
                 android:hint="Tipo"
                 android:editable="false"
@@ -32,7 +32,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/benfIdadeText"
+                android:id="@+id/benfIdadeLabel"
                 android:layout_weight="0.25"
                 android:hint="Idade Aparente"
                 android:textAppearance="@android:style/TextAppearance.Medium"
@@ -46,11 +46,19 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/benfConservacaoText"
+                android:id="@+id/benfConservacaoLabel"
                 android:layout_weight="0.25"
                 android:hint="Conservação"
                 android:textAppearance="@android:style/TextAppearance.Medium"
                 android:text="Conservação: " />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/idBenfInvText"
+                android:layout_weight="0.25"
+                android:visibility="invisible" />
 
         </LinearLayout>
 

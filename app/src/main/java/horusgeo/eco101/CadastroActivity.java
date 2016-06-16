@@ -71,13 +71,15 @@ public class CadastroActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     Register cadastro;
+    ArrayList<Docs> docs;
+    ArrayList<Benfeitoria> benfs;
 
     String idBck;
     static String idPropBenf;
 
     DBHandler db;
 
-    boolean editTable;
+    static boolean editTable;
 
     int tabSelected;
 
@@ -111,6 +113,8 @@ public class CadastroActivity extends AppCompatActivity {
 
 
         cadastro = new Register();
+        benfs = new ArrayList<Benfeitoria>();
+        docs = new ArrayList<Docs>();
 
         db = new DBHandler(this, null, null, 1);
 
@@ -124,6 +128,8 @@ public class CadastroActivity extends AppCompatActivity {
             editTable = false;
         }else if(tipo.equals("edit")){
             cadastro = db.getRegister(text1);
+            benfs = db.getBenfeitoria(text1);
+            docs = db.getDocs(text1);
             idBck = cadastro.get_id_prop();
             editTable = true;
         }
@@ -358,6 +364,10 @@ public class CadastroActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), BenfeitoriaActivity.class);
+                            if(editTable)
+                                intent.putExtra("tipo", "edit");
+                            else
+                                intent.putExtra("tipo", "new");
                             intent.putExtra("idProp", idPropBenf);
                             startActivity(intent);
                         }
@@ -522,12 +532,14 @@ public class CadastroActivity extends AppCompatActivity {
         email.setText(cadastro.get_email_prop());
         anot.setText(cadastro.get_anotacoes_prop());
 
-        if(!cadastro.isDocsEmpty()) {
-            for (Docs temp : cadastro.getDocs()) {
-                if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_PROP))) {
-                    callAddThumb(CAPTURE_IMAGE_ID_PROP, temp.getPath());
-                } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_PROP))) {
-                    callAddThumb(CAPTURE_IMAGE_CPF_PROP, temp.getPath());
+        if(docs.size() > 0) {
+            for (Docs temp : docs) {
+                if(temp.getIdProp() == cadastro.get_id_prop()) {
+                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_PROP))) {
+                        callAddThumb(CAPTURE_IMAGE_ID_PROP, temp.getPath());
+                    } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_PROP))) {
+                        callAddThumb(CAPTURE_IMAGE_CPF_PROP, temp.getPath());
+                    }
                 }
             }
         }
@@ -579,12 +591,14 @@ public class CadastroActivity extends AppCompatActivity {
         tel2.setText(cadastro.get_tel_conj_2());
         anot.setText(cadastro.get_anotacoes_conj());
 
-        if(cadastro.getDocs()!=null) {
-            for (Docs temp : cadastro.getDocs()) {
-                if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_CONJ))) {
-                    callAddThumb(CAPTURE_IMAGE_ID_CONJ, temp.getPath());
-                } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_CONJ))) {
-                    callAddThumb(CAPTURE_IMAGE_CPF_CONJ, temp.getPath());
+        if(docs.size() > 0) {
+            for (Docs temp : docs) {
+                if(temp.getIdProp() == cadastro.get_id_prop()) {
+                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_CONJ))) {
+                        callAddThumb(CAPTURE_IMAGE_ID_CONJ, temp.getPath());
+                    } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_CONJ))) {
+                        callAddThumb(CAPTURE_IMAGE_CPF_CONJ, temp.getPath());
+                    }
                 }
             }
         }
@@ -636,10 +650,12 @@ public class CadastroActivity extends AppCompatActivity {
         com.setText(cadastro.get_comarca_end_res());
         comuf.setText(cadastro.get_uf_com_end_res());
         pto.setText(cadastro.get_p_ref_end_res());
-        if(!cadastro.isDocsEmpty()) {
-            for (Docs temp : cadastro.getDocs()) {
-                if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_END_RES))) {
-                    callAddThumb(CAPTURE_IMAGE_END_RES, temp.getPath());
+        if(docs.size() > 0) {
+            for (Docs temp : docs) {
+                if(temp.getIdProp() == cadastro.get_id_prop()) {
+                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_END_RES))) {
+                        callAddThumb(CAPTURE_IMAGE_END_RES, temp.getPath());
+                    }
                 }
             }
         }
@@ -675,10 +691,12 @@ public class CadastroActivity extends AppCompatActivity {
         bairro.setText(cadastro.get_bairro_end_obj());
         cep.setText(cadastro.get_cep_end_obj());
         pto.setText(cadastro.get_p_ref_end_obj());
-        if(!cadastro.isDocsEmpty()) {
-            for (Docs temp : cadastro.getDocs()) {
-                if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_END_OBJ))) {
-                    callAddThumb(CAPTURE_IMAGE_END_OBJ, temp.getPath());
+        if(docs.size() > 0) {
+            for (Docs temp : docs) {
+                if(temp.getIdProp() == cadastro.get_id_prop()) {
+                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_END_OBJ))) {
+                        callAddThumb(CAPTURE_IMAGE_END_OBJ, temp.getPath());
+                    }
                 }
             }
         }
@@ -726,10 +744,12 @@ public class CadastroActivity extends AppCompatActivity {
             infra3.setChecked(Boolean.parseBoolean(cadastro.get_infraabasagua()));
         obs.setText(cadastro.get_obs_id_prop());
 
-        if(!cadastro.isDocsEmpty()) {
-            for (Docs temp : cadastro.getDocs()) {
-                if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_IDENT_PROP))) {
-                    callAddThumb(CAPTURE_IMAGE_IDENT_PROP, temp.getPath());
+        if(docs.size() > 0) {
+            for (Docs temp : docs) {
+                if(temp.getIdProp() == cadastro.get_id_prop()) {
+                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_IDENT_PROP))) {
+                        callAddThumb(CAPTURE_IMAGE_IDENT_PROP, temp.getPath());
+                    }
                 }
             }
         }
@@ -795,7 +815,7 @@ public class CadastroActivity extends AppCompatActivity {
         Intent intent = new Intent(CadastroActivity.this, InitialActivity.class);
 
         if(editTable){
-            db.updateRegister(cadastro, idBck);
+            db.updateRegister(cadastro, benfs, docs, idBck);
             intent.putExtra("tipo", "ok");
             intent.putExtra("texto", "Cadastro realizado com sucesso!");
         }else {
@@ -806,7 +826,8 @@ public class CadastroActivity extends AppCompatActivity {
             db.addEndObj(cadastro);
             db.addIdProp(cadastro);
             db.addDesc(cadastro);
-            db.addDoc(cadastro);
+            db.addBenf(benfs);
+            db.addDoc(docs);
             intent.putExtra("tipo", "ok");
             intent.putExtra("texto", "Cadastro atualizado com sucesso!");
         }
@@ -828,7 +849,7 @@ public class CadastroActivity extends AppCompatActivity {
             Toast.makeText(this, "Alguma coisa deu errado!", Toast.LENGTH_LONG).show();
         }
         String[] name = fileUri.getPath().split("/");
-        cadastro.getDocs().add(new Docs(fileUri.getPath(), String.valueOf(requestCode), name[name.length-1]));
+        docs.add(new Docs(fileUri.getPath(), String.valueOf(requestCode), name[name.length-1], cadastro.get_id_prop()));
     }
 
     public static void takePhoto(Activity activity, int type){

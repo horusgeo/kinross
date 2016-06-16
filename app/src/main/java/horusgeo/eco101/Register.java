@@ -11,15 +11,17 @@ class Docs{
     private String path;
     private String type;
     private String name;
+    private String idProp;
 
     Docs(){
 
     }
 
-    Docs(String path, String type, String name){
+    Docs(String path, String type, String name, String idProp){
         this.path = path;
         this.type = type;
         this.name = name;
+        this.idProp = idProp;
     }
 
 
@@ -46,6 +48,14 @@ class Docs{
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getIdProp() {
+        return idProp;
+    }
+
+    public void setIdProp(String idProp) {
+        this.idProp = idProp;
+    }
 }
 
 class Benfeitoria{
@@ -54,16 +64,18 @@ class Benfeitoria{
     private String idade;
     private String conservacao;
     private String idBenf;
+    private String idProp;
 
 
     Benfeitoria(){
     }
 
-    Benfeitoria(String tipo, String idade, String conservacao, String idBenf){
+    Benfeitoria(String tipo, String idade, String conservacao, String idBenf, String idProp){
         this.tipo = tipo;
         this.idade = idade;
         this.conservacao = conservacao;
         this.idBenf = idBenf;
+        this.idProp = idProp;
     }
 
 
@@ -97,6 +109,14 @@ class Benfeitoria{
 
     public void setIdBenf(String idBenf) {
         this.idBenf = idBenf;
+    }
+
+    public String getIdProp() {
+        return idProp;
+    }
+
+    public void setIdProp(String idProp) {
+        this.idProp = idProp;
     }
 }
 
@@ -163,35 +183,25 @@ public class Register {
     private String _descricao_visita;
     private String _responsavel;
 
-    private ArrayList<Docs> docs;
-
-    private ArrayList<Benfeitoria> benf;
-
-    private ArrayList<Benfeitoria> plant;
-
-
     private String _latlng;
 
-    public Register(){
-        docs = new ArrayList<Docs>();
-        benf = new ArrayList<Benfeitoria>();
-        plant = new ArrayList<Benfeitoria>();
+    public Register() {
     }
 
     public Register(int id, String nome_proprietario, String id_prop,
                     String nome_projeto, String local_visita,
-                    String data_visita){
+                    String data_visita) {
         this._id = id;
         this._nome_proprietario = nome_proprietario;
         this._id_prop = id_prop;
         this._nome_projeto = nome_projeto;
         this._local_visita = local_visita;
         this._data_visita = data_visita;
-   }
+    }
 
     public Register(String nome_proprietario, String id_prop,
                     String nome_projeto, String local_visita,
-                    String data_visita){
+                    String data_visita) {
         this._nome_proprietario = nome_proprietario;
         this._id_prop = id_prop;
         this._nome_projeto = nome_projeto;
@@ -304,7 +314,7 @@ public class Register {
         this._cpf_prop = _cpf_prop;
     }
 
-   public String get_tel_prop_1() {
+    public String get_tel_prop_1() {
         return _tel_prop_1;
     }
 
@@ -377,7 +387,6 @@ public class Register {
     }
 
 
-
     public String get_doc_id_tipo_conj() {
         return _doc_id_tipo_conj;
     }
@@ -394,7 +403,7 @@ public class Register {
         this._cpf_conj = _cpf_conj;
     }
 
-   public String get_tel_conj_1() {
+    public String get_tel_conj_1() {
         return _tel_conj_1;
     }
 
@@ -538,7 +547,7 @@ public class Register {
         this._cep_end_obj = _cep_end_obj;
     }
 
-   public String get_zoneamento() {
+    public String get_zoneamento() {
         return _zoneamento;
     }
 
@@ -554,7 +563,7 @@ public class Register {
         this._topografia = _topografia;
     }
 
-      public String get_manacial() {
+    public String get_manacial() {
         return _manacial;
     }
 
@@ -634,33 +643,6 @@ public class Register {
         this._infraabasagua = _infraabasagua;
     }
 
-    public ArrayList<Docs> getDocs() {
-        return docs;
-    }
-
-    public void setDocs(ArrayList<Docs> docs) {
-        this.docs = docs;
-    }
-
-    public Boolean isDocsEmpty(){
-        return docs.isEmpty();
-    }
-
-    public ArrayList<Benfeitoria> getBenf() {
-        return benf;
-    }
-
-    public void setBenf(ArrayList<Benfeitoria> benf) {
-        this.benf = benf;
-    }
-
-    public ArrayList<Benfeitoria> getPlant() {
-        return plant;
-    }
-
-    public void setPlant(ArrayList<Benfeitoria> plant) {
-        this.plant = plant;
-    }
 }
 
 
