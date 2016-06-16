@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -26,6 +28,10 @@ public class BenfeitoriaActivity extends AppCompatActivity {
     TextView tipoText;
     TextView idadeText;
     TextView consvText;
+
+    LinearLayout benfsLayout;
+
+    ImageButton benfAddButton;
 
     DBHandler db;
 
@@ -44,7 +50,10 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         benfs = db.getBenfeitoria(idProp);
         docs = db.getDocs(idProp);
 
-        ImageButton benfAddButton = (ImageButton) findViewById(R.id.addBenfButton);
+        benfAddButton = (ImageButton) findViewById(R.id.addBenfButton);
+
+        benfsLayout = (LinearLayout) findViewById(R.id.benfsVertLayout);
+
 
         assert benfAddButton != null;
         benfAddButton.setOnClickListener(new View.OnClickListener() {
@@ -71,17 +80,17 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         builderSingle.setTitle("Selecione o Proprietário");
 
         LayoutInflater inflater = this.getLayoutInflater();
-
-        builderSingle.setView(inflater.inflate(R.layout.benf_dialog, null))
+        final View rootView = inflater.inflate(R.layout.benf_dialog, null);
+        builderSingle.setView(rootView)
             .setPositiveButton("Salvar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    tipoText = (TextView) findViewById(R.id.benfTipoText);
-                    idadeText = (TextView) findViewById(R.id.benfIdadeText);
-                    consvText = (TextView) findViewById(R.id.benfConservText);
+                    tipoText = (TextView) rootView.findViewById(R.id.benfTipoText);
+                    idadeText = (TextView) rootView.findViewById(R.id.benfIdadeText);
+                    consvText = (TextView) rootView.findViewById(R.id.benfConservText);
 
                     benfs.add(new Benfeitoria(tipoText.getText().toString(), idadeText.getText().toString(),
-                            consvText.getText().toString(), String.valueOf(1000 + db.getBenfCount()), idProp));
+                            consvText.getText().toString(), String.valueOf(1000 + benfs.size()), idProp));
 
                     addBenf(benfs.get(benfs.size()-1));
                 }
@@ -94,7 +103,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         builderSingle.show();
     }
 
-    public void addBenf(Benfeitoria benf){
+    public void addBenf(final Benfeitoria benf){
 
         LayoutInflater inflater = this.getLayoutInflater();
         View rootView = inflater.inflate(R.layout.dados_benf, null);
@@ -104,10 +113,54 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         TextView conserv = (TextView) rootView.findViewById(R.id.benfConservacaoLabel);
         TextView idBenf = (TextView) rootView.findViewById(R.id.idBenfInvText);
 
+        ImageButton photoButton = (ImageButton) rootView.findViewById(R.id.benfPhotoButton);
+        ImageButton editButton = (ImageButton) rootView.findViewById(R.id.benfEditButton);
+        ImageButton delButton = (ImageButton) rootView.findViewById(R.id.benfDelButton);
+
         tipo.setText("Tipo: " + benf.getTipo());
-        idade.setText("Tipo: " + benf.getIdade());
-        conserv.setText("Tipo: " + benf.getConservacao());
-        idBenf.setText("Tipo: " + benf.getIdBenf());
+        idade.setText("Idade Aparente: " + benf.getIdade());
+        conserv.setText("Conservação: " + benf.getConservacao());
+        idBenf.setText(benf.getIdBenf());
+
+        benfsLayout.addView(rootView, benfsLayout.getChildCount()-1);
+
+        delButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callDelBenf(benf.getIdBenf());
+            }
+        });
+
+
+    }
+
+
+    public void callDelBenf(String id){
+        int viewId = -1;
+        int benfId = -1;
+
+        for(int i = 0; i < benfsLayout.getChildCount(); i++){
+            View v = benfsLayout.getChildAt(i);
+            TextView idBenf = (TextView) v.findViewById(R.id.idBenfInvText);
+            if(id.equals(idBenf.getText().toString())){
+                viewId = i;
+                break;
+            }
+        }
+        if(viewId!=-1){
+            benfsLayout.removeViewAt(viewId);
+        }
+
+        for(int i = 0; i < benfs.size(); i++){
+            if(id.equals(benfs.get(i).getIdBenf())){
+                benfId = i;
+                break;
+            }
+        }
+
+        if(benfId!=-1){
+            benfs.remove(benfId);
+        }
 
 
     }

@@ -237,8 +237,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 ID + " INTEGER PRIMARY KEY," +
                 PATH + " TEXT," +
                 TYPE + " TEXT," +
-                NAME + " TEXT" +
-                ID_DOC + " TEXT," +
+                NAME + " TEXT," +
+                ID_DOC + " TEXT" +
                 ")";
         db.execSQL(CREATE_DOCS_TABLE);
 
@@ -854,7 +854,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "SELECT * FROM" + TABLE_DOCS + " WHERE " + ID_DOC + " = " + idProp;
+        String query = "SELECT * FROM " + TABLE_DOCS + " WHERE " + ID_DOC + " = " + idProp;
 
         Cursor cursor = db.rawQuery(query, null);
 
