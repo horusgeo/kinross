@@ -1232,6 +1232,20 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
+//    DB removes
+
+    public void removeBenfeitorias(String idProp){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(TABLE_BENF, ID_BENF_PHOTOS + " = " + idProp, null);
+        db.close();
+    }
+
+    public void removeDocs(String idProp){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(TABLE_DOCS, TYPE + " = " + idProp, null);
+        db.close();
+    }
+
 
 
 

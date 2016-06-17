@@ -1,10 +1,13 @@
 package horusgeo.eco101;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -23,6 +27,7 @@ import java.util.ArrayList;
 public class BenfeitoriaActivity extends AppCompatActivity {
 
     String idProp;
+
     ArrayList<Benfeitoria> benfs;
     ArrayList<Docs> docs;
     TextView tipoText;
@@ -32,6 +37,10 @@ public class BenfeitoriaActivity extends AppCompatActivity {
     LinearLayout benfsLayout;
 
     ImageButton benfAddButton;
+
+    ImageHelper imgPhoto;
+
+    Uri fileUri;
 
     DBHandler db;
 
@@ -54,12 +63,26 @@ public class BenfeitoriaActivity extends AppCompatActivity {
 
         benfsLayout = (LinearLayout) findViewById(R.id.benfsVertLayout);
 
+        if(benfs.size() > 0){
+            for(Benfeitoria temp : benfs){
+                db.removeBenfeitorias(temp.getIdBenf());
+                addBenf(temp, benfsLayout.getChildCount()-1);
+                for(Docs temp2 : docs){
+                    if(temp2.getType().equals(temp.getIdBenf())){
+                        db.removeDocs(temp2.getType());
+                        callAddThumb(Integer.parseInt(temp2.getType()), temp2.getPath());
+                    }
+                }
+            }
+        }
+
+        imgPhoto = new ImageHelper();
 
         assert benfAddButton != null;
         benfAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callAddBenfDialog();
+                callAddBenfDialog(-1,-1, null);
             }
         });
 
@@ -68,31 +91,50 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                returnToCadastro();
             }
         });
     }
 
-    public void callAddBenfDialog(){
+    public void callAddBenfDialog(final int pose, final int arrayPose, final String ID){
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(BenfeitoriaActivity.this);
         builderSingle.setTitle("Selecione o Proprietário");
 
         LayoutInflater inflater = this.getLayoutInflater();
         final View rootView = inflater.inflate(R.layout.benf_dialog, null);
+        tipoText = (TextView) rootView.findViewById(R.id.benfTipoText);
+        idadeText = (TextView) rootView.findViewById(R.id.benfIdadeText);
+        consvText = (TextView) rootView.findViewById(R.id.benfConservText);
+
+        if(ID!=null){
+            tipoText.setText(benfs.get(arrayPose).getTipo());
+            idadeText.setText(benfs.get(arrayPose).getIdade());
+            consvText.setText(benfs.get(arrayPose).getConservacao());
+        }
+
         builderSingle.setView(rootView)
             .setPositiveButton("Salvar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    tipoText = (TextView) rootView.findViewById(R.id.benfTipoText);
-                    idadeText = (TextView) rootView.findViewById(R.id.benfIdadeText);
-                    consvText = (TextView) rootView.findViewById(R.id.benfConservText);
 
+                    String idBenf;
+
+                    if(ID==null) {
+                        int lastId;
+                        if (benfs.size() > 0) {
+                            lastId = Integer.parseInt(benfs.get(benfs.size() - 1).getIdBenf());
+                        } else {
+                            lastId = 1000;
+                        }
+                        idBenf = String.valueOf(lastId+1);
+                    }else{
+                        idBenf = ID;
+                    }
                     benfs.add(new Benfeitoria(tipoText.getText().toString(), idadeText.getText().toString(),
-                            consvText.getText().toString(), String.valueOf(1000 + benfs.size()), idProp));
+                            consvText.getText().toString(), idBenf, idProp));
 
-                    addBenf(benfs.get(benfs.size()-1));
+                    addBenf(benfs.get(benfs.size()-1), pose);
                 }
             })
             .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -103,7 +145,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         builderSingle.show();
     }
 
-    public void addBenf(final Benfeitoria benf){
+    public void addBenf(final Benfeitoria benf, int pose){
 
         LayoutInflater inflater = this.getLayoutInflater();
         View rootView = inflater.inflate(R.layout.dados_benf, null);
@@ -121,8 +163,13 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         idade.setText("Idade Aparente: " + benf.getIdade());
         conserv.setText("Conservação: " + benf.getConservacao());
         idBenf.setText(benf.getIdBenf());
+        final int place;
+        if(pose == -1)
+            place = benfsLayout.getChildCount()-1;
+        else
+            place = pose;
 
-        benfsLayout.addView(rootView, benfsLayout.getChildCount()-1);
+        benfsLayout.addView(rootView, place);
 
         delButton.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -131,7 +178,48 @@ public class BenfeitoriaActivity extends AppCompatActivity {
             }
         });
 
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callEditBenf(benf.getIdBenf());
+            }
+        });
 
+        photoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePhoto(Integer.parseInt(benf.getIdBenf()));
+            }
+        });
+
+
+    }
+
+    public void callEditBenf(String id){
+        int viewId = -1;
+        int benfId = -1;
+
+        for(int i = 0; i < benfsLayout.getChildCount(); i++){
+            View v = benfsLayout.getChildAt(i);
+            TextView idBenf = (TextView) v.findViewById(R.id.idBenfInvText);
+            if(id.equals(idBenf.getText().toString())){
+                viewId = i;
+                break;
+            }
+        }
+
+        if(viewId!=-1){
+            benfsLayout.removeViewAt(viewId);
+        }
+
+        for(int i = 0; i < benfs.size(); i++){
+            if(id.equals(benfs.get(i).getIdBenf())){
+                benfId = i;
+                break;
+            }
+        }
+
+        callAddBenfDialog(viewId, benfId, id);
     }
 
 
@@ -150,7 +238,6 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         if(viewId!=-1){
             benfsLayout.removeViewAt(viewId);
         }
-
         for(int i = 0; i < benfs.size(); i++){
             if(id.equals(benfs.get(i).getIdBenf())){
                 benfId = i;
@@ -161,8 +248,77 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         if(benfId!=-1){
             benfs.remove(benfId);
         }
+        ArrayList<Integer> indices = new ArrayList<Integer>();
+        for(int i = 0; i < docs.size(); i++){
+            if(id.equals(docs.get(i).getType())){
+                indices.add(i);
+            }
+        }
 
+        for(int i = indices.size()-1; i >= 0; i--){
+            docs.remove(indices.get(i));
+        }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+
+            callAddThumb(requestCode, fileUri.getPath());
+
+        } else if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(this, "Foto cancelada!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Alguma coisa deu errado!", Toast.LENGTH_LONG).show();
+        }
+        String[] name = fileUri.getPath().split("/");
+        docs.add(new Docs(fileUri.getPath(), String.valueOf(requestCode), name[name.length-1], idProp));
+    }
+
+    public void takePhoto(int type){
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        fileUri = imgPhoto.getOutputMediaFileUri(imgPhoto.MEDIA_TYPE_IMAGE); // create a file to save the image
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+        // start the image capture Intent
+        startActivityForResult(intent, type);
+    }
+
+    public void callAddThumb(int type, String file){
+
+        int viewId = -1;
+        ImageButton img = new ImageButton(this);
+        String id = String.valueOf(type);
+
+        for(int i = 0; i < benfsLayout.getChildCount(); i++){
+            View v = benfsLayout.getChildAt(i);
+            TextView idBenf = (TextView) v.findViewById(R.id.idBenfInvText);
+            if(id.equals(idBenf.getText().toString())){
+                viewId = i;
+                break;
+            }
+        }
+
+        img.setImageBitmap(imgPhoto.decodeSampledBitmapFromFile(file, 100, 100));
+
+        View view = benfsLayout.getChildAt(viewId);
+        LinearLayout layout = (LinearLayout) view.findViewById(R.id.benfPhotoLayout);
+        layout.addView(img);
+
+    }
+
+    public void returnToCadastro(){
+
+        db.addBenf(benfs);
+        db.addDoc(docs);
+
+        Intent intent = new Intent(BenfeitoriaActivity.this, CadastroActivity.class);
+        intent.putExtra("tipo", "edit");
+        intent.putExtra("string", idProp);
+        startActivity(intent);
     }
 
 }

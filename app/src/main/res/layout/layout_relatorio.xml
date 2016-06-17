@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Nº de Identificação do Propietário"
+                android:text="Nº de Identificação do Propietário:  "
                 android:id="@+id/textView21" />
 
             <EditText
