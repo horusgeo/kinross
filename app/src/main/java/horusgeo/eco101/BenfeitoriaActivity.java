@@ -12,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
                 for(Docs temp2 : docs){
                     if(temp2.getType().equals(temp.getIdBenf())){
                         db.removeDocs(temp2.getType());
+                        Log.d("HorusGeo", "OnCreate " + temp2.getPath());
                         callAddThumb(Integer.parseInt(temp2.getType()), temp2.getPath());
                     }
                 }
@@ -273,6 +275,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Alguma coisa deu errado!", Toast.LENGTH_LONG).show();
         }
+        Log.d("HorusGeo", "onActivityResult " + fileUri.getPath());
         String[] name = fileUri.getPath().split("/");
         docs.add(new Docs(fileUri.getPath(), String.valueOf(requestCode), name[name.length-1], idProp));
     }

@@ -169,9 +169,11 @@ public class CadastroActivity extends AppCompatActivity {
                                 loadCadastroIdProp();
                                 break;
                             case 7:
+                                saveCadastroToBenfsPlants();
                                 loadCadastroBenf();
                                 break;
                             case 8:
+                                saveCadastroToBenfsPlants();
                                 loadCadastroPlant();
                                 break;
                             case 9:
@@ -366,7 +368,7 @@ public class CadastroActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), BenfeitoriaActivity.class);
                             intent.putExtra("idProp", idPropBenf);
-                            saveCadastroToBenfsPlants();
+//                            saveCadastroToBenfsPlants();
                             startActivity(intent);
                         }
                     });
@@ -834,8 +836,8 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
-    public static void saveCadastroToBenfsPlants(){
-        this.db.addRegister(cadastro);
+    public void saveCadastroToBenfsPlants(){
+        db.addRegister(cadastro);
         db.addProp(cadastro);
         db.addConj(cadastro);
         db.addEndRes(cadastro);
