@@ -71,12 +71,12 @@ public class ImageHelper {
                 Environment.DIRECTORY_PICTURES), "Eco101");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
-        Log.d("Eco101",Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() );
-        Log.d("Eco101", mediaStorageDir.getPath() );
+//        Log.d("Eco101",Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() );
+//        Log.d("Eco101", mediaStorageDir.getPath() );
         // Create the storage directory if it does not exist
         if (! mediaStorageDir.exists()){
             if (! mediaStorageDir.mkdirs()){
-                Log.d("Eco101", "failed to create directory");
+//                Log.d("Eco101", "failed to create directory");
                 return null;
             }
         }

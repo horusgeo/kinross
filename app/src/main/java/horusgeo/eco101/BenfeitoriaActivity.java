@@ -54,7 +54,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         idProp = intent.getStringExtra("idProp");
-
+        Log.d("HorusGeo", "Called onCreate");
         db = new DBHandler(this, null, null, 1);
 
         benfs = db.getBenfeitoria(idProp);
@@ -91,16 +91,20 @@ public class BenfeitoriaActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
 
-        for(int i = 0 ; i < benfsLayout.getChildCount()-1; i++){
-            benfsLayout.removeViewAt(i);
-        }
+        Log.d("HorusGeo", "Called onStart");
+        Log.d("HorusGeo", String.valueOf(benfsLayout.getChildCount()));
+        Log.d("HorusGeo", String.valueOf(benfs.size()));
+
+        while(benfsLayout.getChildCount() > 1)
+            benfsLayout.removeViewAt(0);
+
 
         if(benfs.size() > 0){
             for(Benfeitoria temp : benfs){
                 addBenf(temp, benfsLayout.getChildCount()-1);
                 for(Docs temp2 : docs){
                     if(temp2.getType().equals(temp.getIdBenf())){
-                        Log.d("HorusGeo", "OnCreate " + temp2.getPath());
+                        Log.d("HorusGeo", temp2.getPath());
                         callAddThumb(Integer.parseInt(temp2.getType()), temp2.getPath());
                     }
                 }
