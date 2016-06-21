@@ -134,10 +134,13 @@ public class CadastroActivity extends AppCompatActivity {
             benfs = db.getBenfeitoria(text1);
             docs = db.getDocs(text1);
             plants = db.getPlants(text1);
+
+            Log.d("HorusGeo", String.valueOf(docs.size()));
+
             idBck = cadastro.get_id_prop();
             db.removeBenfeitorias(text1);
             db.removePlant(text1);
-            db.removePlant(text1);
+            db.removeDocs(text1);
             editTable = true;
         }
 
@@ -543,6 +546,13 @@ public class CadastroActivity extends AppCompatActivity {
         anot.setText(cadastro.get_anotacoes_prop());
 
         Log.d("HorusGeo", "Docs size = " + String.valueOf(docs.size()));
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.idPropLayout);
+        LinearLayout layout2 = (LinearLayout) findViewById(R.id.cpfPropLayout);
+
+        layout.removeAllViews();
+        layout2.removeAllViews();
+
         if(docs.size() > 0) {
             for (Docs temp : docs) {
                 Log.d("HorusGeo", temp.getIdProp() + " " + cadastro.get_id_prop());
@@ -603,6 +613,12 @@ public class CadastroActivity extends AppCompatActivity {
         tel1.setText(cadastro.get_tel_conj_1());
         tel2.setText(cadastro.get_tel_conj_2());
         anot.setText(cadastro.get_anotacoes_conj());
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.idConjLayout);
+        LinearLayout layout2 = (LinearLayout) findViewById(R.id.cpfConjLayout);
+
+        layout.removeAllViews();
+        layout2.removeAllViews();
 
         if(docs.size() > 0) {
             for (Docs temp : docs) {
@@ -665,6 +681,11 @@ public class CadastroActivity extends AppCompatActivity {
         com.setText(cadastro.get_comarca_end_res());
         comuf.setText(cadastro.get_uf_com_end_res());
         pto.setText(cadastro.get_p_ref_end_res());
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.endResPhotoLayout);
+
+        layout.removeAllViews();
+
         if(docs.size() > 0) {
             for (Docs temp : docs) {
                 if(temp.getIdProp().equals(cadastro.get_id_prop())) {
@@ -706,6 +727,11 @@ public class CadastroActivity extends AppCompatActivity {
         bairro.setText(cadastro.get_bairro_end_obj());
         cep.setText(cadastro.get_cep_end_obj());
         pto.setText(cadastro.get_p_ref_end_obj());
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.endObjPhotoLayout);
+
+        layout.removeAllViews();
+
         if(docs.size() > 0) {
             for (Docs temp : docs) {
                 if(temp.getIdProp().equals(cadastro.get_id_prop())) {
@@ -758,6 +784,10 @@ public class CadastroActivity extends AppCompatActivity {
         if(cadastro.get_infraabasagua() != null)
             infra3.setChecked(Boolean.parseBoolean(cadastro.get_infraabasagua()));
         obs.setText(cadastro.get_obs_id_prop());
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.idPropPhotoLayout);
+
+        layout.removeAllViews();
 
         if(docs.size() > 0) {
             for (Docs temp : docs) {
@@ -829,6 +859,8 @@ public class CadastroActivity extends AppCompatActivity {
             saveCadastroDesc();
         Intent intent = new Intent(CadastroActivity.this, InitialActivity.class);
 
+        Log.d("HorusGeo", "save: " + String.valueOf(docs.size()));
+
         if(editTable){
             db.updateRegister(cadastro, benfs, plants, docs, idBck);
             intent.putExtra("tipo", "ok");
@@ -863,6 +895,9 @@ public class CadastroActivity extends AppCompatActivity {
             db.addEndObj(cadastro);
             db.addIdProp(cadastro);
             db.addDesc(cadastro);
+            db.addBenf(benfs);
+            db.addPlant(plants);
+            db.addDoc(docs);
         }
     }
 

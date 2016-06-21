@@ -60,6 +60,9 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         benfs = db.getBenfeitoria(idProp);
         docs = db.getDocs(idProp);
 
+        db.removeBenfeitorias(idProp);
+        db.removeDocs(idProp);
+
         benfAddButton = (ImageButton) findViewById(R.id.addBenfButton);
 
         benfsLayout = (LinearLayout) findViewById(R.id.benfsVertLayout);
@@ -91,11 +94,9 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         if(benfs.size() > 0){
             benfsLayout.removeAllViews();
             for(Benfeitoria temp : benfs){
-                db.removeBenfeitorias(temp.getIdBenf());
                 addBenf(temp, benfsLayout.getChildCount()-1);
                 for(Docs temp2 : docs){
                     if(temp2.getType().equals(temp.getIdBenf())){
-                        db.removeDocs(temp2.getType());
                         Log.d("HorusGeo", "OnCreate " + temp2.getPath());
                         callAddThumb(Integer.parseInt(temp2.getType()), temp2.getPath());
                     }

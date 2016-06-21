@@ -54,6 +54,9 @@ public class PlantacaoActivity extends AppCompatActivity {
         plants = db.getPlants(idProp);
         docs = db.getDocs(idProp);
 
+        db.removePlant(idProp);
+        db.removeDocs(idProp);
+
         plantAddButton = (ImageButton) findViewById(R.id.addBenfButton);
 
         plantsLayout = (LinearLayout) findViewById(R.id.benfsVertLayout);
@@ -86,11 +89,9 @@ public class PlantacaoActivity extends AppCompatActivity {
         if(plants.size() > 0){
             plantsLayout.removeAllViews();
             for(Benfeitoria temp : plants){
-                db.removePlant(temp.getIdBenf());
                 addPlant(temp, plantsLayout.getChildCount()-1);
                 for(Docs temp2 : docs){
                     if(temp2.getType().equals(temp.getIdBenf())){
-                        db.removeDocs(temp2.getType());
                         Log.d("HorusGeo", "OnCreate " + temp2.getPath());
                         callAddThumb(Integer.parseInt(temp2.getType()), temp2.getPath());
                     }

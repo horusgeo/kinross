@@ -1398,26 +1398,21 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void removeBenfeitorias(String idProp){
         SQLiteDatabase db = this.getReadableDatabase();
-        db.delete(TABLE_BENF, ID_BENF_PHOTOS + " = " + idProp, null);
+        db.delete(TABLE_BENF, ID_BENF + " = " + idProp, null);
         db.close();
     }
 
     public void removePlant(String idProp){
         SQLiteDatabase db = this.getReadableDatabase();
-        db.delete(TABLE_PLANT, ID_PLANT_PHOTOS + " = " + idProp, null);
+        db.delete(TABLE_PLANT, ID_PLANT + " = " + idProp, null);
         db.close();
     }
 
     public void removeDocs(String idProp){
         SQLiteDatabase db = this.getReadableDatabase();
-        db.delete(TABLE_DOCS, TYPE + " = " + idProp, null);
+        db.delete(TABLE_DOCS, ID_DOC + " = " + idProp, null);
         db.close();
     }
-
-
-
-
-
 
 
 }
