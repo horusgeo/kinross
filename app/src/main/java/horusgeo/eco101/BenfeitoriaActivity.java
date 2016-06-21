@@ -91,8 +91,11 @@ public class BenfeitoriaActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
 
+        for(int i = 0 ; i < benfsLayout.getChildCount()-1; i++){
+            benfsLayout.removeViewAt(i);
+        }
+
         if(benfs.size() > 0){
-            benfsLayout.removeAllViews();
             for(Benfeitoria temp : benfs){
                 addBenf(temp, benfsLayout.getChildCount()-1);
                 for(Docs temp2 : docs){

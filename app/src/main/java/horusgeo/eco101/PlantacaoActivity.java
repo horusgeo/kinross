@@ -86,8 +86,11 @@ public class PlantacaoActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
 
+        for(int i = 0 ; i < plantsLayout.getChildCount()-1; i++){
+            plantsLayout.removeViewAt(i);
+        }
+
         if(plants.size() > 0){
-            plantsLayout.removeAllViews();
             for(Benfeitoria temp : plants){
                 addPlant(temp, plantsLayout.getChildCount()-1);
                 for(Docs temp2 : docs){
