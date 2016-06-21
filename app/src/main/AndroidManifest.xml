@@ -29,8 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".MapActivity"
             android:label="Mapa"
@@ -39,7 +37,6 @@
             android:name=".InitialActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".CadastroActivity"
             android:label="@string/title_activity_cadastro"
@@ -47,6 +44,10 @@
         <activity
             android:name=".BenfeitoriaActivity"
             android:label="@string/title_activity_benfeitoria"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PlantacaoActivity"
+            android:label="@string/title_activity_plantacao"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

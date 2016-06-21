@@ -64,20 +64,6 @@ public class BenfeitoriaActivity extends AppCompatActivity {
 
         benfsLayout = (LinearLayout) findViewById(R.id.benfsVertLayout);
 
-        if(benfs.size() > 0){
-            for(Benfeitoria temp : benfs){
-                db.removeBenfeitorias(temp.getIdBenf());
-                addBenf(temp, benfsLayout.getChildCount()-1);
-                for(Docs temp2 : docs){
-                    if(temp2.getType().equals(temp.getIdBenf())){
-                        db.removeDocs(temp2.getType());
-                        Log.d("HorusGeo", "OnCreate " + temp2.getPath());
-                        callAddThumb(Integer.parseInt(temp2.getType()), temp2.getPath());
-                    }
-                }
-            }
-        }
-
         imgPhoto = new ImageHelper();
 
         assert benfAddButton != null;
@@ -97,6 +83,27 @@ public class BenfeitoriaActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        if(benfs.size() > 0){
+            benfsLayout.removeAllViews();
+            for(Benfeitoria temp : benfs){
+                db.removeBenfeitorias(temp.getIdBenf());
+                addBenf(temp, benfsLayout.getChildCount()-1);
+                for(Docs temp2 : docs){
+                    if(temp2.getType().equals(temp.getIdBenf())){
+                        db.removeDocs(temp2.getType());
+                        Log.d("HorusGeo", "OnCreate " + temp2.getPath());
+                        callAddThumb(Integer.parseInt(temp2.getType()), temp2.getPath());
+                    }
+                }
+            }
+        }
+    }
+
 
     public void callAddBenfDialog(final int pose, final int arrayPose, final String ID){
 

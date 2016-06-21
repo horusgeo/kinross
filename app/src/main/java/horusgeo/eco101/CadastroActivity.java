@@ -73,6 +73,7 @@ public class CadastroActivity extends AppCompatActivity {
     Register cadastro;
     ArrayList<Docs> docs;
     ArrayList<Benfeitoria> benfs;
+    ArrayList<Benfeitoria> plants;
 
     String idBck;
     static String idPropBenf;
@@ -114,6 +115,7 @@ public class CadastroActivity extends AppCompatActivity {
         cadastro = new Register();
         benfs = new ArrayList<Benfeitoria>();
         docs = new ArrayList<Docs>();
+        plants = new ArrayList<Benfeitoria>();
 
         db = new DBHandler(this, null, null, 1);
 
@@ -131,7 +133,11 @@ public class CadastroActivity extends AppCompatActivity {
             cadastro = db.getRegister(text1);
             benfs = db.getBenfeitoria(text1);
             docs = db.getDocs(text1);
+            plants = db.getPlants(text1);
             idBck = cadastro.get_id_prop();
+            db.removeBenfeitorias(text1);
+            db.removePlant(text1);
+            db.removePlant(text1);
             editTable = true;
         }
 
@@ -368,15 +374,19 @@ public class CadastroActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), BenfeitoriaActivity.class);
                             intent.putExtra("idProp", idPropBenf);
-//                            saveCadastroToBenfsPlants();
                             startActivity(intent);
                         }
                     });
-
-
                     break;
                 case 9:
                     rootView = inflater.inflate(R.layout.layout_plant, container, false);
+                    Button plantButton = (Button) rootView.findViewById(R.id.plantButton);
+                    plantButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+//                            Intent intent = new Intent(getActivity())
+                        }
+                    });
                     break;
                 case 10:
                     rootView = inflater.inflate(R.layout.layout_descricao, container, false);
@@ -532,9 +542,12 @@ public class CadastroActivity extends AppCompatActivity {
         email.setText(cadastro.get_email_prop());
         anot.setText(cadastro.get_anotacoes_prop());
 
+        Log.d("HorusGeo", "Docs size = " + String.valueOf(docs.size()));
         if(docs.size() > 0) {
             for (Docs temp : docs) {
-                if(temp.getIdProp() == cadastro.get_id_prop()) {
+                Log.d("HorusGeo", temp.getIdProp() + " " + cadastro.get_id_prop());
+                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
+                    Log.d("HorusGeo", temp.getType() + " " + String.valueOf(CAPTURE_IMAGE_ID_PROP));
                     if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_PROP))) {
                         callAddThumb(CAPTURE_IMAGE_ID_PROP, temp.getPath());
                     } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_PROP))) {
@@ -593,7 +606,9 @@ public class CadastroActivity extends AppCompatActivity {
 
         if(docs.size() > 0) {
             for (Docs temp : docs) {
-                if(temp.getIdProp() == cadastro.get_id_prop()) {
+                Log.d("HorusGeo", temp.getIdProp() + " " + cadastro.get_id_prop());
+                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
+                    Log.d("HorusGeo", temp.getType() + " " + String.valueOf(CAPTURE_IMAGE_ID_CONJ));
                     if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_CONJ))) {
                         callAddThumb(CAPTURE_IMAGE_ID_CONJ, temp.getPath());
                     } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_CONJ))) {
@@ -652,7 +667,7 @@ public class CadastroActivity extends AppCompatActivity {
         pto.setText(cadastro.get_p_ref_end_res());
         if(docs.size() > 0) {
             for (Docs temp : docs) {
-                if(temp.getIdProp() == cadastro.get_id_prop()) {
+                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
                     if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_END_RES))) {
                         callAddThumb(CAPTURE_IMAGE_END_RES, temp.getPath());
                     }
@@ -693,7 +708,7 @@ public class CadastroActivity extends AppCompatActivity {
         pto.setText(cadastro.get_p_ref_end_obj());
         if(docs.size() > 0) {
             for (Docs temp : docs) {
-                if(temp.getIdProp() == cadastro.get_id_prop()) {
+                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
                     if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_END_OBJ))) {
                         callAddThumb(CAPTURE_IMAGE_END_OBJ, temp.getPath());
                     }
@@ -746,7 +761,7 @@ public class CadastroActivity extends AppCompatActivity {
 
         if(docs.size() > 0) {
             for (Docs temp : docs) {
-                if(temp.getIdProp() == cadastro.get_id_prop()) {
+                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
                     if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_IDENT_PROP))) {
                         callAddThumb(CAPTURE_IMAGE_IDENT_PROP, temp.getPath());
                     }
@@ -815,7 +830,7 @@ public class CadastroActivity extends AppCompatActivity {
         Intent intent = new Intent(CadastroActivity.this, InitialActivity.class);
 
         if(editTable){
-            db.updateRegister(cadastro, benfs, docs, idBck);
+            db.updateRegister(cadastro, benfs, plants, docs, idBck);
             intent.putExtra("tipo", "ok");
             intent.putExtra("texto", "Cadastro realizado com sucesso!");
         }else {
@@ -827,6 +842,7 @@ public class CadastroActivity extends AppCompatActivity {
             db.addIdProp(cadastro);
             db.addDesc(cadastro);
             db.addBenf(benfs);
+            db.addPlant(plants);
             db.addDoc(docs);
             intent.putExtra("tipo", "ok");
             intent.putExtra("texto", "Cadastro atualizado com sucesso!");
@@ -837,13 +853,17 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     public void saveCadastroToBenfsPlants(){
-        db.addRegister(cadastro);
-        db.addProp(cadastro);
-        db.addConj(cadastro);
-        db.addEndRes(cadastro);
-        db.addEndObj(cadastro);
-        db.addIdProp(cadastro);
-        db.addDesc(cadastro);
+        if(db.checkIfPropExists(cadastro.get_id_prop())) {
+            db.updateRegister(cadastro, benfs, plants, docs, idBck);
+        }else{
+            db.addRegister(cadastro);
+            db.addProp(cadastro);
+            db.addConj(cadastro);
+            db.addEndRes(cadastro);
+            db.addEndObj(cadastro);
+            db.addIdProp(cadastro);
+            db.addDesc(cadastro);
+        }
     }
 
     @Override

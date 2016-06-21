@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final int nTables = 8;
+    private static final int nTables = 10;
 
     private static final String DATABASE_NAME = "eco101.db";
     private static final int DATABASE_VERSION = 1;
@@ -451,9 +451,27 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addPlant(ArrayList<Benfeitoria> plants){
+
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for(Benfeitoria temp : plants){
+            values.clear();
+            values.put(TIPO_PLANT, temp.getTipo());
+            values.put(IDADE_PLANT, temp.getIdade());
+            values.put(COMPLEMENTO_PLANT, temp.getConservacao());
+            values.put(ID_PLANT_PHOTOS, temp.getIdBenf());
+            values.put(ID_PLANT, temp.getIdProp());
+
+            db.insert(TABLE_PLANT, null, values);
+        }
+        db.close();
+    }
+
     //Update Registers
 
-    public void updateRegister(Register cadastro, ArrayList<Benfeitoria> benf, ArrayList<Docs> docs, String idBck){
+    public void updateRegister(Register cadastro, ArrayList<Benfeitoria> benf, ArrayList<Benfeitoria> plants,  ArrayList<Docs> docs, String idBck){
 
         ContentValues values = new ContentValues();
 
@@ -473,8 +491,12 @@ public class DBHandler extends SQLiteOpenHelper {
         updateRegisterEndObj(cadastro, idBck);
         updateRegisterIdProp(cadastro, idBck);
         updateRegisterDesc(cadastro, idBck);
-        updateRegisterDoc(docs, idBck);
-        updateRegisterBenf(benf, idBck);
+//        updateRegisterDoc(cadastro, docs, idBck);
+//        updateRegisterBenf(cadastro, benf, idBck);
+//        updateRegisterPlant(cadastro, plants, idBck);
+        addBenf(benf);
+        addPlant(plants);
+        addDoc(docs);
 
     }
 
@@ -629,7 +651,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateRegisterDoc(ArrayList<Docs> docs, String idBck){
+    public void updateRegisterDoc(Register cadastro, ArrayList<Docs> docs, String idBck){
 
         ContentValues values = new ContentValues();
 
@@ -638,17 +660,15 @@ public class DBHandler extends SQLiteOpenHelper {
         for(Docs temp : docs){
             values.put(PATH, temp.getPath());
             values.put(TYPE, temp.getType());
-            values.put(NAME, temp.getType());
-            values.put(ID_DOC, temp.getIdProp());
-            if(temp.getIdProp().equals(idBck))
-                db.update(TABLE_DOCS, values, ID_DOC + "=" + temp.getIdProp(), null);
-            else
-                db.update(TABLE_DOCS, values, ID_DOC + "=" + idBck, null);
+            values.put(NAME, temp.getName());
+            values.put(ID_DOC, cadastro.get_id_prop());
+            db.update(TABLE_DOCS, values, NAME + "=" + temp.getName(), null);
+
         }
 
     }
 
-    public void updateRegisterBenf(ArrayList<Benfeitoria> benfs, String idBck){
+    public void updateRegisterBenf(Register cadastro, ArrayList<Benfeitoria> benfs, String idBck){
 
         ContentValues values = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
@@ -659,18 +679,41 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(IDADE_BENF, temp.getIdade());
             values.put(CONSERVACAO_BENF, temp.getConservacao());
             values.put(ID_BENF_PHOTOS, temp.getIdBenf());
-            values.put(ID_BENF, temp.getIdProp());
-
-            if (temp.getIdProp().equals(idBck)) {
-                db.update(TABLE_BENF, values, ID_BENF + "=" + temp.getIdProp(), null);
-            } else {
-                db.update(TABLE_BENF, values, ID_BENF + "=" + idBck, null);
+            values.put(ID_BENF, cadastro.get_id_prop());
+            if (cadastro.get_id_prop().equals(idBck)) {
+                db.update(TABLE_BENF, values, ID_BENF_PHOTOS + "=" + temp.getIdBenf() + " AND " + ID_BENF + "=" + cadastro.get_id_prop(), null);
+            }else{
+                db.update(TABLE_BENF, values, ID_BENF_PHOTOS + "=" + temp.getIdBenf() + " AND " + ID_BENF + "=" + idBck, null);
             }
+
         }
         db.close();
 
     }
 
+    public void updateRegisterPlant(Register cadastro, ArrayList<Benfeitoria> plants, String idBck){
+
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for(Benfeitoria temp : plants){
+            values.clear();
+            values.put(TIPO_PLANT, temp.getTipo());
+            values.put(IDADE_PLANT, temp.getIdade());
+            values.put(COMPLEMENTO_PLANT, temp.getConservacao());
+            values.put(ID_PLANT_PHOTOS, temp.getIdBenf());
+            values.put(ID_PLANT, cadastro.get_id_prop());
+
+            if (cadastro.get_id_prop().equals(idBck)) {
+                db.update(TABLE_PLANT, values, ID_PLANT_PHOTOS + "=" + temp.getIdBenf() + " AND " + ID_PLANT + "=" + cadastro.get_id_prop(), null);
+            }else{
+                db.update(TABLE_PLANT, values, ID_PLANT_PHOTOS + "=" + temp.getIdBenf() + " AND " + ID_PLANT + "=" + idBck, null);
+            }
+
+        }
+        db.close();
+
+    }
 
 
     //Get Registers
@@ -848,6 +891,32 @@ public class DBHandler extends SQLiteOpenHelper {
         return list;
     }
 
+    public ArrayList<Benfeitoria> getPlants(String idProp) {
+
+        ArrayList<Benfeitoria> list = new ArrayList<Benfeitoria>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_PLANT + " WHERE " + ID_PLANT + " = " + idProp;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Benfeitoria plant = new Benfeitoria();
+                plant.setTipo(cursor.getString(1));
+                plant.setIdade(cursor.getString(2));
+                plant.setConservacao(cursor.getString(3));
+                plant.setIdBenf(cursor.getString(4));
+                plant.setIdProp(cursor.getString(5));
+                list.add(plant);
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+        return list;
+    }
+
     public ArrayList<Docs> getDocs(String idProp){
 
         ArrayList<Docs> list = new ArrayList<Docs>();
@@ -891,7 +960,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.delete(TABLE_DESC, ID_DESC + " = " + idProp, null);
         db.delete(TABLE_DOCS, ID_DOC + " = " + idProp, null);
         db.delete(TABLE_BENF, ID_BENF + " = " + idProp, null);
-
+        db.delete(TABLE_PLANT, ID_PLANT + " = " + idProp, null);
         db.close();
 
     }
@@ -991,9 +1060,12 @@ public class DBHandler extends SQLiteOpenHelper {
             case 7:
                 file = tableDocToCSV();
                 break;
-
-
-
+            case 8:
+                file = tableBenfToCSV();
+                break;
+            case 9:
+                file = tablePlantToCSV();
+                break;
         }
         return file;
     }
@@ -1231,6 +1303,96 @@ public class DBHandler extends SQLiteOpenHelper {
         return file;
     }
 
+    public File tableBenfToCSV(){
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_BENF + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_BENF;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+//            file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()){
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3), cursor.getString(4), cursor.getString(5)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public File tablePlantToCSV(){
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_PLANT + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_PLANT;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+//            file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()){
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3), cursor.getString(4), cursor.getString(5)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public ArrayList<String> getAllDocs(){
+        ArrayList<String> list = new ArrayList<String>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_DOCS;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                list.add(cursor.getString(1));
+            }while(cursor.moveToNext());
+        }
+
+        db.close();
+        return list;
+
+
+
+    }
+
+    public Boolean checkIfPropExists(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_REGISTERS + " WHERE " + ID_PROPRIETARIO + " = " + id;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.getCount()>0)
+            return true;
+
+        return false;
+    }
 
 //    DB removes
 
@@ -1240,11 +1402,19 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void removePlant(String idProp){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(TABLE_PLANT, ID_PLANT_PHOTOS + " = " + idProp, null);
+        db.close();
+    }
+
     public void removeDocs(String idProp){
         SQLiteDatabase db = this.getReadableDatabase();
         db.delete(TABLE_DOCS, TYPE + " = " + idProp, null);
         db.close();
     }
+
+
 
 
 

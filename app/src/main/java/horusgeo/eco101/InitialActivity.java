@@ -33,6 +33,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.net.ftp.FTP;
@@ -47,7 +48,9 @@ public class InitialActivity extends AppCompatActivity {
     FloatingActionButton fab;
     DBHandler db;
     TextView warnInitialText;
-
+    String tipo;
+    String texto;
+    String user;
 
 
     @Override
@@ -65,16 +68,17 @@ public class InitialActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         Intent intent = getIntent();
-        String tipo = intent.getStringExtra("tipo");
-        String texto = intent.getStringExtra("texto");
+        tipo = intent.getStringExtra("tipo");
+        texto = intent.getStringExtra("texto");
+        user = intent.getStringExtra("user");
 
         warnInitialText = (TextView) findViewById(R.id.warnInitialText);
 
         if(tipo.equals("ok")){
             warnInitialText.setText(texto);
             warnInitialText.setTextColor(Color.GREEN);
-        }else if(tipo.equals("start")){
             warnInitialText.setText(texto);
+        }else if(tipo.equals("start")){
             warnInitialText.setTextColor(Color.BLUE);
         }
 
@@ -215,9 +219,11 @@ public class InitialActivity extends AppCompatActivity {
 
             FTPClient client = new FTPClient();
             Boolean teste;
+            Log.d("HorusGeo", "Entrando...");
             try{
+                Log.d("HorusGeo", "Conectando...");
                 client.connect("ftp.horusgeo.com.br", 21);
-
+                Log.d("HorusGeo", "Login...");
                 teste = client.login("horusgeo", "eco101web");
 
                 client.enterLocalPassiveMode();
@@ -232,10 +238,24 @@ public class InitialActivity extends AppCompatActivity {
                     Log.d("HorusGeo", file.getPath());
                     FileInputStream inputStream = new FileInputStream(file);
                     String[] name = file.getPath().split("/");
-                    result = client.storeFile("/public_ftp/incoming/"+ name[name.length-1], inputStream);
+                    result = client.storeFile("/public_ftp/incoming/"+ user + "_" + name[name.length-1], inputStream);
                     inputStream.close();
                     count++;
                 }
+                count = 0;
+                ArrayList<String> list = db.getAllDocs();
+                while(count < list.size()){
+                    File file = new File(list.get(count));
+                    Log.d("HorusGeo", String.valueOf(count));
+                    Log.d("HorusGeo", file.getPath());
+                    FileInputStream inputStream = new FileInputStream(file);
+                    String[] name = file.getPath().split("/");
+                    result = client.storeFile("/public_ftp/incoming/img/"+ name[name.length-1], inputStream);
+                    inputStream.close();
+                    count++;
+                }
+
+
                 client.logout();
 
                 return result;
