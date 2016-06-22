@@ -95,8 +95,6 @@ public class CadastroActivity extends AppCompatActivity {
 
     int tabSelected;
 
-    private static final String IMAGEVIEW_TAG = "icon bitmap";
-
     private static final int CAPTURE_IMAGE_ID_PROP = 100;
     private static final int CAPTURE_IMAGE_CPF_PROP = 101;
     private static final int CAPTURE_IMAGE_ID_CONJ = 102;
