@@ -82,8 +82,8 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/enviar_cadastros"
-            android:id="@+id/sendRegister"
+            android:text="@string/excluir_cadastro"
+            android:id="@+id/deleteRegister"
             android:layout_gravity="center_horizontal" />
 
         <Space
@@ -94,8 +94,9 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/excluir_cadastro"
-            android:id="@+id/deleteRegister"
+            android:text="@string/enviar_cadastros"
+            android:id="@+id/sendRegister"
             android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 </ScrollView>

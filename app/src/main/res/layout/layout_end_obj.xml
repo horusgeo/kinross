@@ -25,7 +25,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/ruaEndObjText"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:inputType="textCapWords|text"
+                android:imeOptions="actionNext"/>
         </LinearLayout>
 
         <Space
@@ -52,7 +54,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/numEndObjText" />
+                android:id="@+id/numEndObjText"
+                android:imeOptions="actionNext"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -66,7 +69,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/complEndObjText" />
+                android:id="@+id/complEndObjText"
+                android:imeOptions="actionNext"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -78,7 +82,9 @@
             <EditText
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/bairroEndObjText" />
+                android:id="@+id/bairroEndObjText"
+                android:inputType="textCapWords|text"
+                android:imeOptions="actionNext"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -92,7 +98,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPostalAddress"
                 android:ems="10"
-                android:id="@+id/cepEndObjText" />
+                android:id="@+id/cepEndObjText"
+                android:imeOptions="actionNext"/>
 
         </LinearLayout>
 
@@ -118,7 +125,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/ptoRefEndObjText"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:inputType="textCapSentences|text"
+                android:imeOptions="actionDone"/>
         </LinearLayout>
 
         <Space

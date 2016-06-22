@@ -221,7 +221,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/idPropObsText"
             android:layout_gravity="center_horizontal"
-            android:padding="15dp" />
+            android:padding="15dp"
+            android:inputType="textCapSentences|textImeMultiLine|text" />
 
         <LinearLayout
             android:orientation="horizontal"

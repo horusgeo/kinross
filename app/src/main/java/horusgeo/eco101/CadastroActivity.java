@@ -4,12 +4,19 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.LinkAddress;
 import android.net.Uri;
 import android.os.Environment;
@@ -26,9 +33,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -52,10 +61,12 @@ import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-
+import java.util.Locale;
 
 
 public class CadastroActivity extends AppCompatActivity {
@@ -84,6 +95,7 @@ public class CadastroActivity extends AppCompatActivity {
 
     int tabSelected;
 
+    private static final String IMAGEVIEW_TAG = "icon bitmap";
 
     private static final int CAPTURE_IMAGE_ID_PROP = 100;
     private static final int CAPTURE_IMAGE_CPF_PROP = 101;
@@ -125,9 +137,13 @@ public class CadastroActivity extends AppCompatActivity {
 
         String tipo = intent.getStringExtra("tipo");
         String text1 = intent.getStringExtra("string");
+        String user = intent.getStringExtra("user");
 
         if(tipo.equals("new")){
             setTitle(text1);
+            cadastro.set_data_visita(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));
+            cadastro.set_horario_chegada(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));
+            cadastro.set_responsavel(Responsavel.TESTE);
             editTable = false;
         }else if(tipo.equals("edit")){
             cadastro = db.getRegister(text1);
@@ -136,7 +152,7 @@ public class CadastroActivity extends AppCompatActivity {
             plants = db.getPlants(text1);
 
             Log.d("HorusGeo", String.valueOf(docs.size()));
-
+            setTitle(cadastro.get_nome_proprietario());
             idBck = cadastro.get_id_prop();
             db.removeBenfeitorias(text1);
             db.removePlant(text1);
@@ -228,15 +244,61 @@ public class CadastroActivity extends AppCompatActivity {
                 }
         );
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_ok);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveCadastro();
+
+                if(tabSelected==1)
+                    saveCadastroRelatorio();
+                if(tabSelected==2)
+                    saveCadastroProp();
+
+                if(cadastro.get_id_prop()!=null && cadastro.get_nome_proprietario()!=null) {
+                    saveCadastro();
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CadastroActivity.this);
+                    builder.setMessage("Por Favor, Defina um número de identificação e \n" +
+                            "um nome de proprietátio! ")
+                            .setPositiveButton("Retornar", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    builder.show();
+                }
             }
         });
 
+        FloatingActionButton fab_cancel = (FloatingActionButton) findViewById(R.id.fab_cancel);
+        assert fab_cancel != null;
+        fab_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CadastroActivity.this, InitialActivity.class);
+                if(cadastro.get_id_prop()!=null) {
+                    if(editTable){
+                        intent.putExtra("tipo", "cancel");
+                        intent.putExtra("texto", "Edição cancelada!");
+                    }else{
+                        intent.putExtra("tipo", "cancel");
+                        intent.putExtra("texto", "Cadastro cancelado!");
+                        if(db.checkIfPropExists(cadastro.get_id_prop())){
+                            db.deleteRegister(cadastro.get_id_prop());
+                        }
+                    }
+                }else{
+                    intent.putExtra("tipo", "cancel");
+                    intent.putExtra("texto", "Cadastro cancelado!");
+                }
+                startActivity(intent);
+            }
+        });
+    }
 
+    @Override
+    public void onBackPressed(){
 
     }
 
@@ -843,6 +905,7 @@ public class CadastroActivity extends AppCompatActivity {
 
 
     public void saveCadastro(){
+        cadastro.set_horario_saida(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));
         if(tabSelected==1)
             saveCadastroRelatorio();
         if(tabSelected==2)
@@ -929,9 +992,10 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
-    public void callAddThumb(int type, String file){
+    public void callAddThumb(int type, final String file){
         ImageButton img = new ImageButton(this);
         img.setImageBitmap(imgPhoto.decodeSampledBitmapFromFile(file, 100, 100));
+
         LinearLayout layout = null;
 
         switch (type){

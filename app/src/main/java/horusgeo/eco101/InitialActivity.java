@@ -74,12 +74,15 @@ public class InitialActivity extends AppCompatActivity {
 
         warnInitialText = (TextView) findViewById(R.id.warnInitialText);
 
-        if(tipo.equals("ok")){
+        if(tipo.equals("ok")) {
             warnInitialText.setText(texto);
             warnInitialText.setTextColor(Color.GREEN);
-            warnInitialText.setText(texto);
         }else if(tipo.equals("start")){
+            warnInitialText.setText(texto);
             warnInitialText.setTextColor(Color.BLUE);
+        }else if(tipo.equals("cancel")){
+            warnInitialText.setText(texto);
+            warnInitialText.setTextColor(Color.RED);
         }
 
 
@@ -99,6 +102,7 @@ public class InitialActivity extends AppCompatActivity {
                 Intent intent = new Intent(InitialActivity.this, CadastroActivity.class);
                 intent.putExtra("tipo", "new");
                 intent.putExtra("string", "Novo Cadatro");
+                intent.putExtra("user", user);
                 startActivity(intent);
             }
         });
@@ -125,6 +129,32 @@ public class InitialActivity extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton fab_cancel = (FloatingActionButton) findViewById(R.id.fab_cancel);
+        assert fab_cancel != null;
+        fab_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(InitialActivity.this);
+                builder.setMessage("Você realmente deseja sair?")
+                        .setPositiveButton("Sair", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                InitialActivity.this.finishAffinity();
+                            }
+                        })
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                builder.show();
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onBackPressed(){
 
     }
 
@@ -162,6 +192,7 @@ public class InitialActivity extends AppCompatActivity {
                         Intent intent = new Intent(InitialActivity.this, CadastroActivity.class);
                         intent.putExtra("tipo", "edit");
                         intent.putExtra("string", strName);
+                        intent.putExtra("user", user);
                         startActivity(intent);
                     }
                 });

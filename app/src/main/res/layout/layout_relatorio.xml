@@ -27,7 +27,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/projetoText"
                 android:layout_weight="1"
-                android:text="Eco 101" />
+                android:text="Eco 101"
+                android:inputType="textCapWords|text"
+                android:imeOptions="actionNext"/>
         </LinearLayout>
 
         <Space
@@ -54,7 +56,8 @@
                 android:inputType="number"
                 android:ems="10"
                 android:id="@+id/idPropText"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:imeOptions="actionNext"/>
         </LinearLayout>
 
         <Space
@@ -80,7 +83,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/localText"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:inputType="textCapWords|text"
+            android:imeOptions="actionDone"/>
 
         <Space
             android:layout_width="match_parent"
@@ -106,7 +111,8 @@
                 android:inputType="date"
                 android:ems="10"
                 android:id="@+id/dataText"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
         </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

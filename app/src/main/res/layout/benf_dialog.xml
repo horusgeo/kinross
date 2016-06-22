@@ -13,21 +13,27 @@
             android:layout_height="wrap_content"
             android:id="@+id/benfTipoText"
             android:layout_weight="0.33"
-            android:hint="Tipo" />
+            android:hint="Tipo"
+            android:inputType="textCapSentences|text"
+            android:imeOptions="actionNext"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/benfIdadeText"
             android:layout_weight="0.33"
-            android:hint="Idade" />
+            android:hint="Idade"
+            android:inputType="number"
+            android:imeOptions="actionNext"/>
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/benfConservText"
             android:layout_weight="0.33"
-            android:hint="Conservação" />
+            android:hint="Conservação"
+            android:inputType="textCapSentences|text"
+            android:imeOptions="actionNext"/>
 
     </LinearLayout>
 

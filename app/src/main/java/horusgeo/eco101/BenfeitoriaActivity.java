@@ -77,7 +77,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_ok);
         assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +85,23 @@ public class BenfeitoriaActivity extends AppCompatActivity {
                 returnToCadastro();
             }
         });
+
+        FloatingActionButton fab_cancel = (FloatingActionButton) findViewById(R.id.fab_cancel);
+        assert fab_cancel != null;
+        fab_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BenfeitoriaActivity.this, CadastroActivity.class);
+                intent.putExtra("tipo", "edit");
+                intent.putExtra("string", idProp);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed(){
+
     }
 
     @Override
@@ -237,6 +254,19 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         }
 
         callAddBenfDialog(viewId, benfId, id);
+        callAddPhotosAfterEdit();
+    }
+
+    public void callAddPhotosAfterEdit(){
+        for(int i = 0; i < benfsLayout.getChildCount(); i++){
+            View v = benfsLayout.getChildAt(i);
+            TextView idBenf = (TextView) v.findViewById(R.id.idBenfInvText);
+            for(Docs temp : docs){
+                if(temp.getType().equals(idBenf.getText())){
+                    callAddThumb(Integer.parseInt(idBenf.getText().toString()), temp.getPath());
+                }
+            }
+        }
     }
 
 

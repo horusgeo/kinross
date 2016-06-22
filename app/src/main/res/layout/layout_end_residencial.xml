@@ -25,7 +25,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/ruaEndResText"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords|text" />
         </LinearLayout>
 
         <Space
@@ -52,7 +54,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/numEndResText" />
+                android:id="@+id/numEndResText"
+                android:imeOptions="actionNext"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -66,7 +69,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/complEndResText" />
+                android:id="@+id/complEndResText"
+                android:imeOptions="actionNext"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -78,7 +82,9 @@
             <EditText
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/bairroEndResText" />
+                android:id="@+id/bairroEndResText"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords|text" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -92,7 +98,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPostalAddress"
                 android:ems="10"
-                android:id="@+id/cepEndResText" />
+                android:id="@+id/cepEndResText"
+                android:imeOptions="actionNext"/>
 
         </LinearLayout>
 
@@ -118,7 +125,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/munEndResText"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords|text" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -131,7 +140,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/ufEndResText"
-                android:layout_weight="0.2" />
+                android:layout_weight="0.2"
+                android:imeOptions="actionNext"
+                android:inputType="textCapCharacters|text" />
         </LinearLayout>
 
         <Space
@@ -156,7 +167,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/comEndResText"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords|text" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -169,7 +182,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/comUfEndResText"
-                android:layout_weight="0.2" />
+                android:layout_weight="0.2"
+                android:imeOptions="actionNext"
+                android:inputType="text|textCapCharacters" />
         </LinearLayout>
 
         <Space
@@ -194,7 +209,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/ptoRefEndResText"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:imeOptions="actionDone"
+                android:inputType="textCapSentences|text" />
         </LinearLayout>
 
         <Space

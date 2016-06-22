@@ -26,7 +26,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="20dp"
                 android:layout_weight="0.25" />
 
             <TextView
@@ -40,7 +40,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="20dp"
                 android:layout_weight="0.25" />
 
             <TextView
@@ -78,7 +78,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0" >
 
             <ImageButton
@@ -87,7 +87,7 @@
                 android:id="@+id/plantPhotoButton"
                 android:layout_weight="0"
                 android:background="@android:color/transparent"
-                android:src="@mipmap/ic_photo_camera_black_24dp" />
+                android:src="@mipmap/ic_photo_camera_black_36dp" />
 
             <Space
                 android:layout_width="match_parent"
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/plantEditButton"
                 android:layout_weight="0"
-                android:src="@mipmap/ic_create_black_24dp"
+                android:src="@mipmap/ic_create_black_36dp"
                 android:background="@android:color/transparent" />
 
             <Space
@@ -113,7 +113,7 @@
                 android:id="@+id/plantDelButton"
                 android:layout_weight="0"
                 android:background="@android:color/transparent"
-                android:src="@mipmap/ic_clear_black_24dp" />
+                android:src="@mipmap/ic_clear_black_36dp" />
         </LinearLayout>
     </LinearLayout>
 

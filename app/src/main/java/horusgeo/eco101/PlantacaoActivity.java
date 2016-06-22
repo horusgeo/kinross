@@ -71,7 +71,7 @@ public class PlantacaoActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_ok);
         assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +79,23 @@ public class PlantacaoActivity extends AppCompatActivity {
                 returnToCadastro();
             }
         });
+
+        FloatingActionButton fab_cancel = (FloatingActionButton) findViewById(R.id.fab_cancel);
+        assert fab_cancel != null;
+        fab_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PlantacaoActivity.this, CadastroActivity.class);
+                intent.putExtra("tipo", "edit");
+                intent.putExtra("string", idProp);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed(){
 
     }
 

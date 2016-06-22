@@ -55,7 +55,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/descricaoText"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:inputType="textCapSentences|textImeMultiLine|text"
+            android:imeOptions="actionDone"/>
 
         <Space
             android:layout_width="match_parent"
@@ -79,7 +81,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/responsavelText"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:inputType="textCapWords|textPersonName|text" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

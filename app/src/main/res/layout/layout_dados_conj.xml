@@ -24,10 +24,11 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
+                android:inputType="textCapWords|textPersonName|text"
                 android:ems="10"
                 android:id="@+id/conjNomeText"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:imeOptions="actionNext"/>
         </LinearLayout>
 
         <Space
@@ -50,7 +51,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/conjNacText"
-                android:layout_weight="0.25" />
+                android:layout_weight="0.25"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords|text" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -63,7 +66,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/conjProfText"
-                android:layout_weight="0.25" />
+                android:layout_weight="0.25"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords|text" />
         </LinearLayout>
 
         <Space
@@ -88,7 +93,8 @@
                 android:inputType="number"
                 android:ems="10"
                 android:id="@+id/conjDocIdText"
-                android:layout_weight="0.8" />
+                android:layout_weight="0.8"
+                android:imeOptions="actionNext"/>
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -114,7 +120,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/conjTpOrgText"
-                android:layout_weight="0.7" />
+                android:layout_weight="0.7"
+                android:imeOptions="actionNext"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -129,7 +136,8 @@
                 android:inputType="number"
                 android:ems="10"
                 android:id="@+id/conjCPFText"
-                android:layout_weight="0.003" />
+                android:layout_weight="0.003"
+                android:imeOptions="actionNext"/>
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -169,7 +177,8 @@
                 android:inputType="phone"
                 android:ems="10"
                 android:id="@+id/conjTel1Text"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:imeOptions="actionNext"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -184,7 +193,8 @@
                 android:inputType="phone"
                 android:ems="10"
                 android:id="@+id/conjTel2Text"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:imeOptions="actionNext"/>
         </LinearLayout>
 
         <Space
@@ -202,7 +212,9 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/conjAnotText" />
+            android:id="@+id/conjAnotText"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences|textImeMultiLine|text" />
 
         <Space
             android:layout_width="match_parent"
