@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
@@ -148,6 +149,7 @@ public class CadastroActivity extends AppCompatActivity {
             benfs = db.getBenfeitoria(text1);
             docs = db.getDocs(text1);
             plants = db.getPlants(text1);
+            idPropBenf = cadastro.get_id_prop();
 
             Log.d("HorusGeo", String.valueOf(docs.size()));
             setTitle(cadastro.get_nome_proprietario());
@@ -447,7 +449,9 @@ public class CadastroActivity extends AppCompatActivity {
                     plantButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                            Intent intent = new Intent(getActivity())
+                            Intent intent = new Intent(getActivity(), PlantacaoActivity.class);
+                            intent.putExtra("idProp", idPropBenf);
+                            startActivity(intent);
                         }
                     });
                     break;

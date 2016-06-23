@@ -54,11 +54,15 @@ public class BenfeitoriaActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         idProp = intent.getStringExtra("idProp");
-        Log.d("HorusGeo", "Called onCreate");
+        Log.d("Benfeitorias", "***** Called onCreate Benfeitorias *****");
+        Log.d("Benfeitorias", "idProp = " + idProp);
         db = new DBHandler(this, null, null, 1);
 
         benfs = db.getBenfeitoria(idProp);
         docs = db.getDocs(idProp);
+
+        Log.d("Benfeitorias", "benfs size = " + benfs.size());
+        Log.d("Benfeitorias", "docs size = " + docs.size());
 
         db.removeBenfeitorias(idProp);
         db.removeDocs(idProp);
@@ -73,6 +77,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         benfAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Benfeitorias", "***** Add Benf Clicked *****");
                 callAddBenfDialog(-1,-1, null);
             }
         });
@@ -82,6 +87,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("Benfeitorias", "***** Return to Cadastro Clicked *****");
                 returnToCadastro();
             }
         });
@@ -91,6 +97,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         fab_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Benfeitorias", "***** Cancel Button Clicked *****");
                 Intent intent = new Intent(BenfeitoriaActivity.this, CadastroActivity.class);
                 intent.putExtra("tipo", "edit");
                 intent.putExtra("string", idProp);
@@ -108,20 +115,23 @@ public class BenfeitoriaActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
 
-        Log.d("HorusGeo", "Called onStart");
-        Log.d("HorusGeo", String.valueOf(benfsLayout.getChildCount()));
-        Log.d("HorusGeo", String.valueOf(benfs.size()));
+        Log.d("Benfeitorias", "***** Called onStart Benfeitorias *****");
+        Log.d("Benfeitorias", "benfsLayout size antes while = " + String.valueOf(benfsLayout.getChildCount()));
+        Log.d("Benfeitorias", "benfs size = " + String.valueOf(benfs.size()));
 
         while(benfsLayout.getChildCount() > 1)
             benfsLayout.removeViewAt(0);
 
+        Log.d("Benfeitorias", "benfsLayout size depois while = " + String.valueOf(benfsLayout.getChildCount()));
 
         if(benfs.size() > 0){
             for(Benfeitoria temp : benfs){
-                addBenf(temp, benfsLayout.getChildCount()-1);
+                addBenf(temp, benfsLayout.getChildCount()-1, -1);
+                Log.d("Benfeitorias", "benfsLayout após add dentro do if = " + String.valueOf(benfsLayout.getChildCount()));
                 for(Docs temp2 : docs){
+                    Log.d("Benfeitorias", "idBenfs -> benfsLayout = " + temp.getIdBenf() + " benfs = " + temp2.getType());
                     if(temp2.getType().equals(temp.getIdBenf())){
-                        Log.d("HorusGeo", temp2.getPath());
+                        Log.d("Benfeitorias", "paths = " + temp2.getPath());
                         callAddThumb(Integer.parseInt(temp2.getType()), temp2.getPath());
                     }
                 }
@@ -141,14 +151,19 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         idadeText = (TextView) rootView.findViewById(R.id.benfIdadeText);
         consvText = (TextView) rootView.findViewById(R.id.benfConservText);
 
+        Log.d("Benfeitorias", "***** Add Benf Dialog *****");
+        Log.d("Benfeitorias", "pose = " + pose);
+        Log.d("Benfeitorias", "arrayPose = " + arrayPose);
+        Log.d("Benfeitorias", "ID = " + ID);
         if(ID!=null){
             tipoText.setText(benfs.get(arrayPose).getTipo());
             idadeText.setText(benfs.get(arrayPose).getIdade());
             consvText.setText(benfs.get(arrayPose).getConservacao());
         }
 
-        builderSingle.setView(rootView)
-            .setPositiveButton("Salvar", new DialogInterface.OnClickListener() {
+        builderSingle.setView(rootView);
+
+        builderSingle.setPositiveButton("Salvar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
 
@@ -156,30 +171,53 @@ public class BenfeitoriaActivity extends AppCompatActivity {
 
                     if(ID==null) {
                         int lastId;
+                        Log.d("Benfeitorias", "IF True");
+                        Log.d("Benfeitorias", "benfs size = " + benfs.size());
                         if (benfs.size() > 0) {
+                            Log.d("Benfeitorias", "benfs idBenf = " + benfs.get(benfs.size() - 1).getIdBenf());
                             lastId = Integer.parseInt(benfs.get(benfs.size() - 1).getIdBenf());
                         } else {
                             lastId = 1000;
                         }
+                        Log.d("Benfeitorias", "lastId = " + lastId);
                         idBenf = String.valueOf(lastId+1);
+                        Log.d("Benfeitorias", "id Benf = " + idBenf);
+                        benfs.add(new Benfeitoria(tipoText.getText().toString(), idadeText.getText().toString(),
+                                consvText.getText().toString(), idBenf, idProp));
+                        addBenf(benfs.get(benfs.size()-1), pose, -1);
                     }else{
+                        Log.d("Benfeitorias", "IF False");
                         idBenf = ID;
-                    }
-                    benfs.add(new Benfeitoria(tipoText.getText().toString(), idadeText.getText().toString(),
-                            consvText.getText().toString(), idBenf, idProp));
+                        Log.d("Benfeitorias", "idBenf" + idBenf);
 
-                    addBenf(benfs.get(benfs.size()-1), pose);
+                        benfs.get(arrayPose).setTipo(tipoText.getText().toString());
+                        benfs.get(arrayPose).setIdade(idadeText.getText().toString());
+                        benfs.get(arrayPose).setConservacao(consvText.getText().toString());
+                        addBenf(benfs.get(arrayPose), pose, arrayPose);
+                    }
+
+
+//                    Log.d("Benfeitorias", "benfs size = " + benfs.size());
+
                 }
-            })
-            .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            });
+
+        if(arrayPose == -1) {
+            builderSingle.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    Log.d("Benfeitorias", "***** Cancel Dialog *****");
                     dialog.dismiss();
                 }
-        });
+            });
+        }
         builderSingle.show();
     }
 
-    public void addBenf(final Benfeitoria benf, int pose){
+    public void addBenf(final Benfeitoria benf, int pose, int arrayPose){
+
+        Log.d("Benfeitorias", "***** ADD BENF *****");
+        Log.d("Benfeitorias", "benf = " + benf.getIdBenf());
+        Log.d("Benfeitorias", "pose = " + pose);
 
         LayoutInflater inflater = this.getLayoutInflater();
         View rootView = inflater.inflate(R.layout.dados_benf, null);
@@ -193,6 +231,8 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         ImageButton editButton = (ImageButton) rootView.findViewById(R.id.benfEditButton);
         ImageButton delButton = (ImageButton) rootView.findViewById(R.id.benfDelButton);
 
+
+
         tipo.setText("Tipo: " + benf.getTipo());
         idade.setText("Idade Aparente: " + benf.getIdade());
         conserv.setText("Conservação: " + benf.getConservacao());
@@ -203,7 +243,12 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         else
             place = pose;
 
+        Log.d("Benfeitorias", "place = " + place);
+
         benfsLayout.addView(rootView, place);
+
+        if(arrayPose!=-1)
+            callAddPhotosAfterEdit(benf.getIdBenf());
 
         delButton.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -222,6 +267,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Benfeitorias", "***** TAKE PHOTO *****");
                 takePhoto(Integer.parseInt(benf.getIdBenf()));
             }
         });
@@ -233,38 +279,52 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         int viewId = -1;
         int benfId = -1;
 
+        Log.d("Benfeitorias", "***** EDIT BENF *****");
+        Log.d("Benfeitorias", "id = " + id);
+
+
+        Log.d("Benfeitorias", "benfsLayout size = " + benfsLayout.getChildCount());
         for(int i = 0; i < benfsLayout.getChildCount(); i++){
             View v = benfsLayout.getChildAt(i);
             TextView idBenf = (TextView) v.findViewById(R.id.idBenfInvText);
-            if(id.equals(idBenf.getText().toString())){
+
+            Log.d("Benfeitorias", "id = " + id + " idBenf = " + idBenf.getText());
+
+            if(id.equals(idBenf.getText())){
                 viewId = i;
                 break;
             }
         }
+        Log.d("Benfeitorias", "viewID = " + viewId);
 
         if(viewId!=-1){
+            Log.d("Benfeitorias", "benfsLayout size = " + benfsLayout.getChildCount());
             benfsLayout.removeViewAt(viewId);
+            Log.d("Benfeitorias", "benfsLayout size = " + benfsLayout.getChildCount());
         }
 
         for(int i = 0; i < benfs.size(); i++){
+            Log.d("Benfeitorias", "id = " + id + " benfs id = " + benfs.get(i).getIdBenf());
             if(id.equals(benfs.get(i).getIdBenf())){
                 benfId = i;
                 break;
             }
         }
 
+        Log.d("Benfeitorias", "benfId = " + benfId);
+
         callAddBenfDialog(viewId, benfId, id);
-        callAddPhotosAfterEdit();
+
     }
 
-    public void callAddPhotosAfterEdit(){
-        for(int i = 0; i < benfsLayout.getChildCount(); i++){
-            View v = benfsLayout.getChildAt(i);
-            TextView idBenf = (TextView) v.findViewById(R.id.idBenfInvText);
-            for(Docs temp : docs){
-                if(temp.getType().equals(idBenf.getText())){
-                    callAddThumb(Integer.parseInt(idBenf.getText().toString()), temp.getPath());
-                }
+    public void callAddPhotosAfterEdit(String id){
+
+        Log.d("Benfeitorias", "***** CALL ADD PHOTOS AFTER EDIT *****");
+        Log.d("Benfeitorias", "docs size = " + docs.size());
+        for(Docs temp : docs){
+            Log.d("Benfeitorias", "temp Type = " + temp.getType() + " idBenf = " + id);
+            if(temp.getType().equals(id)){
+                callAddThumb(Integer.parseInt(temp.getType()), temp.getPath());
             }
         }
     }
@@ -274,37 +334,59 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         int viewId = -1;
         int benfId = -1;
 
+        Log.d("Benfeitorias", "***** DELETE BENF *****");
+        Log.d("Benfeitorias", "id = " + id);
+
+        Log.d("Benfeitorias", "benfsLayout size = " + benfsLayout.getChildCount());
         for(int i = 0; i < benfsLayout.getChildCount(); i++){
             View v = benfsLayout.getChildAt(i);
             TextView idBenf = (TextView) v.findViewById(R.id.idBenfInvText);
-            if(id.equals(idBenf.getText().toString())){
+            Log.d("Benfeitorias", "id = " + id + " idBenf = " + idBenf.getText());
+            if(id.equals(idBenf.getText())){
                 viewId = i;
                 break;
             }
         }
+
+        Log.d("Benfeitorias", "viewID = " + viewId);
+
         if(viewId!=-1){
+            Log.d("Benfeitorias", "benfsLayout size = " + benfsLayout.getChildCount());
             benfsLayout.removeViewAt(viewId);
+            Log.d("Benfeitorias", "benfsLayout size = " + benfsLayout.getChildCount());
         }
+
+
         for(int i = 0; i < benfs.size(); i++){
+            Log.d("Benfeitorias", "id = " + id + " benfs id = " + benfs.get(i).getIdBenf());
             if(id.equals(benfs.get(i).getIdBenf())){
                 benfId = i;
                 break;
             }
         }
 
+        Log.d("Benfeitorias", "benfId = " + benfId);
+
         if(benfId!=-1){
+            Log.d("Benfeitorias", "benfs size = " + benfs.size());
             benfs.remove(benfId);
+            Log.d("Benfeitorias", "benfs size = " + benfs.size());
         }
         ArrayList<Integer> indices = new ArrayList<Integer>();
         for(int i = 0; i < docs.size(); i++){
+            Log.d("Benfeitorias", "i = " + i + " id = " + id + " docs type = " + docs.get(i).getType());
             if(id.equals(docs.get(i).getType())){
                 indices.add(i);
             }
         }
 
+        Log.d("Benfeitorias", "docs size = " + docs.size());
+        Log.d("Benfeitorias", "indices size = " + indices.size());
         for(int i = indices.size()-1; i >= 0; i--){
             docs.remove(indices.get(i));
         }
+
+        Log.d("Benfeitorias", "docs size = " + docs.size());
 
     }
 
@@ -337,18 +419,28 @@ public class BenfeitoriaActivity extends AppCompatActivity {
 
     public void callAddThumb(int type, String file){
 
+        Log.d("Benfeitorias", "***** CALL ADD THUMB *****");
+        Log.d("Benfeitorias", "type = " + type);
+        Log.d("Benfeitorias", "file = " + file);
+
+
         int viewId = -1;
         ImageButton img = new ImageButton(this);
         String id = String.valueOf(type);
 
+
+        Log.d("Benfeitorias", "benfsLayout size = " + benfsLayout.getChildCount());
         for(int i = 0; i < benfsLayout.getChildCount(); i++){
             View v = benfsLayout.getChildAt(i);
             TextView idBenf = (TextView) v.findViewById(R.id.idBenfInvText);
+            Log.d("Benfeitorias", "id = " + id + " idBenf = " + idBenf.getText());
             if(id.equals(idBenf.getText().toString())){
                 viewId = i;
                 break;
             }
         }
+
+        Log.d("Benfeitorias", "viewId = " + viewId);
 
         img.setImageBitmap(imgPhoto.decodeSampledBitmapFromFile(file, 100, 100));
 

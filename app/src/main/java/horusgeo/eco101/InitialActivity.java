@@ -1,6 +1,9 @@
 package horusgeo.eco101;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,6 +54,7 @@ public class InitialActivity extends AppCompatActivity {
     String tipo;
     String texto;
     String user;
+
 
 
     @Override
@@ -124,7 +128,7 @@ public class InitialActivity extends AppCompatActivity {
         sendCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SendDB sendDB = new SendDB();
+                SendDB sendDB = new SendDB(InitialActivity.this);
                 sendDB.execute((Void) null);
             }
         });
@@ -237,11 +241,33 @@ public class InitialActivity extends AppCompatActivity {
 
     }
 
-    private class SendDB extends AsyncTask<Void, Void, Boolean> {
 
-        SendDB(){
 
+
+    private class SendDB extends AsyncTask<Void, Integer, Boolean> {
+
+        private ProgressDialog dialogProgress;
+
+        SendDB(Activity activity){
+            this.dialogProgress = new ProgressDialog(activity);
         }
+
+        protected void onPreExecute() {
+            this.dialogProgress.setMessage("Enviando Cadastros! Por Favor, aguarde!");
+            this.dialogProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            this.dialogProgress.setProgress(0);
+            this.dialogProgress.show();
+        }
+
+
+
+//        private void updateProgress(int count, int numFiles){
+//            this.dialogProgress.setMessage("Enviando arquivos! Por Favor, aguarde!\n" +
+//                    count + " / " + numFiles);
+//            this.dialogProgress.setMax(numFiles);
+//            this.dialogProgress.incrementProgressBy(100/numFiles);
+//        }
+
 
         @Override
         protected Boolean doInBackground(Void... params){
@@ -251,6 +277,10 @@ public class InitialActivity extends AppCompatActivity {
             FTPClient client = new FTPClient();
             Boolean teste;
             Log.d("HorusGeo", "Entrando...");
+            ArrayList<String> list = db.getAllDocs();
+            int ntables = db.getNTables();
+            int numFiles = list.size() + ntables;
+
             try{
                 Log.d("HorusGeo", "Conectando...");
                 client.connect("ftp.horusgeo.com.br", 21);
@@ -263,7 +293,7 @@ public class InitialActivity extends AppCompatActivity {
                 client.setFileTransferMode(FTP.BINARY_FILE_TYPE);
                 int count = 0;
                 Boolean result = false;
-                while(count < db.getNTables()){
+                while(count < ntables){
                     File file = db.generateCSV(count);
                     Log.d("HorusGeo", String.valueOf(count));
                     Log.d("HorusGeo", file.getPath());
@@ -272,9 +302,11 @@ public class InitialActivity extends AppCompatActivity {
                     result = client.storeFile("/public_ftp/incoming/"+ user + "_" + name[name.length-1], inputStream);
                     inputStream.close();
                     count++;
+//                    updateProgress(count, numFiles);
+                    publishProgress((int)(count/numFiles));
                 }
                 count = 0;
-                ArrayList<String> list = db.getAllDocs();
+
                 while(count < list.size()){
                     File file = new File(list.get(count));
                     Log.d("HorusGeo", String.valueOf(count));
@@ -284,6 +316,8 @@ public class InitialActivity extends AppCompatActivity {
                     result = client.storeFile("/public_ftp/incoming/img/"+ name[name.length-1], inputStream);
                     inputStream.close();
                     count++;
+//                    updateProgress(count+ntables, numFiles);
+                    publishProgress((int)((count+ntables)/numFiles));
                 }
 
 
@@ -297,8 +331,20 @@ public class InitialActivity extends AppCompatActivity {
             Log.d("HorusGeo", "Return False");
             return false;
         }
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            this.dialogProgress.setProgress(progress[0]);
+        }
+
+//        @Override
+//        public void onProgressUpdate(String... args){
+//            dialogProgress.setProgress(args[0]);
+//        }
 
         protected void onPostExecute(Boolean result) {
+            if (dialogProgress.isShowing()) {
+                dialogProgress.dismiss();
+            }
             Toast toast;
             Log.d("HorusGeo", "Toast");
             if(result){
@@ -311,6 +357,8 @@ public class InitialActivity extends AppCompatActivity {
             toast.show();
 
         }
+
+
 
     }
 

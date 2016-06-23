@@ -424,7 +424,7 @@ public class DBHandler extends SQLiteOpenHelper {
             values.clear();
             values.put(PATH, temp.getPath());
             values.put(TYPE, temp.getType());
-            values.put(NAME, temp.getType());
+            values.put(NAME, temp.getName());
             values.put(ID_DOC, temp.getIdProp());
 
             db.insert(TABLE_DOCS, null, values);

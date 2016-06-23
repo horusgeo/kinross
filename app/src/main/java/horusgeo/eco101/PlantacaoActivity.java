@@ -103,13 +103,12 @@ public class PlantacaoActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
 
-        for(int i = 0 ; i < plantsLayout.getChildCount()-1; i++){
-            plantsLayout.removeViewAt(i);
-        }
+        while(plantsLayout.getChildCount() > 1)
+            plantsLayout.removeViewAt(0);
 
         if(plants.size() > 0){
             for(Benfeitoria temp : plants){
-                addPlant(temp, plantsLayout.getChildCount()-1);
+                addPlant(temp, plantsLayout.getChildCount()-1, -1);
                 for(Docs temp2 : docs){
                     if(temp2.getType().equals(temp.getIdBenf())){
                         Log.d("HorusGeo", "OnCreate " + temp2.getPath());
@@ -137,39 +136,45 @@ public class PlantacaoActivity extends AppCompatActivity {
             consvText.setText(plants.get(arrayPose).getConservacao());
         }
 
-        builderSingle.setView(rootView)
-                .setPositiveButton("Salvar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
+        builderSingle.setView(rootView);
 
-                        String idplant;
+        builderSingle.setPositiveButton("Salvar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
 
-                        if(ID==null) {
-                            int lastId;
-                            if (plants.size() > 0) {
-                                lastId = Integer.parseInt(plants.get(plants.size() - 1).getIdBenf());
-                            } else {
-                                lastId = 3000;
-                            }
-                            idplant = String.valueOf(lastId+1);
-                        }else{
-                            idplant = ID;
-                        }
-                        plants.add(new Benfeitoria(tipoText.getText().toString(), idadeText.getText().toString(),
-                                consvText.getText().toString(), idplant, idProp));
+                String idplant;
 
-                        addPlant(plants.get(plants.size()-1), pose);
+                if(ID==null) {
+                    int lastId;
+                    if (plants.size() > 0) {
+                        lastId = Integer.parseInt(plants.get(plants.size() - 1).getIdBenf());
+                    } else {
+                        lastId = 3000;
                     }
-                })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
+                    idplant = String.valueOf(lastId+1);
+                    plants.add(new Benfeitoria(tipoText.getText().toString(), idadeText.getText().toString(),
+                            consvText.getText().toString(), idplant, idProp));
+                    addPlant(plants.get(plants.size()-1), pose, -1);
+                }else{
+                    idplant = ID;
+                    plants.get(arrayPose).setTipo(tipoText.getText().toString());
+                    plants.get(arrayPose).setIdade(idadeText.getText().toString());
+                    plants.get(arrayPose).setConservacao(consvText.getText().toString());
+                    addPlant(plants.get(arrayPose), pose, arrayPose);
+                }
+            }
+        });
+        if(arrayPose == -1) {
+            builderSingle.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+        }
         builderSingle.show();
     }
 
-    public void addPlant(final Benfeitoria plant, int pose){
+    public void addPlant(final Benfeitoria plant, int pose, int arrayPose){
 
         LayoutInflater inflater = this.getLayoutInflater();
         View rootView = inflater.inflate(R.layout.dados_plants, null);
@@ -194,6 +199,9 @@ public class PlantacaoActivity extends AppCompatActivity {
             place = pose;
 
         plantsLayout.addView(rootView, place);
+
+        if(arrayPose!=-1)
+            callAddPhotosAfterEdit(plant.getIdBenf());
 
         delButton.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -244,6 +252,15 @@ public class PlantacaoActivity extends AppCompatActivity {
         }
 
         callAddPlantDialog(viewId, plantId, id);
+    }
+
+    public void callAddPhotosAfterEdit(String id){
+
+        for(Docs temp : docs){
+            if(temp.getType().equals(id)){
+                callAddThumb(Integer.parseInt(temp.getType()), temp.getPath());
+            }
+        }
     }
 
     public void callDelPlant(String id){
