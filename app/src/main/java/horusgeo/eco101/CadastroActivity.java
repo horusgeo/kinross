@@ -43,6 +43,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.ViewStub;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -103,6 +104,32 @@ public class CadastroActivity extends AppCompatActivity {
     private static final int CAPTURE_IMAGE_END_RES = 104;
     private static final int CAPTURE_IMAGE_END_OBJ = 105;
     private static final int CAPTURE_IMAGE_IDENT_PROP = 106;
+    private static final int CAPTURE_IMAGE_COMP_END_PROP = 107;
+    private static final int CAPTURE_IMAGE_CAS_PROP = 108;
+    private static final int CAPTURE_IMAGE_CTPS_PROP = 109;
+    private static final int CAPTURE_IMAGE_CNH_PROP = 110;
+    private static final int CAPTURE_IMAGE_RG_HERD = 111;
+    private static final int CAPTURE_IMAGE_CPF_HERD = 112;
+    private static final int CAPTURE_IMAGE_PART_HERD = 113;
+    private static final int CAPTURE_IMAGE_OBT_HERD = 114;
+    private static final int CAPTURE_IMAGE_OBT_ESPO = 115;
+    private static final int CAPTURE_IMAGE_PROC_ESPO = 116;
+    private static final int CAPTURE_IMAGE_CPF_ESPO = 117;
+    private static final int CAPTURE_IMAGE_RG_ESPO = 118;
+    private static final int CAPTURE_IMAGE_CONT_PJ = 119;
+    private static final int CAPTURE_IMAGE_ULT_PJ = 120;
+    private static final int CAPTURE_IMAGE_CNPJ = 121;
+    private static final int CAPTURE_IMAGE_RG_PJ = 122;
+    private static final int CAPTURE_IMAGE_RG_PJ_CONJ = 123;
+    private static final int CAPTURE_IMAGE_END_PJ = 124;
+    private static final int CAPTURE_IMAGE_CERT_REG = 125;
+    private static final int CAPTURE_IMAGE_CERT_NEG = 126;
+    private static final int CAPTURE_IMAGE_ESCR = 127;
+    private static final int CAPTURE_IMAGE_CONT_COMP_VEND = 128;
+    private static final int CAPTURE_IMAGE_IPTU = 129;
+    private static final int CAPTURE_IMAGE_CCIR = 130;
+    private static final int CAPTURE_IMAGE_ITR = 131;
+
 
     private static Uri fileUri;
 
@@ -204,6 +231,9 @@ public class CadastroActivity extends AppCompatActivity {
                             case 9:
                                 loadCadastroDesc();
                                 break;
+                            case 10:
+                                loadCadastroCheckList();
+                                break;
                         }
                     }
 
@@ -238,6 +268,9 @@ public class CadastroActivity extends AppCompatActivity {
                                 break;
                             case 9:
                                 saveCadastroDesc();
+                                break;
+                            case 10:
+                                saveCadastrocheckList();
                                 break;
                         }
                     }
@@ -295,6 +328,57 @@ public class CadastroActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        FloatingActionButton fab_photo = (FloatingActionButton) findViewById(R.id.fab_photo);
+        assert fab_photo != null;
+        fab_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callPhotos();
+            }
+        });
+
+
+    }
+
+    public void callPhotos(){
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(CadastroActivity.this);
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                CadastroActivity.this,
+                android.R.layout.select_dialog_singlechoice);
+        arrayAdapter.addAll(FotoTypes.NAMES);
+
+        builderSingle.setNegativeButton(
+                "Cancelar",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        if(cadastro.get_id_prop() == null){
+            builderSingle.setTitle("Por Favor, Selecione um número de identificação do proprietário!");
+
+        }else{
+            builderSingle.setTitle("Selecione o Documento");
+
+            builderSingle.setAdapter(
+                    arrayAdapter,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            takePhoto(CadastroActivity.this, FotoTypes.CODES.get(which));
+
+                        }
+                    });
+        }
+        builderSingle.show();
+
+
+
     }
 
     @Override
@@ -459,6 +543,9 @@ public class CadastroActivity extends AppCompatActivity {
                     rootView = inflater.inflate(R.layout.layout_descricao, container, false);
                     break;
                 case 11:
+                    rootView = inflater.inflate(R.layout.layout_checklist, container, false);
+                    break;
+                case 12:
                     rootView = inflater.inflate(R.layout.layout_map, container, false);
                     break;
                 default:
@@ -490,7 +577,7 @@ public class CadastroActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 10;
+            return 12;
         }
 
         @Override
@@ -517,6 +604,8 @@ public class CadastroActivity extends AppCompatActivity {
                 case 9:
                     return "Descrição da Visita";
                 case 10:
+                    return "Check list";
+                case 11:
                     return "Mapa";
             }
             return null;
@@ -905,6 +994,109 @@ public class CadastroActivity extends AppCompatActivity {
         resp.setText(cadastro.get_responsavel());
     }
 
+    public void saveCadastrocheckList(){
+
+    }
+
+    public void loadCadastroCheckList(){
+
+        CheckBox checkBox = null;
+
+        for(Docs temp : docs){
+            switch(Integer.parseInt(temp.getType())){
+
+                case CAPTURE_IMAGE_ID_PROP:
+                    checkBox = (CheckBox) findViewById(R.id.checkListIDProp);
+                    break;
+                case CAPTURE_IMAGE_CPF_PROP:
+                    checkBox = (CheckBox) findViewById(R.id.checkListCPFProp);
+                    break;
+                case CAPTURE_IMAGE_ID_CONJ:
+                    checkBox = (CheckBox) findViewById(R.id.checkListIDProp);
+                    break;
+                case CAPTURE_IMAGE_CPF_CONJ:
+                    checkBox = (CheckBox) findViewById(R.id.checkListCPFProp);
+                    break;
+                case CAPTURE_IMAGE_COMP_END_PROP:
+                    checkBox = (CheckBox) findViewById(R.id.checkListEnd);
+                    break;
+                case CAPTURE_IMAGE_CAS_PROP:
+                    checkBox = (CheckBox) findViewById(R.id.checkListCas);
+                    break;
+                case CAPTURE_IMAGE_CTPS_PROP:
+                    checkBox = (CheckBox) findViewById(R.id.checkListCTPS);
+                    break;
+                case CAPTURE_IMAGE_CNH_PROP:
+                    checkBox = (CheckBox) findViewById(R.id.checkListCNH);
+                    break;
+                case CAPTURE_IMAGE_RG_HERD:
+                    checkBox = (CheckBox) findViewById(R.id.checkListIDHerd);
+                    break;
+                case CAPTURE_IMAGE_CPF_HERD:
+                    checkBox = (CheckBox) findViewById(R.id.checkListCPFProp);
+                    break;
+                case CAPTURE_IMAGE_PART_HERD:
+                    checkBox = (CheckBox) findViewById(R.id.checkListPartHerd);
+                    break;
+                case CAPTURE_IMAGE_OBT_HERD:
+                    checkBox = (CheckBox) findViewById(R.id.checkListObHerd);
+                    break;
+                case CAPTURE_IMAGE_OBT_ESPO:
+                    checkBox = (CheckBox) findViewById(R.id.checkListObtEspolio);
+                    break;
+                case CAPTURE_IMAGE_PROC_ESPO:
+                    checkBox = (CheckBox) findViewById(R.id.checkListProcEspolio);
+                    break;
+                case CAPTURE_IMAGE_CPF_ESPO:
+                    checkBox = (CheckBox) findViewById(R.id.checkListCPFEspolio);
+                    break;
+                case CAPTURE_IMAGE_RG_ESPO:
+                    checkBox = (CheckBox) findViewById(R.id.checkListRGEspolio);
+                    break;
+                case CAPTURE_IMAGE_CONT_PJ:
+                    checkBox = (CheckBox) findViewById(R.id.checkListContrato);
+                    break;
+                case CAPTURE_IMAGE_ULT_PJ:
+                    checkBox = (CheckBox) findViewById(R.id.checkListUltimaAlteracao);
+                    break;
+                case CAPTURE_IMAGE_CNPJ:
+                    checkBox = (CheckBox) findViewById(R.id.checkListCNPJ);
+                    break;
+                case CAPTURE_IMAGE_RG_PJ:
+                    checkBox = (CheckBox) findViewById(R.id.checkListRGPJ);
+                    break;
+                case CAPTURE_IMAGE_RG_PJ_CONJ:
+                    checkBox = (CheckBox) findViewById(R.id.checkListRGPJConj);
+                    break;
+                case CAPTURE_IMAGE_END_PJ:
+                    checkBox = (CheckBox) findViewById(R.id.checkListEndPJ);
+                    break;
+                case CAPTURE_IMAGE_CERT_REG:
+                    checkBox = (CheckBox) findViewById(R.id.checkListRegImovel);
+                    break;
+                case CAPTURE_IMAGE_CERT_NEG:
+                    checkBox = (CheckBox) findViewById(R.id.checkListNegImovel);
+                    break;
+                case CAPTURE_IMAGE_ESCR:
+                    checkBox = (CheckBox) findViewById(R.id.checkListEscImovel);
+                    break;
+                case CAPTURE_IMAGE_CONT_COMP_VEND:
+                    checkBox = (CheckBox) findViewById(R.id.checkListContImovel);
+                    break;
+                case CAPTURE_IMAGE_IPTU:
+                    checkBox = (CheckBox) findViewById(R.id.checkListIPTUImovel);
+                    break;
+                case CAPTURE_IMAGE_CCIR:
+                    checkBox = (CheckBox) findViewById(R.id.checkListCCIRImovel);
+                    break;
+                case CAPTURE_IMAGE_ITR:
+                    checkBox = (CheckBox) findViewById(R.id.checkListITRImovel);
+                    break;
+            }
+            checkBox.setChecked(true);
+        }
+
+    }
 
     public void saveCadastro(){
         cadastro.set_horario_saida(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));

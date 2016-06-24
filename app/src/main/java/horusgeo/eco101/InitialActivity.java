@@ -16,6 +16,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -95,7 +96,7 @@ public class InitialActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(InitialActivity.this, MapActivity.class);
+                Intent intent = new Intent(InitialActivity.this, MappingActivity.class);
                 startActivity(intent);
             }
         });
@@ -128,8 +129,36 @@ public class InitialActivity extends AppCompatActivity {
         sendCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SendDB sendDB = new SendDB(InitialActivity.this);
-                sendDB.execute((Void) null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(InitialActivity.this);
+                //builder.setTitle("!!! ATENÇÃO !!!");
+                builder.setMessage("Esta função enviará os dados para o Sistema Web!\n" +
+                        "Certifique-se de que todos os dados estão corretos!\n" +
+                        "É necessário uma conexão com a internet!")
+                        .setPositiveButton("Enviar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                SendDB sendDB = new SendDB(InitialActivity.this);
+                                sendDB.execute((Void) null);
+                            }
+                        })
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                TextView title = new TextView(InitialActivity.this);
+                title.setText("!!! ATENÇÃO !!!");
+                title.setGravity(Gravity.CENTER_HORIZONTAL);
+                title.setTextSize(30);
+                title.setTextColor(Color.RED);
+
+                builder.setCustomTitle(title);
+
+                Dialog d = builder.show();
+
+                TextView textView = (TextView) d.findViewById(android.R.id.message);
+
+                textView.setGravity(Gravity.CENTER);
+
             }
         });
 
@@ -257,6 +286,7 @@ public class InitialActivity extends AppCompatActivity {
             this.dialogProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             this.dialogProgress.setProgress(0);
             this.dialogProgress.show();
+            this.dialogProgress.setCancelable(false);
         }
 
 
@@ -279,7 +309,7 @@ public class InitialActivity extends AppCompatActivity {
             Log.d("HorusGeo", "Entrando...");
             ArrayList<String> list = db.getAllDocs();
             int ntables = db.getNTables();
-            int numFiles = list.size() + ntables;
+            double numFiles = list.size() + ntables;
 
             try{
                 Log.d("HorusGeo", "Conectando...");
@@ -293,6 +323,7 @@ public class InitialActivity extends AppCompatActivity {
                 client.setFileTransferMode(FTP.BINARY_FILE_TYPE);
                 int count = 0;
                 Boolean result = false;
+                double progress = 0.0;
                 while(count < ntables){
                     File file = db.generateCSV(count);
                     Log.d("HorusGeo", String.valueOf(count));
@@ -302,8 +333,10 @@ public class InitialActivity extends AppCompatActivity {
                     result = client.storeFile("/public_ftp/incoming/"+ user + "_" + name[name.length-1], inputStream);
                     inputStream.close();
                     count++;
-//                    updateProgress(count, numFiles);
-                    publishProgress((int)(count/numFiles));
+                    progress = 100*(count/numFiles);
+
+                    Log.d("HorusGeo", "progress = " + progress);
+                    publishProgress((int)(progress));
                 }
                 count = 0;
 
@@ -316,8 +349,9 @@ public class InitialActivity extends AppCompatActivity {
                     result = client.storeFile("/public_ftp/incoming/img/"+ name[name.length-1], inputStream);
                     inputStream.close();
                     count++;
-//                    updateProgress(count+ntables, numFiles);
-                    publishProgress((int)((count+ntables)/numFiles));
+                    progress = 100*((count+ntables)/numFiles);
+                    Log.d("HorusGeo", "progress = " + progress);
+                    publishProgress((int)(progress));
                 }
 
 
@@ -333,13 +367,12 @@ public class InitialActivity extends AppCompatActivity {
         }
         @Override
         protected void onProgressUpdate(Integer... progress) {
+            Log.d("HorusGeo", "Progress Called = " + progress[0]);
+
             this.dialogProgress.setProgress(progress[0]);
         }
 
-//        @Override
-//        public void onProgressUpdate(String... args){
-//            dialogProgress.setProgress(args[0]);
-//        }
+
 
         protected void onPostExecute(Boolean result) {
             if (dialogProgress.isShowing()) {

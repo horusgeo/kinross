@@ -1,15 +1,24 @@
 myMap = L.map('mapDiv').setView([-19.315, -43.636], 15);
 
 var options = {
-                minZoom: 15,
+                minZoom: 0,
                 maxZoom: 21,
                 opacity: 1.0,
                 tms: false
                 };
 
-L.tileLayer('{z}/{x}/{y}.png', options).addTo(myMap);
-myMap.attributionControl.setPosition('bottomleft')
 
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    opacity: 0.2,
+}).addTo(myMap);
+
+L.tileLayer('{z}/{x}/{y}.png', options).addTo(myMap);
+
+
+myMap.attributionControl.setPosition('bottomleft');
+
+omnivore.kml('fd.kml').addTo(myMap);
 
 function clickPoints(){
 

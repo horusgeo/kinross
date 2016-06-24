@@ -33,28 +33,32 @@
         <activity
             android:name=".MapActivity"
             android:label="Mapa"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".InitialActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CadastroActivity"
             android:label="@string/title_activity_cadastro"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".BenfeitoriaActivity"
             android:label="@string/title_activity_benfeitoria"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PlantacaoActivity"
             android:label="@string/title_activity_plantacao"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MappingActivity"
+            android:label="@string/title_activity_mapping"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

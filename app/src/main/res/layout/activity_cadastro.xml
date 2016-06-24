@@ -50,6 +50,15 @@
         app:backgroundTint="@android:color/holo_red_dark" />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@mipmap/ic_camera_alt_white_24dp"
+        app:backgroundTint="@android:color/holo_blue_dark" />
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

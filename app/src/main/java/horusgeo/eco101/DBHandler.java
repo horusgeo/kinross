@@ -35,6 +35,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TABLE_PLANT = "plantacoes";
     private static final String TABLE_DESC = "descricao";
     private static final String TABLE_DOCS = "documentos";
+    private static final String TABLE_LATLNG = "latlng";
 
     private static final String ID = "_id";
 
@@ -131,7 +132,10 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TYPE = "type";
     private static final String NAME = "name";
 
-    private static final String LATLNG = "latlng";
+    private static final String LAT = "lat";
+    private static final String LNG = "lng";
+    private static final String TYPE_LATLNG = "tipo";
+    private static final String ID_LATLNG = "_id_latlng";
 
     public DBHandler(Context context, String name,
                        SQLiteDatabase.CursorFactory factory, int version) {
@@ -261,6 +265,15 @@ public class DBHandler extends SQLiteOpenHelper {
                 ID_PLANT + " TEXT" +
                 ")";
         db.execSQL(CREATE_PLANT_TABLE);
+
+        String CREATE_LATLNG_TABLE = "CREATE TABLE " + TABLE_LATLNG + "(" +
+                ID + " INTEGER PRIMARY KEY," +
+                LAT + " TEXT," +
+                LNG + " TEXT," +
+                TYPE_LATLNG + " TEXT," +
+                ID_LATLNG + " TEXT" +
+                ")";
+        db.execSQL(CREATE_LATLNG_TABLE);
     }
 
     @Override
@@ -275,6 +288,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DOCS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BENF);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLANT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LATLNG);
         onCreate(db);
     }
 
@@ -1384,12 +1398,14 @@ public class DBHandler extends SQLiteOpenHelper {
     public Boolean checkIfPropExists(String id){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "SELECT * FROM " + TABLE_REGISTERS + " WHERE " + ID_PROPRIETARIO + " = " + id;
+        if(id!=null) {
+            String query = "SELECT * FROM " + TABLE_REGISTERS + " WHERE " + ID_PROPRIETARIO + " = " + id;
 
-        Cursor cursor = db.rawQuery(query, null);
+            Cursor cursor = db.rawQuery(query, null);
 
-        if(cursor.getCount()>0)
-            return true;
+            if (cursor.getCount() > 0)
+                return true;
+        }
 
         return false;
     }

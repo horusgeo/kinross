@@ -92,18 +92,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab_cancel = (FloatingActionButton) findViewById(R.id.fab_cancel);
-        assert fab_cancel != null;
-        fab_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Benfeitorias", "***** Cancel Button Clicked *****");
-                Intent intent = new Intent(BenfeitoriaActivity.this, CadastroActivity.class);
-                intent.putExtra("tipo", "edit");
-                intent.putExtra("string", idProp);
-                startActivity(intent);
-            }
-        });
+
     }
 
     @Override

@@ -30,4 +30,5 @@ dependencies {
     compile 'org.apache:apache:18'
     compile 'commons-net:commons-net:3.3'
     compile 'com.opencsv:opencsv:3.8'
+    compile 'com.getbase:floatingactionbutton:1.10.1'
 }
