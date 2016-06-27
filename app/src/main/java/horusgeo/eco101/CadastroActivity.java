@@ -363,7 +363,7 @@ public class CadastroActivity extends AppCompatActivity {
             builderSingle.setTitle("Por Favor, Selecione um número de identificação do proprietário!");
 
         }else{
-            builderSingle.setTitle("Selecione o Documento");
+            builderSingle.setTitle("Selecione o documento");
 
             builderSingle.setAdapter(
                     arrayAdapter,
