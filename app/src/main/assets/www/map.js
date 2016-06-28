@@ -63,14 +63,31 @@ function createProperty(){
 /* *********************** Pin *********************** */
 
 function setPin(Text){
+    pinMarker = L.marker({}, {icon: iconYellowPin});
+    function onMapClick(e) {
+        pinMarker.setLatLng(e.latlng)
+        myMap.removeLayer(pinMarker);
+        pinMarker.addTo(myMap)
+                 .bindPopup(Text + '<br>' + e.latlng.toString() + '</br>')
+                 .openPopup();
+    }
+    myMap.on('click', onMapClick);
+}
 
-    var pinMarker = L.marker(myMap.getCenter(), {icon: iconYellowPin})
-                                            .addTo(myMap)
-                                            .bindPopup(Text + "\n" + myMap.getCenter().toString())
-                                            .openPopup();
+function keepPin(){
 
-    pins.push(pinMarker);
+    var aux = L.marker(pinMarker.getLatLng(), {icon: iconYellowPin})
+                .addTo(myMap)
+                .bindPopup(pinMarker.getPopup().getContent())
+                .openPopup();
 
+    pins.push(aux);
+    cancelPin();
+}
+
+function cancelPin(){
+    myMap.removeLayer(pinMarker);
+    myMap.off('click', null);
 }
 
 /* *********************** Regua *********************** */
@@ -131,3 +148,13 @@ function closeRegua(){
 //    myMap.off('click', )
 
 //}
+
+/* *********************** CallBacks to Android *********************** */
+
+function callBackProperty(prop){
+
+}
+
+function callBackPin(pin){
+
+}

@@ -1,14 +1,20 @@
 package horusgeo.eco101;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
@@ -27,8 +33,12 @@ public class MappingActivity extends AppCompatActivity {
     FloatingActionButton fabPointsCancel;
     FloatingActionButton fabPointsNew;
     FloatingActionButton fabPointsOk;
+    FloatingActionButton fabPinOk;
+    FloatingActionButton fabPinCancel;
 
     FloatingActionsMenu fabMenu;
+
+    EditText pinText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +70,9 @@ public class MappingActivity extends AppCompatActivity {
         fabPointsCancel = (FloatingActionButton) findViewById(R.id.fabPointsCancel);
         fabPointsNew = (FloatingActionButton) findViewById(R.id.fabPointsNew);
         fabPointsOk = (FloatingActionButton) findViewById(R.id.fabPointsOk);
+        fabPin = (FloatingActionButton) findViewById(R.id.actionPin);
+        fabPinOk = (FloatingActionButton) findViewById(R.id.fabPinOk);
+        fabPinCancel = (FloatingActionButton) findViewById(R.id.fabPinCancel);
 
         fabPoints.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -150,7 +163,31 @@ public class MappingActivity extends AppCompatActivity {
         fabPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fabMenu.collapse();
+                fabMenu.setClickable(false);
 
+                fabPinOk.setVisibility(View.VISIBLE);
+                fabPinOk.setClickable(true);
+
+                fabPinCancel.setVisibility(View.VISIBLE);
+                fabPinCancel.setClickable(true);
+
+                callPinDialog();
+
+            }
+        });
+
+        fabPinOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callPin(true);
+            }
+        });
+
+        fabPinCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callPin(false);
             }
         });
 
@@ -169,6 +206,11 @@ public class MappingActivity extends AppCompatActivity {
         @JavascriptInterface
         public void paintProperty() {
 
+        }
+
+        @JavascriptInterface
+        public void toastTest(String texto){
+            Toast.makeText(getApplicationContext(), texto, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -190,8 +232,48 @@ public class MappingActivity extends AppCompatActivity {
 
     }
 
+    private void callPinDialog(){
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(MappingActivity.this);
+        builderSingle.setTitle("Escreva uma nota para o marcador:");
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View rootView = inflater.inflate(R.layout.pin_dialog, null);
+        pinText = (EditText) rootView.findViewById(R.id.pinText);
+
+        builderSingle.setView(rootView);
+
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                myWebView.loadUrl("javascript:setPin('" + pinText.getText().toString() + "')");
+            }
+        });
+        builderSingle.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                callPin(false);
+            }
+        });
+        builderSingle.show();
+    }
+
+    private void callPin(Boolean bool){
+        fabMenu.setClickable(true);
+
+        fabPinOk.setVisibility(View.INVISIBLE);
+        fabPinOk.setClickable(false);
+
+        fabPinCancel.setVisibility(View.INVISIBLE);
+        fabPinCancel.setClickable(false);
+
+        if(bool)
+            myWebView.loadUrl("javascript:keepPin()");
+        else
+            myWebView.loadUrl("javascript:cancelPin()");
 
 
+    }
 
     private void clickRegua(Boolean which){
         if(which)

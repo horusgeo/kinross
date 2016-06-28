@@ -10,9 +10,10 @@ var clickReguaArray = [];
 var reguaPolygon = L.polygon([],{
                     color:"green"});
 
-var pins[];
+var pins = [];
 
 var centerMarker;
+var pinMarker;
 var popup;
 
 
