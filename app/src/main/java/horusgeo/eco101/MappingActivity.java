@@ -24,6 +24,10 @@ public class MappingActivity extends AppCompatActivity {
     FloatingActionButton fabRegua;
     FloatingActionButton fabPin;
     FloatingActionButton fabReguaCancel;
+    FloatingActionButton fabPointsCancel;
+    FloatingActionButton fabPointsNew;
+    FloatingActionButton fabPointsOk;
+
     FloatingActionsMenu fabMenu;
 
     @Override
@@ -53,11 +57,72 @@ public class MappingActivity extends AppCompatActivity {
         fabPoints = (FloatingActionButton) findViewById(R.id.actionPoint);
         fabRegua = (FloatingActionButton) findViewById(R.id.actionRegua);
         fabReguaCancel = (FloatingActionButton) findViewById(R.id.fabReguaCancel);
+        fabPointsCancel = (FloatingActionButton) findViewById(R.id.fabPointsCancel);
+        fabPointsNew = (FloatingActionButton) findViewById(R.id.fabPointsNew);
+        fabPointsOk = (FloatingActionButton) findViewById(R.id.fabPointsOk);
 
         fabPoints.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickPoints();
+                fabMenu.collapse();
+                fabMenu.setVisibility(View.INVISIBLE);
+                fabMenu.setClickable(false);
+
+                fabPointsCancel.setVisibility(View.VISIBLE);
+                fabPointsCancel.setClickable(true);
+
+                fabPointsNew.setVisibility(View.VISIBLE);
+                fabPointsNew.setClickable(true);
+
+                fabPointsOk.setVisibility(View.VISIBLE);
+                fabPointsOk.setClickable(true);
+
+                clickPoints(0);
+            }
+        });
+
+        fabPointsNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickPoints(1);
+            }
+        });
+
+        fabPointsOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabMenu.setVisibility(View.VISIBLE);
+                fabMenu.setClickable(true);
+
+                fabPointsCancel.setVisibility(View.INVISIBLE);
+                fabPointsCancel.setClickable(false);
+
+                fabPointsNew.setVisibility(View.INVISIBLE);
+                fabPointsNew.setClickable(false);
+
+                fabPointsOk.setVisibility(View.INVISIBLE);
+                fabPointsOk.setClickable(false);
+
+                clickPoints(2);
+            }
+        });
+
+        fabPointsCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabMenu.setVisibility(View.VISIBLE);
+                fabMenu.setClickable(true);
+
+                fabPointsCancel.setVisibility(View.INVISIBLE);
+                fabPointsCancel.setClickable(false);
+
+                fabPointsNew.setVisibility(View.INVISIBLE);
+                fabPointsNew.setClickable(false);
+
+                fabPointsOk.setVisibility(View.INVISIBLE);
+                fabPointsOk.setClickable(false);
+
+                clickPoints(3);
             }
         });
 
@@ -82,6 +147,13 @@ public class MappingActivity extends AppCompatActivity {
             }
         });
 
+        fabPin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
 
@@ -100,9 +172,25 @@ public class MappingActivity extends AppCompatActivity {
         }
     }
 
-    private void clickPoints(){
-        myWebView.loadUrl("javascript:clickPoints()");
+    private void clickPoints(Integer which){
+        switch (which){
+            case 0:
+                myWebView.loadUrl("javascript:startPoints()");
+                break;
+            case 1:
+                myWebView.loadUrl("javascript:clickPoints()");
+                break;
+            case 2:
+                myWebView.loadUrl("javascript:createProperty()");
+                break;
+            case 3:
+                myWebView.loadUrl("javascript:clearPoints()");
+                break;
+        }
+
     }
+
+
 
 
     private void clickRegua(Boolean which){

@@ -1,6 +1,5 @@
-myMap = L.map('mapDiv', {
-//            measureControl:true
-            }).setView([-19.315, -43.636], 15);
+myMap = L.map('mapDiv',{}).setView([-19.315, -43.636], 15);
+//myMap = L.map('mapDiv',{});
 
 var options = {
                 minZoom: 0,
@@ -11,12 +10,13 @@ var options = {
 
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-
 }).addTo(myMap);
 
 //L.tileLayer('{z}/{x}/{y}.png', options).addTo(myMap);
 
 myMap.attributionControl.setPosition('bottomleft');
+
+/* *********************** Load KML *********************** */
 
 var runLayer = omnivore.kml('./kml/fd.kml')
     .on('ready', function() {
@@ -25,28 +25,58 @@ var runLayer = omnivore.kml('./kml/fd.kml')
     .addTo(myMap);
 L.control.scale().addTo(myMap);
 
-//clickRegua();
+/* *********************** Click Points *********************** */
+
+function startPoints(){
+    centerMarker = L.marker(myMap.getCenter(), {icon: iconBlackPin})
+                        .addTo(myMap)
+                        .bindPopup(myMap.getCenter().toString())
+                        .openPopup();
+
+    myMap.on('move', function (e) {
+		centerMarker.setLatLng(myMap.getCenter())
+		            .bindPopup(myMap.getCenter().toString()).openPopup();
+	});
+}
 
 function clickPoints(){
+    clickPointsArray.push(centerMarker.getLatLng());
+    propertyPolygon.addLatLng(centerMarker.getLatLng()).addTo(myMap);
+}
 
-    var popup = L.popup();
+function clearPoints(){
+    clickPointsArray = [];
+    propertyPolygon.setLatLngs([]);
+    myMap.removeLayer(centerMarker);
+    myMap.removeLayer(reguaPolygon);
+    myMap.off('move', null);
+}
 
-    function onMapClick(e) {
-        popup
-            .setLatLng(e.latlng)
-            .setContent(e.latlng.toString())
-            .openOn(myMap);
-        clickPointsArray.push(e.latlng);
-        propertyPolygon.addLatLng(e.latlng).addTo(myMap);
-    }
+function createProperty(){
+    var aux = L.polygon(propertyPolygon.getLatLngs(),{
+                  color:"blue"});
+    properties.push(aux);
+    aux.addTo(myMap);
+    clearPoints();
+}
 
-    myMap.on('click', onMapClick);
+/* *********************** Pin *********************** */
+
+function setPin(Text){
+
+    var pinMarker = L.marker(myMap.getCenter(), {icon: iconYellowPin})
+                                            .addTo(myMap)
+                                            .bindPopup(Text + "\n" + myMap.getCenter().toString())
+                                            .openPopup();
+
+    pins.push(pinMarker);
 
 }
 
-var popup = L.popup({closeButton: false});
+/* *********************** Regua *********************** */
 
 function clickRegua(){
+    popup = L.popup({closeButton: false});
 
     clickReguaArray = [];
     reguaPolygon.setLatLngs([]);
@@ -85,6 +115,8 @@ function clickRegua(){
 }
 
 function closeRegua(){
+    clickReguaArray = [];
+    reguaPolygon.setLatLngs([]);
     myMap.off('click', null);
     myMap.removeLayer(reguaPolygon);
     myMap.closePopup(popup);

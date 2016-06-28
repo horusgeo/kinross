@@ -30,6 +30,47 @@
         android:visibility="invisible"
         android:clickable="false"/>
 
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabPointsCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@mipmap/ic_clear_white_24dp"
+        fab:fab_colorNormal="@color/red"
+        fab:fab_colorPressed="@color/red_pressed"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:visibility="invisible"
+        android:clickable="false"/>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabPointsNew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@mipmap/ic_place_white_24dp"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/colorPrimaryDark"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:visibility="invisible"
+        android:clickable="false"/>
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabPointsOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@mipmap/ic_done_white_24dp"
+        fab:fab_colorNormal="@color/green"
+        fab:fab_colorPressed="@color/green_pressed"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:visibility="invisible"
+        android:clickable="false"/>
+
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/multiple_actions"
         android:layout_width="wrap_content"

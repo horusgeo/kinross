@@ -1,3 +1,19 @@
-var iconRedPin = L.MakiMarkers.icon({icon: "circle", color: "#F00", size: "m"});
-var iconGreenPin = L.MakiMarkers.icon({icon: "circle", color: "#0F0", size: "m"});
-var iconBluePin = L.MakiMarkers.icon({icon: "circle", color: "#00F", size: "m"});
+var LeafIcon = L.Icon.extend({
+    options: {
+//        iconSize:     [38, 95],
+//        shadowSize:   [50, 64],
+        iconAnchor:   [16, 31],
+//        shadowAnchor: [4, 62],
+        popupAnchor:  [0, -35]
+    }
+});
+
+var iconRedPin = new LeafIcon({iconUrl: './markers/marker_red.png'});
+var iconGreenPin = new LeafIcon({iconUrl: './markers/marker_green.png'});
+var iconBluePin = new LeafIcon({iconUrl: './markers/marker_blue.png'});
+var iconBlackPin = new LeafIcon({iconUrl: './markers/marker_black.png'});
+var iconYellowPin = new LeafIcon({iconUrl: './markers/marker_yellow.png'});
+
+
+
+
