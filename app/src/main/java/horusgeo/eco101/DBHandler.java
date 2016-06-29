@@ -483,6 +483,25 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public  void addLatLng(Register cadastro){
+
+        ContentValues values = new ContentValues();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int tam = cadastro.getLat().length;
+
+        for(int i = 0; i < tam; i++){
+            values.put(LAT, String.valueOf(cadastro.getLat()[i]));
+            values.put(LNG, String.valueOf(cadastro.getLng()[i]));
+            values.put(TYPE_LATLNG, "0");
+            values.put(ID_LATLNG, cadastro.get_id_prop());
+            db.insert(TABLE_LATLNG, null, values);
+        }
+
+        db.close();
+    }
+
     //Update Registers
 
     public void updateRegister(Register cadastro, ArrayList<Benfeitoria> benf, ArrayList<Benfeitoria> plants,  ArrayList<Docs> docs, String idBck){
@@ -1428,6 +1447,71 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         db.delete(TABLE_DOCS, ID_DOC + " = " + idProp, null);
         db.close();
+    }
+
+//    Propriedades Utils
+
+    public float[] getLats(){
+        float lats[] = {};
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT " + LAT + " FROM " + TABLE_LATLNG;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        int count = 0;
+
+        if(cursor.moveToFirst()){
+            do{
+                lats[count] = Integer.valueOf(cursor.getString(0));
+                count++;
+            }while(cursor.moveToNext());
+        }
+        db.close();
+        return lats;
+    }
+
+    public float[] getLngs(){
+        float lats[] = {};
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT " + LNG + " FROM " + TABLE_LATLNG;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        int count = 0;
+
+        if(cursor.moveToFirst()){
+            do{
+                lats[count] = Integer.valueOf(cursor.getString(0));
+                count++;
+            }while(cursor.moveToNext());
+        }
+        db.close();
+        return lats;
+    }
+
+    public String[] getIds(){
+        String[] ids = {};
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT " + ID_LATLNG + " FROM " + TABLE_LATLNG;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        int count = 0;
+
+        if(cursor.moveToFirst()){
+            do{
+                ids[count] = cursor.getString(0);
+                count++;
+            }while(cursor.moveToNext());
+        }
+        db.close();
+        return ids;
     }
 
 

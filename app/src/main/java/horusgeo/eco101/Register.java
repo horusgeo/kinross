@@ -6,6 +6,8 @@ import java.util.ArrayList;
  * Created by rafael on 24/05/2016.
  */
 
+
+
 class Docs{
 
     private String path;
@@ -183,30 +185,11 @@ public class Register {
     private String _descricao_visita;
     private String _responsavel;
 
-    private String _latlng;
+    private float[] lat;
+    private float[] lng;
 
     public Register() {
-    }
 
-    public Register(int id, String nome_proprietario, String id_prop,
-                    String nome_projeto, String local_visita,
-                    String data_visita) {
-        this._id = id;
-        this._nome_proprietario = nome_proprietario;
-        this._id_prop = id_prop;
-        this._nome_projeto = nome_projeto;
-        this._local_visita = local_visita;
-        this._data_visita = data_visita;
-    }
-
-    public Register(String nome_proprietario, String id_prop,
-                    String nome_projeto, String local_visita,
-                    String data_visita) {
-        this._nome_proprietario = nome_proprietario;
-        this._id_prop = id_prop;
-        this._nome_projeto = nome_projeto;
-        this._local_visita = local_visita;
-        this._data_visita = data_visita;
     }
 
     public int get_id() {
@@ -223,15 +206,6 @@ public class Register {
 
     public void set_nome_proprietario(String nome_proprietario) {
         this._nome_proprietario = nome_proprietario;
-    }
-
-
-    public String get_latlng() {
-        return _latlng;
-    }
-
-    public void set_latlng(String latlng) {
-        this._latlng = latlng;
     }
 
     public String get_nome_projeto() {
@@ -643,6 +617,21 @@ public class Register {
         this._infraabasagua = _infraabasagua;
     }
 
+    public float[] getLat() {
+        return lat;
+    }
+
+    public void setLat(float[] lat) {
+        this.lat = lat;
+    }
+
+    public float[] getLng() {
+        return lng;
+    }
+
+    public void setLng(float[] lng) {
+        this.lng = lng;
+    }
 }
 
 

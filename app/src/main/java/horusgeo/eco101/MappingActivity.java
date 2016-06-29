@@ -3,9 +3,11 @@ package horusgeo.eco101;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
+import java.util.ArrayList;
 
 
 public class MappingActivity extends AppCompatActivity {
@@ -39,6 +43,12 @@ public class MappingActivity extends AppCompatActivity {
     FloatingActionsMenu fabMenu;
 
     EditText pinText;
+    EditText nameText;
+    EditText idText;
+
+    String idProp;
+
+    DBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +56,14 @@ public class MappingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mapping);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent intent = getIntent();
+
+        idProp = intent.getStringExtra("id");
+
+        db = new DBHandler(this, null, null, 1);
+
+
 
         //WebView
         myWebView = (WebView) findViewById(R.id.mapView);
@@ -191,8 +209,24 @@ public class MappingActivity extends AppCompatActivity {
             }
         });
 
+
+        populateMap();
+
     }
 
+    public void populateMap(){
+
+        float lat[] = db.getLats();
+        float lng[] = db.getLngs();
+        String[] ids = db.getIds();
+
+        int tam = lat.length;
+
+        for (int i = 0; i < tam; i++){
+            myWebView.loadUrl("javascript:populateMap(" + ids[i] + ", " + lat[i] + ", " + lng[i] + " )");
+        }
+
+    }
 
     public class WebAppInterface {
         Context mContext;
@@ -204,14 +238,91 @@ public class MappingActivity extends AppCompatActivity {
 
 
         @JavascriptInterface
-        public void paintProperty() {
+        public void callBackPropriedade(float lat[], float lng[]){
+
+            if(idProp.equals("-1")){
+                callPropDialog(lat, lng);
+            }else{
+                callAddLatLng(lat, lng);
+            }
 
         }
 
-        @JavascriptInterface
-        public void toastTest(String texto){
-            Toast.makeText(getApplicationContext(), texto, Toast.LENGTH_LONG).show();
-        }
+
+    }
+
+    private void callPropDialog(final float lat[], final float lng[]){
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(MappingActivity.this);
+        builderSingle.setTitle("Defina o nome e o número de identificação do proprietário:");
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View rootView = inflater.inflate(R.layout.latlng_dialog, null);
+        nameText = (EditText) rootView.findViewById(R.id.latlngNameText);
+        idText = (EditText) rootView.findViewById(R.id.latlngIdText);
+
+        builderSingle.setView(rootView);
+
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(nameText.getText().toString().equals("")){
+                    callPropDialog(lat, lng);
+                }else if(idText.getText().toString().equals("")){
+                    callPropDialog(lat, lng);
+                }else{
+                    Register cadastro = new Register();
+                    cadastro.set_nome_proprietario(nameText.getText().toString());
+                    cadastro.set_id_prop(idText.getText().toString());
+                    callAddLatLng(cadastro, lat, lng);
+                }
+            }
+        });
+        builderSingle.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                clickPoints(3);
+            }
+        });
+        builderSingle.show();
+
+    }
+
+    private void callAddLatLng(float lat[], float lng[]){
+        Register cadastro = new Register();
+
+        cadastro.set_id_prop("-1");
+        cadastro.setLat(lat);
+        cadastro.setLng(lng);
+
+        db.addLatLng(cadastro);
+
+    }
+
+    private void callAddLatLng(String id, float lat[], float lng[]){
+        Register cadastro = new Register();
+
+        cadastro.set_id_prop(id);
+        cadastro.setLat(lat);
+        cadastro.setLng(lng);
+
+        db.addLatLng(cadastro);
+    }
+
+    private void callAddLatLng(Register cadastro, float lat[], float lng[]){
+
+        cadastro.setLat(lat);
+        cadastro.setLng(lng);
+
+        db.addRegister(cadastro);
+        db.addProp(cadastro);
+        db.addConj(cadastro);
+        db.addEndRes(cadastro);
+        db.addEndObj(cadastro);
+        db.addIdProp(cadastro);
+        db.addDesc(cadastro);
+        db.addLatLng(cadastro);
+
     }
 
     private void clickPoints(Integer which){

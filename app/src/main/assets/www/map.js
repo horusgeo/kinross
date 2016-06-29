@@ -58,6 +58,7 @@ function createProperty(){
     properties.push(aux);
     aux.addTo(myMap);
     clearPoints();
+    callBackProperty(aux.getLatLngs());
 }
 
 /* *********************** Pin *********************** */
@@ -139,22 +140,37 @@ function closeRegua(){
     myMap.closePopup(popup);
 }
 
-
-
-//function savePropertiesPoints(){
-
-//    properties.push(propertyPolygon);
-
-//    myMap.off('click', )
-
-//}
-
 /* *********************** CallBacks to Android *********************** */
-
 function callBackProperty(prop){
-
+    var lats = [];
+    var lngs = [];
+    for(i = 0; i < prop.length; i++){
+        lats.push(prop[i].lat);
+        lngs.push(prop[i].lng);
+        console.log("entrou " + lats[i] + " " + lngs[i]);
+    }
+    Android.callBackPropriedade(lats, lngs);
 }
 
 function callBackPin(pin){
+
+}
+
+/* *********************** Populate Map *********************** */
+var idBck = "a";
+
+function populateMap(id, lat, lng){
+
+    var latLng = L.latLng(lat, lng);
+
+    if(id==idBck){
+
+
+    }else{
+        id = idBck;
+
+    }
+
+
 
 }

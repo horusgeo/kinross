@@ -547,6 +547,15 @@ public class CadastroActivity extends AppCompatActivity {
                     break;
                 case 12:
                     rootView = inflater.inflate(R.layout.layout_map, container, false);
+                    Button mapButton = (Button) rootView.findViewById(R.id.mapButtonCadastro);
+                    mapButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), MappingActivity.class);
+                            intent.putExtra("idProp", idPropBenf);
+                            startActivity(intent);
+                        }
+                    });
                     break;
                 default:
                     rootView = inflater.inflate(R.layout.layout_relatorio, container, false);
