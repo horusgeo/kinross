@@ -2,7 +2,7 @@ var myMap;
 
 var clickPointsArray = [];
 
-var properties = [];
+
 var propertyPolygon = L.polygon([],{
     color:"red"});
 
@@ -11,6 +11,7 @@ var reguaPolygon = L.polygon([],{
                     color:"green"});
 
 var pins = [];
+var properties = [];
 
 var centerMarker;
 var pinMarker;

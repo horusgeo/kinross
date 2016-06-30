@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -15,12 +17,14 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class MappingActivity extends AppCompatActivity {
@@ -50,6 +54,9 @@ public class MappingActivity extends AppCompatActivity {
 
     DBHandler db;
 
+    Register cadastro;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +70,10 @@ public class MappingActivity extends AppCompatActivity {
 
         db = new DBHandler(this, null, null, 1);
 
+        cadastro = new Register();
+
+        if(!idProp.equals("-1"))
+            cadastro = db.getRegister(idProp);
 
 
         //WebView
@@ -76,7 +87,14 @@ public class MappingActivity extends AppCompatActivity {
         webSettings.setAllowUniversalAccessFromFileURLs(true);
         webSettings.setAllowFileAccess(true);
 
-        myWebView.setWebViewClient(new WebViewClient());
+        myWebView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onPageFinished(WebView view, String url){
+                populateMap();
+            }
+        });
+
 
         myWebView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
@@ -133,8 +151,11 @@ public class MappingActivity extends AppCompatActivity {
 
                 fabPointsOk.setVisibility(View.INVISIBLE);
                 fabPointsOk.setClickable(false);
-
-                clickPoints(2);
+                if(cadastro.getLat().size()>0)
+                    callCancelDialog();
+                else
+                    callPropDialog();
+//                clickPoints(2);
             }
         });
 
@@ -209,24 +230,11 @@ public class MappingActivity extends AppCompatActivity {
             }
         });
 
-
-        populateMap();
-
     }
 
-    public void populateMap(){
 
-        float lat[] = db.getLats();
-        float lng[] = db.getLngs();
-        String[] ids = db.getIds();
 
-        int tam = lat.length;
 
-        for (int i = 0; i < tam; i++){
-            myWebView.loadUrl("javascript:populateMap(" + ids[i] + ", " + lat[i] + ", " + lng[i] + " )");
-        }
-
-    }
 
     public class WebAppInterface {
         Context mContext;
@@ -238,92 +246,119 @@ public class MappingActivity extends AppCompatActivity {
 
 
         @JavascriptInterface
-        public void callBackPropriedade(float lat[], float lng[]){
+        public void callBackPropriedade(Double[] lat, Double[] lng){
+
+            ArrayList<Double> lats = new ArrayList<Double>(Arrays.asList(lat));
+            ArrayList<Double> lngs = new ArrayList<Double>(Arrays.asList(lng));
+
+            cadastro.setLat(lats);
+            cadastro.setLng(lngs);
+
+            db.addLatLng(cadastro);
 
             if(idProp.equals("-1")){
-                callPropDialog(lat, lng);
-            }else{
-                callAddLatLng(lat, lng);
-            }
+                db.addRegister(cadastro);
+                db.addProp(cadastro);
+                db.addConj(cadastro);
+                db.addEndRes(cadastro);
+                db.addEndObj(cadastro);
+                db.addIdProp(cadastro);
+                db.addDesc(cadastro);
 
+            }
         }
 
-
+        @JavascriptInterface
+        public void callBackPins(Double lat, Double lng, String texto){
+            db.addPinToLatLngTable(lat, lng, texto);
+        }
     }
 
-    private void callPropDialog(final float lat[], final float lng[]){
+    public void populateMap(){
 
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(MappingActivity.this);
-        builderSingle.setTitle("Defina o nome e o número de identificação do proprietário:");
+        ArrayList<Double> lat = db.getLats();
+        ArrayList<Double> lng = db.getLngs();
+        ArrayList<String> ids = db.getIds();
+        ArrayList<String> texts = db.getTexts();
+        String idBck = "a";
 
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View rootView = inflater.inflate(R.layout.latlng_dialog, null);
-        nameText = (EditText) rootView.findViewById(R.id.latlngNameText);
-        idText = (EditText) rootView.findViewById(R.id.latlngIdText);
+        int tam = lat.size();
 
-        builderSingle.setView(rootView);
-
-        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(nameText.getText().toString().equals("")){
-                    callPropDialog(lat, lng);
-                }else if(idText.getText().toString().equals("")){
-                    callPropDialog(lat, lng);
+        for (int i = 0; i < tam; i++){
+            if(ids.equals("-1")){
+                myWebView.loadUrl("javascript:populatePin('" + texts.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + " )");
+            }else{
+                if(ids.get(i).equals(idBck)) {
+                    myWebView.loadUrl("javascript:continueProp(" + lat.get(i) + ", " + lng.get(i) + " )");
                 }else{
-                    Register cadastro = new Register();
-                    cadastro.set_nome_proprietario(nameText.getText().toString());
-                    cadastro.set_id_prop(idText.getText().toString());
-                    callAddLatLng(cadastro, lat, lng);
+
+                    idBck = ids.get(i);
+                    myWebView.loadUrl("javascript:newProp('" + ids.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + ", '" + texts.get(i) + "', 2)");
                 }
             }
-        });
-        builderSingle.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                clickPoints(3);
-            }
-        });
-        builderSingle.show();
+        }
+
+        myWebView.loadUrl("javascript:addProp()");
 
     }
 
-    private void callAddLatLng(float lat[], float lng[]){
-        Register cadastro = new Register();
+    private void callCancelDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MappingActivity.this);
 
-        cadastro.set_id_prop("-1");
-        cadastro.setLat(lat);
-        cadastro.setLng(lng);
+        builder.setMessage("Proprietário já possui uma propriedade cadastrada!")
+                .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
 
-        db.addLatLng(cadastro);
+        TextView title = new TextView(MappingActivity.this);
+        title.setText("!!! ATENÇÃO !!!");
+        title.setGravity(Gravity.CENTER_HORIZONTAL);
+        title.setTextSize(30);
+
+        builder.setCustomTitle(title);
+    }
+
+    private void callPropDialog(){
+        if(idProp.equals("-1")) {
+            AlertDialog.Builder builderSingle = new AlertDialog.Builder(MappingActivity.this);
+            builderSingle.setTitle("Defina o nome e o número de identificação do proprietário:");
+            builderSingle.setCancelable(false);
+            LayoutInflater inflater = this.getLayoutInflater();
+            final View rootView = inflater.inflate(R.layout.latlng_dialog, null);
+            nameText = (EditText) rootView.findViewById(R.id.latlngNameText);
+            idText = (EditText) rootView.findViewById(R.id.latlngIdText);
+
+            builderSingle.setView(rootView);
+
+            builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (nameText.getText().toString().equals("")) {
+                        callPropDialog();
+                    } else if (idText.getText().toString().equals("")) {
+                        callPropDialog();
+                    } else {
+                        cadastro.set_nome_proprietario(nameText.getText().toString());
+                        cadastro.set_id_prop(idText.getText().toString());
+                        myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + " 1)");
+                    }
+                }
+            });
+            builderSingle.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    clickPoints(3);
+                }
+            });
+            builderSingle.show();
+        }else{
+            myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + " 1)");
+        }
 
     }
 
-    private void callAddLatLng(String id, float lat[], float lng[]){
-        Register cadastro = new Register();
-
-        cadastro.set_id_prop(id);
-        cadastro.setLat(lat);
-        cadastro.setLng(lng);
-
-        db.addLatLng(cadastro);
-    }
-
-    private void callAddLatLng(Register cadastro, float lat[], float lng[]){
-
-        cadastro.setLat(lat);
-        cadastro.setLng(lng);
-
-        db.addRegister(cadastro);
-        db.addProp(cadastro);
-        db.addConj(cadastro);
-        db.addEndRes(cadastro);
-        db.addEndObj(cadastro);
-        db.addIdProp(cadastro);
-        db.addDesc(cadastro);
-        db.addLatLng(cadastro);
-
-    }
 
     private void clickPoints(Integer which){
         switch (which){
@@ -385,6 +420,8 @@ public class MappingActivity extends AppCompatActivity {
 
 
     }
+
+
 
     private void clickRegua(Boolean which){
         if(which)

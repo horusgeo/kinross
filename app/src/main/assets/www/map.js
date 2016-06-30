@@ -25,6 +25,7 @@ var runLayer = omnivore.kml('./kml/fd.kml')
     .addTo(myMap);
 L.control.scale().addTo(myMap);
 
+
 /* *********************** Click Points *********************** */
 
 function startPoints(){
@@ -52,13 +53,31 @@ function clearPoints(){
     myMap.off('move', null);
 }
 
-function createProperty(){
-    var aux = L.polygon(propertyPolygon.getLatLngs(),{
-                  color:"blue"});
+function createProperty(id, nome, tipo){
+    ;
+
+    var p = L.polygon(propertyPolygon.getLatLngs(),{});
+
+    console.log(id);
+
+    if(tipo==0)
+        p.color = "blue";
+    if(tipo==1)
+        p.color = "green";
+    if(tipo==2)
+        p.color = "yellow";
+    if(tipo==3)
+        p.color = "red";
+
+    console.log(id);
+    p.bindPopup(nome);
+
+    console.log(id);
+    var aux = new Prop(p, id, tipo, nome);
     properties.push(aux);
-    aux.addTo(myMap);
+    aux.getPoly().addTo(myMap);
     clearPoints();
-    callBackProperty(aux.getLatLngs());
+    callBackProperty(aux.getPoly().getLatLngs());
 }
 
 /* *********************** Pin *********************** */
@@ -84,6 +103,7 @@ function keepPin(){
 
     pins.push(aux);
     cancelPin();
+    callBackPin(aux.getLatLng(), aux.getPopup().getContent());
 }
 
 function cancelPin(){
@@ -153,24 +173,58 @@ function callBackProperty(prop){
 }
 
 function callBackPin(pin){
-
+    Android.callBackPins(pin.lat, pin.lng);
 }
 
 /* *********************** Populate Map *********************** */
-var idBck = "a";
 
-function populateMap(id, lat, lng){
+function populatePin(texto, lat, lng){
 
-    var latLng = L.latLng(lat, lng);
+    var aux = L.marker([lat,lng], {icon: iconYellowPin})
+                    .addTo(myMap)
+                    .bindPopup(texto)
+                    .openPopup();
 
-    if(id==idBck){
+        pins.push(aux);
+}
 
 
-    }else{
-        id = idBck;
+function newProp(id, lat, lng, nome, tipo){
 
+    var latlng = L.latLng(lat,lng);
+
+    if(tipo==0)
+        var p = L.polygon(latlng, {color:"blue"});
+    if(tipo==1)
+        var p = L.polygon(latlng, {color:"green"});
+    if(tipo==2)
+        var p = L.polygon(latlng, {color:"yellow"});
+    if(tipo==3)
+        var p = L.polygon(latlng, {color:"red"});
+
+    var aux = new Prop(p, id, tipo, nome);
+    console.log("new " + lat + " " + lng);
+    properties.push(aux);
+
+}
+
+function continueProp(lat, lng){
+
+//    var prop = properties[properties.length-1];
+
+//    var p = prop.getPoly();
+    var latlng = L.latLng(lat,lng);
+    console.log("continue " + lat + " " + lng);
+    properties[properties.length-1].getPoly().addLatLng(latlng);
+
+}
+
+function addProp(){
+
+    console.log("add Prop " + properties[0].getPoly().getLatLngs().length);
+    for (i=0;i<properties.length;i++){
+        console.log(i);
+        properties[i].getPoly().addTo(myMap);
     }
-
-
 
 }

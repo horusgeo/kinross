@@ -185,8 +185,9 @@ public class Register {
     private String _descricao_visita;
     private String _responsavel;
 
-    private float[] lat;
-    private float[] lng;
+    private ArrayList<Double> lat = new ArrayList<Double>();
+    private ArrayList<Double> lng = new ArrayList<Double>();
+    private String tipoLatLng;
 
     public Register() {
 
@@ -617,20 +618,28 @@ public class Register {
         this._infraabasagua = _infraabasagua;
     }
 
-    public float[] getLat() {
+    public ArrayList<Double> getLat() {
         return lat;
     }
 
-    public void setLat(float[] lat) {
+    public void setLat(ArrayList<Double> lat) {
         this.lat = lat;
     }
 
-    public float[] getLng() {
+    public ArrayList<Double> getLng() {
         return lng;
     }
 
-    public void setLng(float[] lng) {
+    public void setLng(ArrayList<Double> lng) {
         this.lng = lng;
+    }
+
+    public String getTipoLatLng() {
+        return tipoLatLng;
+    }
+
+    public void setTipoLatLng(String tipoLatLng) {
+        this.tipoLatLng = tipoLatLng;
     }
 }
 

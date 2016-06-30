@@ -135,6 +135,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String LAT = "lat";
     private static final String LNG = "lng";
     private static final String TYPE_LATLNG = "tipo";
+    private static final String TEXT_LATLNG = "texto_pin";
     private static final String ID_LATLNG = "_id_latlng";
 
     public DBHandler(Context context, String name,
@@ -271,6 +272,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 LAT + " TEXT," +
                 LNG + " TEXT," +
                 TYPE_LATLNG + " TEXT," +
+                TEXT_LATLNG + " TEXT," +
                 ID_LATLNG + " TEXT" +
                 ")";
         db.execSQL(CREATE_LATLNG_TABLE);
@@ -489,15 +491,34 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        int tam = cadastro.getLat().length;
+        int tam = cadastro.getLat().size();
 
         for(int i = 0; i < tam; i++){
-            values.put(LAT, String.valueOf(cadastro.getLat()[i]));
-            values.put(LNG, String.valueOf(cadastro.getLng()[i]));
+            values.put(LAT, String.valueOf(cadastro.getLat().get(i)));
+            values.put(LNG, String.valueOf(cadastro.getLng().get(i)));
             values.put(TYPE_LATLNG, "0");
+            values.put(TEXT_LATLNG, cadastro.get_nome_proprietario());
             values.put(ID_LATLNG, cadastro.get_id_prop());
+
             db.insert(TABLE_LATLNG, null, values);
         }
+
+        db.close();
+    }
+
+    public void addPinToLatLngTable(Double lat, Double lng, String texto){
+
+        ContentValues values = new ContentValues();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        values.put(LAT, String.valueOf(lat));
+        values.put(LNG, String.valueOf(lng));
+        values.put(TYPE_LATLNG, "0");
+        values.put(TEXT_LATLNG, texto);
+        values.put(ID_LATLNG, "-1");
+
+        db.insert(TABLE_LATLNG, null, values);
 
         db.close();
     }
@@ -892,6 +913,22 @@ public class DBHandler extends SQLiteOpenHelper {
             register.set_descricao_visita(cursor.getString(3));
             register.set_responsavel(cursor.getString(4));
             cursor.close();
+        }
+        db.close();
+
+        query = "SELECT * FROM " + TABLE_LATLNG + " WHERE " + ID_LATLNG + " = " + idProp;
+
+        cursor = db.rawQuery(query, null);
+        float lat[] = {};
+        float lng[] = {};
+        if (cursor.moveToFirst()) {
+            int count = 0;
+            do {
+                lat[count] = Float.parseFloat(cursor.getString(1));
+                lng[count] = Float.parseFloat(cursor.getString(2));
+                register.setTipoLatLng(cursor.getString(3));
+                count++;
+            } while (cursor.moveToNext());
         }
         db.close();
 
@@ -1451,8 +1488,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
 //    Propriedades Utils
 
-    public float[] getLats(){
-        float lats[] = {};
+    public ArrayList<Double> getLats(){
+        ArrayList<Double> lats = new ArrayList<Double>();
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -1460,11 +1497,12 @@ public class DBHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(query, null);
 
+
         int count = 0;
 
         if(cursor.moveToFirst()){
             do{
-                lats[count] = Integer.valueOf(cursor.getString(0));
+                lats.add(Double.parseDouble(cursor.getString(0)));
                 count++;
             }while(cursor.moveToNext());
         }
@@ -1472,8 +1510,8 @@ public class DBHandler extends SQLiteOpenHelper {
         return lats;
     }
 
-    public float[] getLngs(){
-        float lats[] = {};
+    public ArrayList<Double> getLngs(){
+        ArrayList<Double> lngs = new ArrayList<Double>();
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -1485,16 +1523,16 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             do{
-                lats[count] = Integer.valueOf(cursor.getString(0));
+                lngs.add(Double.parseDouble(cursor.getString(0)));
                 count++;
             }while(cursor.moveToNext());
         }
         db.close();
-        return lats;
+        return lngs;
     }
 
-    public String[] getIds(){
-        String[] ids = {};
+    public ArrayList<String> getIds(){
+        ArrayList<String> ids = new ArrayList<String>();
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -1506,7 +1544,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             do{
-                ids[count] = cursor.getString(0);
+                ids.add(cursor.getString(0));
                 count++;
             }while(cursor.moveToNext());
         }
@@ -1514,5 +1552,25 @@ public class DBHandler extends SQLiteOpenHelper {
         return ids;
     }
 
+    public ArrayList<String> getTexts(){
+        ArrayList<String> texts = new ArrayList<String>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT " + TEXT_LATLNG + " FROM " + TABLE_LATLNG;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        int count = 0;
+
+        if(cursor.moveToFirst()){
+            do{
+                texts.add(cursor.getString(0));
+                count++;
+            }while(cursor.moveToNext());
+        }
+        db.close();
+        return texts;
+    }
 
 }
