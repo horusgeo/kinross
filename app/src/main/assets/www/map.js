@@ -103,7 +103,7 @@ function keepPin(){
 
     pins.push(aux);
     cancelPin();
-    callBackPin(aux.getLatLng(), aux.getPopup().getContent());
+    callBackPin(aux);
 }
 
 function cancelPin(){
@@ -173,7 +173,8 @@ function callBackProperty(prop){
 }
 
 function callBackPin(pin){
-    Android.callBackPins(pin.lat, pin.lng);
+    var l = pin.getLatLng();
+    Android.callBackPins(l.lat, l.lng, pin.getContent());
 }
 
 /* *********************** Populate Map *********************** */
@@ -186,42 +187,39 @@ function populatePin(texto, lat, lng){
                     .openPopup();
 
         pins.push(aux);
+        aux.addTo(myMap);
 }
 
 
 function newProp(id, lat, lng, nome, tipo){
 
-    var latlng = L.latLng(lat,lng);
+    var latlng = [];
+    latlng.push(L.latLng(lat,lng));
+    var p;
 
     if(tipo==0)
-        var p = L.polygon(latlng, {color:"blue"});
+        p = L.polygon(latlng, {color:"blue"});
     if(tipo==1)
-        var p = L.polygon(latlng, {color:"green"});
+        p = L.polygon(latlng, {color:"green"});
     if(tipo==2)
-        var p = L.polygon(latlng, {color:"yellow"});
+        p = L.polygon(latlng, {color:"yellow"});
     if(tipo==3)
-        var p = L.polygon(latlng, {color:"red"});
+        p = L.polygon(latlng, {color:"red"});
 
     var aux = new Prop(p, id, tipo, nome);
-    console.log("new " + lat + " " + lng);
     properties.push(aux);
 
 }
 
 function continueProp(lat, lng){
 
-//    var prop = properties[properties.length-1];
-
-//    var p = prop.getPoly();
     var latlng = L.latLng(lat,lng);
-    console.log("continue " + lat + " " + lng);
     properties[properties.length-1].getPoly().addLatLng(latlng);
 
 }
 
 function addProp(){
 
-    console.log("add Prop " + properties[0].getPoly().getLatLngs().length);
     for (i=0;i<properties.length;i++){
         console.log(i);
         properties[i].getPoly().addTo(myMap);

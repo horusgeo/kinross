@@ -293,7 +293,7 @@ public class MappingActivity extends AppCompatActivity {
                 }else{
 
                     idBck = ids.get(i);
-                    myWebView.loadUrl("javascript:newProp('" + ids.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + ", '" + texts.get(i) + "', 2)");
+                    myWebView.loadUrl("javascript:newProp('" + ids.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + ", '" + texts.get(i) + "', 3)");
                 }
             }
         }
