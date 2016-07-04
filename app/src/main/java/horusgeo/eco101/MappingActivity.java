@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -92,6 +94,14 @@ public class MappingActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url){
                 populateMap();
+            }
+        });
+
+        myWebView.setWebChromeClient(new WebChromeClient(){
+
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                callback.invoke(origin, true, false);
             }
         });
 
@@ -246,8 +256,14 @@ public class MappingActivity extends AppCompatActivity {
 
 
         @JavascriptInterface
-        public void callBackPropriedade(Double[] lat, Double[] lng){
+        public void callBackPropriedade(float[] latjs, float[] lngjs){
 
+            Double[] lat = new Double[latjs.length];
+            Double[] lng = new Double[lngjs.length];
+            for(int i = 0; i < lat.length; i++){
+                lat[i] = Double.valueOf(String.valueOf(latjs[i]));
+                lng[i] = Double.valueOf(String.valueOf(lngjs[i]));
+            }
             ArrayList<Double> lats = new ArrayList<Double>(Arrays.asList(lat));
             ArrayList<Double> lngs = new ArrayList<Double>(Arrays.asList(lng));
 
@@ -269,7 +285,10 @@ public class MappingActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public void callBackPins(Double lat, Double lng, String texto){
+        public void callBackPins(float latjs, float lngjs, String texto){
+
+            Double lat = Double.valueOf(String.valueOf(latjs));
+            Double lng = Double.valueOf(String.valueOf(lngjs));
             db.addPinToLatLngTable(lat, lng, texto);
         }
     }
@@ -285,15 +304,14 @@ public class MappingActivity extends AppCompatActivity {
         int tam = lat.size();
 
         for (int i = 0; i < tam; i++){
-            if(ids.equals("-1")){
+            if(ids.get(i).equals("-1")){
                 myWebView.loadUrl("javascript:populatePin('" + texts.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + " )");
             }else{
                 if(ids.get(i).equals(idBck)) {
                     myWebView.loadUrl("javascript:continueProp(" + lat.get(i) + ", " + lng.get(i) + " )");
                 }else{
-
                     idBck = ids.get(i);
-                    myWebView.loadUrl("javascript:newProp('" + ids.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + ", '" + texts.get(i) + "', 3)");
+                    myWebView.loadUrl("javascript:newProp('" + ids.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + ", '" + texts.get(i) + "'," + db.getStatus(ids.get(i)) + ")");
                 }
             }
         }

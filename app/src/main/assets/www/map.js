@@ -1,9 +1,29 @@
-myMap = L.map('mapDiv',{}).setView([-19.315, -43.636], 15);
-//myMap = L.map('mapDiv',{});
+//myMap = L.map('mapDiv',{}).setView([-19.315, -43.636], 15);
+myMap = L.map('mapDiv',{});
+
+
+function onLocationFound(e) {
+//    var radius = e.accuracy / 2;
+
+    L.marker(e.latlng, {icon: iconPosePin}).addTo(myMap);
+//           .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+//    L.circle(e.latlng, radius).addTo(myMap);
+}
+
+function onLocationError(e) {
+    alert(e.message);
+}
+
+myMap.on('locationfound', onLocationFound);
+myMap.on('locationerror', onLocationError);
+
+myMap.locate({setView: true, maxZoom: 30});
+
 
 var options = {
                 minZoom: 0,
-                maxZoom: 21,
+                maxZoom: 30,
                 opacity: 1.0,
                 tms: false
                 };
@@ -19,9 +39,9 @@ myMap.attributionControl.setPosition('bottomleft');
 /* *********************** Load KML *********************** */
 
 var runLayer = omnivore.kml('./kml/fd.kml')
-    .on('ready', function() {
-         myMap.fitBounds(runLayer.getBounds());
-    })
+//    .on('ready', function() {
+//         myMap.fitBounds(runLayer.getBounds());
+//    })
     .addTo(myMap);
 L.control.scale().addTo(myMap);
 
@@ -54,7 +74,6 @@ function clearPoints(){
 }
 
 function createProperty(id, nome, tipo){
-    ;
 
     var p = L.polygon(propertyPolygon.getLatLngs(),{});
 
@@ -88,7 +107,7 @@ function setPin(Text){
         pinMarker.setLatLng(e.latlng)
         myMap.removeLayer(pinMarker);
         pinMarker.addTo(myMap)
-                 .bindPopup(Text + '<br>' + e.latlng.toString() + '</br>')
+                 .bindPopup(generatePinText(Text, e.latlng))
                  .openPopup();
     }
     myMap.on('click', onMapClick);
@@ -131,7 +150,7 @@ function clickRegua(){
             popup
                 .setLatLng(e.latlng)
                 .openOn(myMap)
-                .setContent(calcula_dist() + " metros");
+                .setContent(calcula_dist());
         }else{
             clickReguaArray.push(e.latlng);
 
@@ -143,7 +162,7 @@ function clickRegua(){
                 popup
                     .setLatLng(e.latlng)
                     .openOn(myMap)
-                    .setContent(calcula_dist() + " metros");
+                    .setContent(calcula_dist());
                 reguaPolygon.addLatLng(e.latlng).addTo(myMap);
             }
         }
@@ -167,20 +186,18 @@ function callBackProperty(prop){
     for(i = 0; i < prop.length; i++){
         lats.push(prop[i].lat);
         lngs.push(prop[i].lng);
-        console.log("entrou " + lats[i] + " " + lngs[i]);
     }
     Android.callBackPropriedade(lats, lngs);
 }
 
 function callBackPin(pin){
     var l = pin.getLatLng();
-    Android.callBackPins(l.lat, l.lng, pin.getContent());
+    Android.callBackPins(l.lat, l.lng, pin.getPopup().getContent());
 }
 
 /* *********************** Populate Map *********************** */
 
 function populatePin(texto, lat, lng){
-
     var aux = L.marker([lat,lng], {icon: iconYellowPin})
                     .addTo(myMap)
                     .bindPopup(texto)
@@ -221,7 +238,6 @@ function continueProp(lat, lng){
 function addProp(){
 
     for (i=0;i<properties.length;i++){
-        console.log(i);
         properties[i].getPoly().addTo(myMap);
     }
 

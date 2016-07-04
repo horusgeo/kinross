@@ -43,6 +43,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String ID_PROPRIETARIO = "id_proprietario";
     private static final String LOCAL_VISITA = "local_visita";
     private static final String DATA_VISITA = "data_visita";
+    private static final String STATUS = "status";
 
     private static final String ID_PROP = "_id_prop";
     private static final String NOME_PROPRIETARIO = "nome_proprietario";
@@ -151,7 +152,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 NOME_PROJETO + " TEXT," +
                 ID_PROPRIETARIO + " TEXT," +
                 LOCAL_VISITA + " TEXT," +
-                DATA_VISITA + " TEXT" +
+                DATA_VISITA + " TEXT," +
+                STATUS + " TEXT" +
                 ")";
         db.execSQL(CREATE_REGISTER_TABLE);
 
@@ -304,6 +306,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(ID_PROPRIETARIO, cadastro.get_id_prop());
         values.put(LOCAL_VISITA, cadastro.get_local_visita());
         values.put(DATA_VISITA, cadastro.get_data_visita());
+        values.put(STATUS, cadastro.get_status());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -533,6 +536,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(ID_PROPRIETARIO, cadastro.get_id_prop());
         values.put(LOCAL_VISITA, cadastro.get_local_visita());
         values.put(DATA_VISITA, cadastro.get_data_visita());
+        values.put(STATUS, cadastro.get_status());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -811,6 +815,7 @@ public class DBHandler extends SQLiteOpenHelper {
             register.set_id_prop(cursor.getString(2));
             register.set_local_visita(cursor.getString(3));
             register.set_data_visita(cursor.getString(4));
+            register.set_status(cursor.getString(5));
             cursor.close();
         }
 
@@ -1156,7 +1161,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 do {
                     //Which column you want to export
                     String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
-                            cursor.getString(3), cursor.getString(4)};
+                            cursor.getString(3), cursor.getString(4), cursor.getString(5)};
                     csvWrite.writeNext(arrStr);
                 } while (cursor.moveToNext());
             }
@@ -1571,6 +1576,20 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         db.close();
         return texts;
+    }
+
+    public int getStatus(String id){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT " + STATUS + " FROM " + TABLE_REGISTERS + " WHERE " + ID_PROPRIETARIO + " = " + id;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+
+        return Integer.valueOf(cursor.getString(0));
+
     }
 
 }

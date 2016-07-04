@@ -628,11 +628,28 @@ public class CadastroActivity extends AppCompatActivity {
         TextView idProp = (TextView) findViewById(R.id.idPropText);
         TextView localVisita = (TextView) findViewById(R.id.localText);
         TextView dataVisita = (TextView) findViewById(R.id.dataText);
+        RadioGroup statusVisita = (RadioGroup) findViewById(R.id.statusGroup);
 
         cadastro.set_nome_projeto(nomeProjeto.getText().toString());
         cadastro.set_id_prop(idProp.getText().toString());
         cadastro.set_local_visita(localVisita.getText().toString());
         cadastro.set_data_visita(dataVisita.getText().toString());
+
+        switch(statusVisita.getCheckedRadioButtonId()){
+            case R.id.accRadioButton:
+                cadastro.set_status("1");
+                break;
+            case R.id.negRadioButton:
+                cadastro.set_status("2");
+                break;
+            case R.id.rejRadioButton:
+                cadastro.set_status("3");
+                break;
+            case R.id.indRadioButton:
+                cadastro.set_status("0");
+                break;
+        }
+
         idPropBenf = cadastro.get_id_prop();
 
     }
@@ -642,11 +659,31 @@ public class CadastroActivity extends AppCompatActivity {
         TextView idProp = (TextView) findViewById(R.id.idPropText);
         TextView localVisita = (TextView) findViewById(R.id.localText);
         TextView dataVisita = (TextView) findViewById(R.id.dataText);
+        RadioGroup statusVisita = (RadioGroup) findViewById(R.id.statusGroup);
 
         nomeProjeto.setText(cadastro.get_nome_projeto());
         idProp.setText(cadastro.get_id_prop());
         localVisita.setText(cadastro.get_local_visita());
         dataVisita.setText(cadastro.get_data_visita());
+
+        if(cadastro.get_status() == null){
+            statusVisita.check(R.id.indRadioButton);
+        }else{
+            switch(Integer.valueOf(cadastro.get_status())){
+                case 1:
+                    statusVisita.check(R.id.accRadioButton);
+                    break;
+                case 2:
+                    statusVisita.check(R.id.negRadioButton);
+                    break;
+                case 3:
+                    statusVisita.check(R.id.rejRadioButton);
+                    break;
+                case 4:
+                    statusVisita.check(R.id.indRadioButton);
+                    break;
+            }
+        }
 
     }
 

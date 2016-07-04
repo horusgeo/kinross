@@ -130,6 +130,7 @@ public class Register {
     private String _id_prop;
     private String _local_visita;
     private String _data_visita;
+    private String _status;
 
     private String _nome_proprietario;
     private String _nacionalidade_prop;
@@ -640,6 +641,14 @@ public class Register {
 
     public void setTipoLatLng(String tipoLatLng) {
         this.tipoLatLng = tipoLatLng;
+    }
+
+    public String get_status() {
+        return _status;
+    }
+
+    public void set_status(String _status) {
+        this._status = _status;
     }
 }
 
