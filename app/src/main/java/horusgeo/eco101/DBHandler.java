@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final int nTables = 10;
+    private static final int nTables = 11;
 
     private static final String DATABASE_NAME = "eco101.db";
     private static final int DATABASE_VERSION = 1;
@@ -36,6 +36,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TABLE_DESC = "descricao";
     private static final String TABLE_DOCS = "documentos";
     private static final String TABLE_LATLNG = "latlng";
+    private static final String TABLE_OBS = "observacao";
 
     private static final String ID = "_id";
 
@@ -57,7 +58,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TEL_PROPRIETARIO_1 = "tel_proprietario_1";
     private static final String TEL_PROPRIETARIO_2 = "tel_proprietario_2";
     private static final String EMAIL_PROPRIETARIO = "email_proprietario";
-    private static final String ANOTACOES_PROPRIETARIO = "anotacoes_proprietario";
+    private static final String POSSPROP = "poss_prop";
     private static final String ARQUIVOS_PROPRIETARIO = "arquivos_proprietario";
 
     private static final String ID_CONJ = "_id_conj";
@@ -70,7 +71,6 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String CPF_PHOTO_CONJ = "cpf_photo_conj";
     private static final String TEL_CONJ_1 = "tel_conj_1";
     private static final String TEL_CONJ_2 = "tel_conj_2";
-    private static final String ANOTACOES_CONJ = "anotacoes_conj";
     private static final String ARQUIVOS_CONJ = "arquivos_conj";
 
     private static final String ID_END_RES = "_id_end_res";
@@ -139,6 +139,9 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TEXT_LATLNG = "texto_pin";
     private static final String ID_LATLNG = "_id_latlng";
 
+    private static final String OBS = "obs";
+    private static final String ID_OBS = "_id_obs";
+
     public DBHandler(Context context, String name,
                        SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -169,7 +172,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 TEL_PROPRIETARIO_1 + " TEXT," +
                 TEL_PROPRIETARIO_2 + " TEXT," +
                 EMAIL_PROPRIETARIO + " TEXT," +
-                ANOTACOES_PROPRIETARIO + " TEXT," +
+                POSSPROP + " TEXT," +
                 ID_PROP + " TEXT" +
                 ")";
         db.execSQL(CREATE_PROP_TABLE);
@@ -184,7 +187,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 CPF_CONJ + " TEXT," +
                 TEL_CONJ_1 + " TEXT," +
                 TEL_CONJ_2 + " TEXT," +
-                ANOTACOES_CONJ + " TEXT," +
                 ID_CONJ + " TEXT" +
                 ")";
         db.execSQL(CREATE_CONJ_TABLE);
@@ -278,6 +280,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 ID_LATLNG + " TEXT" +
                 ")";
         db.execSQL(CREATE_LATLNG_TABLE);
+
+        String CREATE_OBS_TABLE = "CREATE TABLE " + TABLE_OBS + "(" +
+                ID + " INTEGER PRIMARY KEY," +
+                OBS + " TEXT," +
+                ID_OBS + " TEXT" +
+                ")";
+        db.execSQL(CREATE_OBS_TABLE);
     }
 
     @Override
@@ -293,6 +302,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BENF);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLANT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LATLNG);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OBS);
         onCreate(db);
     }
 
@@ -328,7 +338,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(TEL_PROPRIETARIO_1, cadastro.get_tel_prop_1());
         values.put(TEL_PROPRIETARIO_2, cadastro.get_tel_prop_2());
         values.put(EMAIL_PROPRIETARIO, cadastro.get_email_prop());
-        values.put(ANOTACOES_PROPRIETARIO, cadastro.get_anotacoes_prop());
+        values.put(POSSPROP, cadastro.get_possProp());
         values.put(ID_PROP, cadastro.get_id_prop());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -349,7 +359,6 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(CPF_CONJ, cadastro.get_cpf_conj());
         values.put(TEL_CONJ_1, cadastro.get_tel_conj_1());
         values.put(TEL_CONJ_2, cadastro.get_tel_conj_2());
-        values.put(ANOTACOES_CONJ, cadastro.get_anotacoes_conj());
         values.put(ID_CONJ, cadastro.get_id_prop());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -526,6 +535,20 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addObs(Register cadastro){
+
+        ContentValues values = new ContentValues();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        values.put(OBS, cadastro.getObservacao());
+        values.put(ID_OBS, cadastro.get_id_prop());
+
+        db.insert(TABLE_OBS, null, values);
+
+        db.close();
+    }
+
     //Update Registers
 
     public void updateRegister(Register cadastro, ArrayList<Benfeitoria> benf, ArrayList<Benfeitoria> plants,  ArrayList<Docs> docs, String idBck){
@@ -549,6 +572,8 @@ public class DBHandler extends SQLiteOpenHelper {
         updateRegisterEndObj(cadastro, idBck);
         updateRegisterIdProp(cadastro, idBck);
         updateRegisterDesc(cadastro, idBck);
+        updateRegisterObs(cadastro, idBck);
+        updateRegisterPins(cadastro, idBck);
 //        updateRegisterDoc(cadastro, docs, idBck);
 //        updateRegisterBenf(cadastro, benf, idBck);
 //        updateRegisterPlant(cadastro, plants, idBck);
@@ -572,7 +597,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(TEL_PROPRIETARIO_1, cadastro.get_tel_prop_1());
         values.put(TEL_PROPRIETARIO_2, cadastro.get_tel_prop_2());
         values.put(EMAIL_PROPRIETARIO, cadastro.get_email_prop());
-        values.put(ANOTACOES_PROPRIETARIO, cadastro.get_anotacoes_prop());
+        values.put(POSSPROP, cadastro.get_possProp());
         values.put(ID_PROP, cadastro.get_id_prop());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -597,7 +622,6 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(CPF_CONJ, cadastro.get_cpf_conj());
         values.put(TEL_CONJ_1, cadastro.get_tel_conj_1());
         values.put(TEL_CONJ_2, cadastro.get_tel_conj_2());
-        values.put(ANOTACOES_CONJ, cadastro.get_anotacoes_conj());
         values.put(ID_CONJ, cadastro.get_id_prop());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -707,6 +731,51 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
         db.close();
+    }
+
+    public void updateRegisterObs(Register cadastro, String idBck){
+
+        ContentValues values = new ContentValues();
+
+        values.put(OBS, cadastro.getObservacao());
+        values.put(ID_OBS, cadastro.get_id_prop());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        if (cadastro.get_id_prop().equals(idBck)) {
+            db.update(TABLE_OBS, values, ID_OBS + "=" + cadastro.get_id_prop(), null);
+        } else {
+            db.update(TABLE_OBS, values, ID_OBS + "=" + idBck, null);
+        }
+
+        db.close();
+    }
+
+    public void updateRegisterPins(Register cadastro, String idBck){
+
+        ContentValues values = new ContentValues();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int tam = cadastro.getLat().size();
+
+        for(int i = 0; i < tam; i++){
+            values.put(LAT, String.valueOf(cadastro.getLat().get(i)));
+            values.put(LNG, String.valueOf(cadastro.getLng().get(i)));
+            values.put(TYPE_LATLNG, cadastro.getTipoLatLng());
+            values.put(TEXT_LATLNG, cadastro.get_nome_proprietario());
+            values.put(ID_LATLNG, cadastro.get_id_prop());
+
+            if(cadastro.get_id_prop().equals(idBck)){
+                db.update(TABLE_LATLNG, values, ID_LATLNG + "=" + cadastro.get_id_prop(), null);
+            } else {
+                db.update(TABLE_LATLNG, values, ID_LATLNG + "=" + idBck, null);
+            }
+
+        }
+
+        db.close();
+
     }
 
     public void updateRegisterDoc(Register cadastro, ArrayList<Docs> docs, String idBck){
@@ -835,7 +904,7 @@ public class DBHandler extends SQLiteOpenHelper {
             register.set_tel_prop_1(cursor.getString(8));
             register.set_tel_prop_2(cursor.getString(9));
             register.set_email_prop(cursor.getString(10));
-            register.set_anotacoes_prop(cursor.getString(11));
+            register.set_possProp(cursor.getString(11));
             cursor.close();
         }
 
@@ -853,7 +922,6 @@ public class DBHandler extends SQLiteOpenHelper {
             register.set_cpf_conj(cursor.getString(6));
             register.set_tel_conj_1(cursor.getString(7));
             register.set_tel_conj_2(cursor.getString(8));
-            register.set_anotacoes_conj(cursor.getString(9));
             cursor.close();
         }
 
@@ -924,17 +992,31 @@ public class DBHandler extends SQLiteOpenHelper {
         query = "SELECT * FROM " + TABLE_LATLNG + " WHERE " + ID_LATLNG + " = " + idProp;
 
         cursor = db.rawQuery(query, null);
-        float lat[] = {};
-        float lng[] = {};
+        ArrayList<Double> lat = new ArrayList<Double>();
+        ArrayList<Double> lng = new ArrayList<Double>();
         if (cursor.moveToFirst()) {
             int count = 0;
             do {
-                lat[count] = Float.parseFloat(cursor.getString(1));
-                lng[count] = Float.parseFloat(cursor.getString(2));
+                lat.add(Double.parseDouble(cursor.getString(1)));
+                lng.add(Double.valueOf(cursor.getString(2)));
                 register.setTipoLatLng(cursor.getString(3));
                 count++;
             } while (cursor.moveToNext());
         }
+
+        register.setLat(lat);
+        register.setLng(lng);
+
+        query = "SELECT * FROM " + TABLE_OBS + " WHERE " + ID_OBS + " = " + idProp;
+
+        cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            register.setObservacao(cursor.getString(1));
+            cursor.close();
+        }
+
         db.close();
 
         return register;
@@ -1036,6 +1118,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.delete(TABLE_DOCS, ID_DOC + " = " + idProp, null);
         db.delete(TABLE_BENF, ID_BENF + " = " + idProp, null);
         db.delete(TABLE_PLANT, ID_PLANT + " = " + idProp, null);
+        db.delete(TABLE_OBS, ID_OBS + " = " + idProp, null);
         db.close();
 
     }
@@ -1141,6 +1224,9 @@ public class DBHandler extends SQLiteOpenHelper {
             case 9:
                 file = tablePlantToCSV();
                 break;
+            case 10:
+                file = tableLatLngToCSV();
+                break;
         }
         return file;
     }
@@ -1156,7 +1242,7 @@ public class DBHandler extends SQLiteOpenHelper {
             //file.mkdirs();
             file.createNewFile();
             csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
-            csvWrite.writeNext(cursor.getColumnNames());
+//            csvWrite.writeNext(cursor.getColumnNames());
             if (cursor.moveToFirst()) {
                 do {
                     //Which column you want to export
@@ -1184,7 +1270,7 @@ public class DBHandler extends SQLiteOpenHelper {
 //            file.mkdirs();
             file.createNewFile();
             csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
-            csvWrite.writeNext(cursor.getColumnNames());
+//            csvWrite.writeNext(cursor.getColumnNames());
             if (cursor.moveToFirst()) {
                 do {
                     //Which column you want to export
@@ -1215,14 +1301,14 @@ public class DBHandler extends SQLiteOpenHelper {
 //            file.mkdirs();
             file.createNewFile();
             csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
-            csvWrite.writeNext(cursor.getColumnNames());
+//            csvWrite.writeNext(cursor.getColumnNames());
             if (cursor.moveToFirst()) {
                 do {
                     //Which column you want to export
                     String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
                             cursor.getString(3), cursor.getString(4), cursor.getString(5),
                             cursor.getString(6), cursor.getString(7), cursor.getString(8),
-                            cursor.getString(9), cursor.getString(10)};
+                            cursor.getString(9)};
                     csvWrite.writeNext(arrStr);
                 } while (cursor.moveToNext());
             }
@@ -1245,7 +1331,7 @@ public class DBHandler extends SQLiteOpenHelper {
 //            file.mkdirs();
             file.createNewFile();
             csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
-            csvWrite.writeNext(cursor.getColumnNames());
+//            csvWrite.writeNext(cursor.getColumnNames());
             if (cursor.moveToFirst()) {
                 do {
                     //Which column you want to export
@@ -1275,7 +1361,7 @@ public class DBHandler extends SQLiteOpenHelper {
 //            file.mkdirs();
             file.createNewFile();
             csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
-            csvWrite.writeNext(cursor.getColumnNames());
+//            csvWrite.writeNext(cursor.getColumnNames());
             if (cursor.moveToFirst()) {
                 do {
                     //Which column you want to export
@@ -1304,7 +1390,7 @@ public class DBHandler extends SQLiteOpenHelper {
 //            file.mkdirs();
             file.createNewFile();
             csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
-            csvWrite.writeNext(cursor.getColumnNames());
+//            csvWrite.writeNext(cursor.getColumnNames());
             if (cursor.moveToFirst()) {
                 do {
                     //Which column you want to export
@@ -1333,7 +1419,7 @@ public class DBHandler extends SQLiteOpenHelper {
 //            file.mkdirs();
             file.createNewFile();
             csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
-            csvWrite.writeNext(cursor.getColumnNames());
+//            csvWrite.writeNext(cursor.getColumnNames());
             if (cursor.moveToFirst()) {
                 do {
                     //Which column you want to export
@@ -1361,7 +1447,7 @@ public class DBHandler extends SQLiteOpenHelper {
 //            file.mkdirs();
             file.createNewFile();
             csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
-            csvWrite.writeNext(cursor.getColumnNames());
+//            csvWrite.writeNext(cursor.getColumnNames());
             if (cursor.moveToFirst()){
                 do {
                     //Which column you want to export
@@ -1389,7 +1475,7 @@ public class DBHandler extends SQLiteOpenHelper {
 //            file.mkdirs();
             file.createNewFile();
             csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
-            csvWrite.writeNext(cursor.getColumnNames());
+//            csvWrite.writeNext(cursor.getColumnNames());
             if (cursor.moveToFirst()){
                 do {
                     //Which column you want to export
@@ -1417,7 +1503,35 @@ public class DBHandler extends SQLiteOpenHelper {
 //            file.mkdirs();
             file.createNewFile();
             csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
-            csvWrite.writeNext(cursor.getColumnNames());
+//            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()){
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3), cursor.getString(4), cursor.getString(5)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public File tableLatLngToCSV(){
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_LATLNG + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_LATLNG;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+//            file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+//            csvWrite.writeNext(cursor.getColumnNames());
             if (cursor.moveToFirst()){
                 do {
                     //Which column you want to export

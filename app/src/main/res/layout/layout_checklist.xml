@@ -42,7 +42,8 @@
                     android:text="Carteira de identidade"
                     android:id="@+id/checkListIDProp"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -50,7 +51,8 @@
                     android:text="CPF"
                     android:id="@+id/checkListCPFProp"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -58,7 +60,9 @@
                     android:text="Comprovante de endereço"
                     android:id="@+id/checkListEnd"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false"
+                    android:enabled="true" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -66,7 +70,8 @@
                     android:text="Certidão de casamento"
                     android:id="@+id/checkListCas"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -74,7 +79,8 @@
                     android:text="CTPS"
                     android:id="@+id/checkListCTPS"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -82,7 +88,8 @@
                     android:text="CNH"
                     android:id="@+id/checkListCNH"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
             </LinearLayout>
         </LinearLayout>
 
@@ -122,7 +129,8 @@
                     android:text="Carteira de identidade"
                     android:id="@+id/checkListIDHerd"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -130,7 +138,8 @@
                     android:text="CPF"
                     android:id="@+id/checkListCPFHerd"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -138,7 +147,8 @@
                     android:text="Formal de Partilha (caso não esteja registrada)"
                     android:id="@+id/checkListPartHerd"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -146,7 +156,8 @@
                     android:text="Certidão de Óbito"
                     android:id="@+id/checkListObHerd"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
             </LinearLayout>
         </LinearLayout>
@@ -187,7 +198,8 @@
                     android:text="Certidão de Óbito"
                     android:id="@+id/checkListObtEspolio"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -195,7 +207,8 @@
                     android:text="Nº do processo"
                     android:id="@+id/checkListProcEspolio"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -203,7 +216,8 @@
                     android:text="CPF do inventariante"
                     android:id="@+id/checkListCPFEspolio"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -211,7 +225,8 @@
                     android:text="RG do inventariante"
                     android:id="@+id/checkListRGEspolio"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
             </LinearLayout>
         </LinearLayout>
 
@@ -251,7 +266,8 @@
                     android:text="Contrato Social"
                     android:id="@+id/checkListContrato"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -259,7 +275,8 @@
                     android:text="Última alteração contratual"
                     android:id="@+id/checkListUltimaAlteracao"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -267,7 +284,8 @@
                     android:text="Cadastro de Pessoa Jurídica"
                     android:id="@+id/checkListCNPJ"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -275,7 +293,8 @@
                     android:text="Carteira de identidade do(s) representante(s)"
                     android:id="@+id/checkListRGPJ"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -283,7 +302,8 @@
                     android:text="Carteira de identidade do(s) cônjuge(s)"
                     android:id="@+id/checkListRGPJConj"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -291,7 +311,8 @@
                     android:text="Comprovante de endereço atualizado"
                     android:id="@+id/checkListEndPJ"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
             </LinearLayout>
         </LinearLayout>
 
@@ -331,7 +352,8 @@
                     android:text="Certidão de registro (IMPORTANTE)"
                     android:id="@+id/checkListRegImovel"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -339,7 +361,8 @@
                     android:text="Certidão Negativa (NO CASO DE POSSEIRO)"
                     android:id="@+id/checkListNegImovel"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -347,7 +370,8 @@
                     android:text="Escritura de aquisição do imóvel"
                     android:id="@+id/checkListEscImovel"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -355,7 +379,8 @@
                     android:text="Contrato de compra e venda"
                     android:id="@+id/checkListContImovel"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -363,7 +388,8 @@
                     android:text="Comprovante de IPTU (IMÓVEL URBANO)"
                     android:id="@+id/checkListIPTUImovel"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -371,7 +397,8 @@
                     android:text="Comprovante de CCIR (IMÓVEL RURAL)"
                     android:id="@+id/checkListCCIRImovel"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
 
                 <CheckBox
                     android:layout_width="wrap_content"
@@ -379,7 +406,8 @@
                     android:text="Comprovante de ITR (IMÓVEL RURAL)"
                     android:id="@+id/checkListITRImovel"
                     android:checked="false"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:clickable="false" />
             </LinearLayout>
         </LinearLayout>
 

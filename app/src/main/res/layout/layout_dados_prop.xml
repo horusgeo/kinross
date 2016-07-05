@@ -88,10 +88,11 @@
                 android:id="@+id/estadoCivilLabel" />
 
             <RadioGroup
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/estadoCivilGroup"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
                 <RadioButton
                     android:layout_width="wrap_content"
@@ -281,24 +282,34 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp"
+            android:layout_height="20dp"
             android:layout_gravity="center_horizontal" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Anotações"
-            android:id="@+id/anotacoesLabel"
-            android:layout_gravity="center_horizontal" />
-
-        <EditText
+        <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/anotacoesText"
-            android:layout_gravity="center_horizontal"
-            android:imeOptions="actionDone"
-            android:inputType="textCapSentences|textImeMultiLine|text" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/posPropRadioGroup"
+            android:gravity="center">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Posseiro"
+                android:id="@+id/possRadioButton"
+                android:checked="false" />
+
+            <Space
+                android:layout_width="80dp"
+                android:layout_height="match_parent" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Proprietário"
+                android:id="@+id/propRadioButton"
+                android:checked="false" />
+        </RadioGroup>
 
         <Space
             android:layout_width="match_parent"

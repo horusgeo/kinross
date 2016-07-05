@@ -234,6 +234,9 @@ public class CadastroActivity extends AppCompatActivity {
                             case 10:
                                 loadCadastroCheckList();
                                 break;
+                            case 11:
+                                loadCadastroObs();
+                                break;
                         }
                     }
 
@@ -271,6 +274,9 @@ public class CadastroActivity extends AppCompatActivity {
                                 break;
                             case 10:
                                 saveCadastrocheckList();
+                                break;
+                            case 11:
+                                saveCadastroObs();
                                 break;
                         }
                     }
@@ -484,36 +490,12 @@ public class CadastroActivity extends AppCompatActivity {
                     break;
                 case 5:
                     rootView = inflater.inflate(R.layout.layout_end_residencial, container, false);
-                    ImageButton endResPhoto = (ImageButton) rootView.findViewById(R.id.photoEndResButton);
-
-                    endResPhoto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            takePhoto(getActivity(), CAPTURE_IMAGE_END_RES);
-                        }
-                    });
                     break;
                 case 6:
                     rootView = inflater.inflate(R.layout.layout_end_obj, container, false);
-                    ImageButton endObjPhoto = (ImageButton) rootView.findViewById(R.id.photoEndObjButton);
-
-                    endObjPhoto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            takePhoto(getActivity(), CAPTURE_IMAGE_END_OBJ);
-                        }
-                    });
                     break;
                 case 7:
                     rootView = inflater.inflate(R.layout.layout_id_prop, container, false);
-                    ImageButton identPropPhoto = (ImageButton) rootView.findViewById(R.id.photoIdPropButton);
-
-                    identPropPhoto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            takePhoto(getActivity(), CAPTURE_IMAGE_IDENT_PROP);
-                        }
-                    });
                     break;
                 case 8:
                     rootView = inflater.inflate(R.layout.layout_benf, container, false);
@@ -546,6 +528,9 @@ public class CadastroActivity extends AppCompatActivity {
                     rootView = inflater.inflate(R.layout.layout_checklist, container, false);
                     break;
                 case 12:
+                    rootView = inflater.inflate(R.layout.layout_obs, container, false);
+                    break;
+                case 13:
                     rootView = inflater.inflate(R.layout.layout_map, container, false);
                     Button mapButton = (Button) rootView.findViewById(R.id.mapButtonCadastro);
                     mapButton.setOnClickListener(new View.OnClickListener() {
@@ -586,7 +571,7 @@ public class CadastroActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 12;
+            return 13;
         }
 
         @Override
@@ -615,6 +600,8 @@ public class CadastroActivity extends AppCompatActivity {
                 case 10:
                     return "Check list";
                 case 11:
+                    return "Observações";
+                case 12:
                     return "Mapa";
             }
             return null;
@@ -695,26 +682,53 @@ public class CadastroActivity extends AppCompatActivity {
         TextView doc = (TextView) findViewById(R.id.identidadeText);
         TextView doctp = (TextView) findViewById(R.id.idTipoText);
         RadioGroup est = (RadioGroup) findViewById(R.id.estadoCivilGroup);
-        //TextView docph = (TextView) mView.findViewById(R.id.id);
         TextView cpf = (TextView) findViewById(R.id.cpfText);
-        //TextView cpfph = (TextView) mView.findViewById(R.id.dataText);
         TextView tel1 = (TextView) findViewById(R.id.propTel1);
         TextView tel2 = (TextView) findViewById(R.id.propTel2);
         TextView email = (TextView) findViewById(R.id.emailText);
-        TextView anot = (TextView) findViewById(R.id.anotacoesText);
-
+        RadioGroup poss = (RadioGroup) findViewById(R.id.posPropRadioGroup);
 
         cadastro.set_nome_proprietario(nome.getText().toString());
         cadastro.set_nacionalidade_prop(nacio.getText().toString());
         cadastro.set_profissao_prop(prof.getText().toString());
         cadastro.set_doc_id_prop(doc.getText().toString());
         cadastro.set_doc_id_tipo_prop(doctp.getText().toString());
-        cadastro.set_estado_civil(String.valueOf(est.getCheckedRadioButtonId()));
         cadastro.set_cpf_prop(cpf.getText().toString());
         cadastro.set_tel_prop_1(tel1.getText().toString());
         cadastro.set_tel_prop_2(tel2.getText().toString());
         cadastro.set_email_prop(email.getText().toString());
-        cadastro.set_anotacoes_prop(anot.getText().toString());
+
+        switch(est.getCheckedRadioButtonId()){
+            case R.id.casadoRadio:
+                cadastro.set_estado_civil("1");
+                break;
+            case R.id.divorciadoRadio:
+                cadastro.set_estado_civil("2");
+                break;
+            case R.id.viuvoRadio:
+                cadastro.set_estado_civil("3");
+                break;
+            case R.id.solteiroRadio:
+                cadastro.set_estado_civil("4");
+                break;
+            default:
+                cadastro.set_estado_civil("0");
+                break;
+        }
+
+        switch(poss.getCheckedRadioButtonId()){
+            case R.id.possRadioButton:
+                cadastro.set_possProp("1");
+                break;
+            case R.id.propRadioButton:
+                cadastro.set_possProp("2");
+                break;
+            default:
+                cadastro.set_possProp("0");
+                break;
+        }
+
+
 
     }
 
@@ -729,21 +743,47 @@ public class CadastroActivity extends AppCompatActivity {
         TextView tel1 = (TextView) findViewById(R.id.propTel1);
         TextView tel2 = (TextView) findViewById(R.id.propTel2);
         TextView email = (TextView) findViewById(R.id.emailText);
-        TextView anot = (TextView) findViewById(R.id.anotacoesText);
+        RadioGroup pos = (RadioGroup) findViewById(R.id.posPropRadioGroup);
 
         nome.setText(cadastro.get_nome_proprietario());
         nacio.setText(cadastro.get_nacionalidade_prop());
         prof.setText(cadastro.get_profissao_prop());
         doc.setText(cadastro.get_doc_id_prop());
         doctp.setText(cadastro.get_doc_id_tipo_prop());
-        if(cadastro.get_estado_civil()!= null)
-            est.check(Integer.valueOf(cadastro.get_estado_civil()));
+
+        if(cadastro.get_estado_civil()!= null){
+            switch (cadastro.get_estado_civil()){
+                case "1":
+                    est.check(R.id.casadoRadio);
+                    break;
+                case "2":
+                    est.check(R.id.divorciadoRadio);
+                    break;
+                case "3":
+                    est.check(R.id.viuvoRadio);
+                    break;
+                case "4":
+                    est.check(R.id.solteiroRadio);
+                    break;
+            }
+
+        }
+
+        if(cadastro.get_possProp()!=null){
+            switch (cadastro.get_possProp()){
+                case "1":
+                    est.check(R.id.possRadioButton);
+                    break;
+                case "2":
+                    est.check(R.id.propRadioButton);
+                    break;
+            }
+        }
+
         cpf.setText(cadastro.get_cpf_prop());
         tel1.setText(cadastro.get_tel_prop_1());
         tel2.setText(cadastro.get_tel_prop_2());
         email.setText(cadastro.get_email_prop());
-        anot.setText(cadastro.get_anotacoes_prop());
-
         Log.d("HorusGeo", "Docs size = " + String.valueOf(docs.size()));
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.idPropLayout);
@@ -777,8 +817,6 @@ public class CadastroActivity extends AppCompatActivity {
         TextView cpf = (TextView) findViewById(R.id.conjCPFText);
         TextView tel1 = (TextView) findViewById(R.id.conjTel1Text);
         TextView tel2 = (TextView) findViewById(R.id.conjTel2Text);
-        TextView anot = (TextView) findViewById(R.id.conjAnotText);
-
 
         cadastro.set_nome_conj(nome.getText().toString());
         cadastro.set_nacionalidade_conj(nacio.getText().toString());
@@ -788,7 +826,6 @@ public class CadastroActivity extends AppCompatActivity {
         cadastro.set_cpf_conj(cpf.getText().toString());
         cadastro.set_tel_conj_1(tel1.getText().toString());
         cadastro.set_tel_conj_2(tel2.getText().toString());
-        cadastro.set_anotacoes_conj(anot.getText().toString());
 
     }
 
@@ -801,7 +838,6 @@ public class CadastroActivity extends AppCompatActivity {
         TextView cpf = (TextView) findViewById(R.id.conjCPFText);
         TextView tel1 = (TextView) findViewById(R.id.conjTel1Text);
         TextView tel2 = (TextView) findViewById(R.id.conjTel2Text);
-        TextView anot = (TextView) findViewById(R.id.conjAnotText);
 
         nome.setText(cadastro.get_nome_conj());
         nacio.setText(cadastro.get_nacionalidade_conj());
@@ -811,7 +847,6 @@ public class CadastroActivity extends AppCompatActivity {
         cpf.setText(cadastro.get_cpf_conj());
         tel1.setText(cadastro.get_tel_conj_1());
         tel2.setText(cadastro.get_tel_conj_2());
-        anot.setText(cadastro.get_anotacoes_conj());
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.idConjLayout);
         LinearLayout layout2 = (LinearLayout) findViewById(R.id.cpfConjLayout);
@@ -881,19 +916,7 @@ public class CadastroActivity extends AppCompatActivity {
         comuf.setText(cadastro.get_uf_com_end_res());
         pto.setText(cadastro.get_p_ref_end_res());
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.endResPhotoLayout);
 
-        layout.removeAllViews();
-
-        if(docs.size() > 0) {
-            for (Docs temp : docs) {
-                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
-                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_END_RES))) {
-                        callAddThumb(CAPTURE_IMAGE_END_RES, temp.getPath());
-                    }
-                }
-            }
-        }
     }
 
     public void saveCadastroEndObj(){
@@ -927,19 +950,7 @@ public class CadastroActivity extends AppCompatActivity {
         cep.setText(cadastro.get_cep_end_obj());
         pto.setText(cadastro.get_p_ref_end_obj());
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.endObjPhotoLayout);
 
-        layout.removeAllViews();
-
-        if(docs.size() > 0) {
-            for (Docs temp : docs) {
-                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
-                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_END_OBJ))) {
-                        callAddThumb(CAPTURE_IMAGE_END_OBJ, temp.getPath());
-                    }
-                }
-            }
-        }
     }
 
     public void saveCadastroIdProp(){
@@ -951,9 +962,48 @@ public class CadastroActivity extends AppCompatActivity {
         CheckBox infra3 = (CheckBox) findViewById(R.id.infraAbasAguaRadio);
         TextView obs = (TextView) findViewById(R.id.idPropObsText);
 
-        cadastro.set_zoneamento(String.valueOf(zon.getCheckedRadioButtonId()));
-        cadastro.set_topografia(String.valueOf(topo.getCheckedRadioButtonId()));
-        cadastro.set_manacial(String.valueOf(man.getCheckedRadioButtonId()));
+        switch(zon.getCheckedRadioButtonId()){
+            case R.id.zoneRuralRadio:
+                cadastro.set_zoneamento("1");
+                break;
+            case R.id.zoneUrbRadio:
+                cadastro.set_zoneamento("2");
+                break;
+            case R.id.zoneExpRadio:
+                cadastro.set_zoneamento("3");
+                break;
+            default:
+                cadastro.set_zoneamento("0");
+                break;
+        }
+
+        switch(topo.getCheckedRadioButtonId()){
+            case R.id.topoPlanoRadio:
+                cadastro.set_topografia("1");
+                break;
+            case R.id.topoOndRadio:
+                cadastro.set_topografia("2");
+                break;
+            case R.id.topoMontRadio:
+                cadastro.set_topografia("3");
+                break;
+            default:
+                cadastro.set_topografia("0");
+                break;
+        }
+
+        switch(man.getCheckedRadioButtonId()){
+            case R.id.manaSimRadio:
+                cadastro.set_manacial("1");
+                break;
+            case R.id.mananNaoRadio:
+                cadastro.set_manacial("2");
+                break;
+            default:
+                cadastro.set_topografia("0");
+                break;
+        }
+
         cadastro.set_infraredeel(String.valueOf(infra1.isChecked()));
         cadastro.set_infrasintel(String.valueOf(infra2.isChecked()));
         cadastro.set_infraabasagua(String.valueOf(infra3.isChecked()));
@@ -970,12 +1020,45 @@ public class CadastroActivity extends AppCompatActivity {
         CheckBox infra3 = (CheckBox) findViewById(R.id.infraAbasAguaRadio);
         TextView obs = (TextView) findViewById(R.id.idPropObsText);
 
-        if(cadastro.get_zoneamento() != null)
-            zon.check(Integer.parseInt(cadastro.get_zoneamento()));
-        if(cadastro.get_topografia() != null)
-            topo.check(Integer.parseInt(cadastro.get_topografia()));
-        if(cadastro.get_manacial() != null)
-            man.check(Integer.parseInt(cadastro.get_manacial()));
+        if(cadastro.get_zoneamento() != null){
+            switch(cadastro.get_zoneamento()){
+                case "1":
+                    zon.check(R.id.zoneRuralRadio);
+                    break;
+                case "2":
+                    zon.check(R.id.zoneUrbRadio);
+                    break;
+                case "3":
+                    zon.check(R.id.zoneExpRadio);
+                    break;
+            }
+        }
+
+        if(cadastro.get_topografia() != null){
+            switch(cadastro.get_topografia()){
+                case "1":
+                    topo.check(R.id.topoPlanoRadio);
+                    break;
+                case "2":
+                    topo.check(R.id.topoOndRadio);
+                    break;
+                case "3":
+                    topo.check(R.id.topoMontRadio);
+                    break;
+            }
+        }
+
+        if(cadastro.get_manacial() != null){
+            switch(cadastro.get_manacial()){
+                case "1":
+                    man.check(R.id.manaSimRadio);
+                    break;
+                case "2":
+                    man.check(R.id.mananNaoRadio);
+                    break;
+            }
+        }
+
         if(cadastro.get_infraredeel() != null)
             infra1.setChecked(Boolean.parseBoolean(cadastro.get_infraredeel()));
         if(cadastro.get_infrasintel() != null)
@@ -983,20 +1066,6 @@ public class CadastroActivity extends AppCompatActivity {
         if(cadastro.get_infraabasagua() != null)
             infra3.setChecked(Boolean.parseBoolean(cadastro.get_infraabasagua()));
         obs.setText(cadastro.get_obs_id_prop());
-
-        LinearLayout layout = (LinearLayout) findViewById(R.id.idPropPhotoLayout);
-
-        layout.removeAllViews();
-
-        if(docs.size() > 0) {
-            for (Docs temp : docs) {
-                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
-                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_IDENT_PROP))) {
-                        callAddThumb(CAPTURE_IMAGE_IDENT_PROP, temp.getPath());
-                    }
-                }
-            }
-        }
 
     }
 
@@ -1038,6 +1107,18 @@ public class CadastroActivity extends AppCompatActivity {
         h_saida.setText(cadastro.get_horario_saida());
         desc.setText(cadastro.get_descricao_visita());
         resp.setText(cadastro.get_responsavel());
+    }
+
+    public void saveCadastroObs(){
+        TextView obsText = (TextView) findViewById(R.id.obsText);
+
+        cadastro.setObservacao(obsText.getText().toString());
+    }
+
+    public void loadCadastroObs(){
+        TextView obsText = (TextView) findViewById(R.id.obsText);
+
+        obsText.setText(cadastro.getObservacao());
     }
 
     public void saveCadastrocheckList(){
@@ -1251,15 +1332,7 @@ public class CadastroActivity extends AppCompatActivity {
             case CAPTURE_IMAGE_CPF_CONJ:
                 layout = (LinearLayout) findViewById(R.id.cpfConjLayout);
                 break;
-            case CAPTURE_IMAGE_END_RES:
-                layout = (LinearLayout) findViewById(R.id.endResPhotoLayout);
-                break;
-            case CAPTURE_IMAGE_END_OBJ:
-                layout = (LinearLayout) findViewById(R.id.endObjPhotoLayout);
-                break;
-            case CAPTURE_IMAGE_IDENT_PROP:
-                layout = (LinearLayout) findViewById(R.id.idPropPhotoLayout);
-                break;
+
         }
         layout.addView(img);
 

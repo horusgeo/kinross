@@ -13,9 +13,9 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/mapView"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+        android:layout_marginTop="65dp" />
 
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabReguaCancel"

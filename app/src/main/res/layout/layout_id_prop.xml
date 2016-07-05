@@ -224,53 +224,5 @@
             android:padding="15dp"
             android:inputType="textCapSentences|textImeMultiLine|text" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Adicionar arquivo?   "
-                android:id="@+id/textView5" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/photoIdPropButton"
-                android:src="@mipmap/ic_photo_camera_black_24dp"
-                android:background="@android:color/transparent" />
-
-            <Space
-                android:layout_width="30dp"
-                android:layout_height="match_parent" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/uploadIdPropButton"
-                android:src="@mipmap/ic_file_upload_black_24dp"
-                android:background="@android:color/transparent"
-                android:visibility="invisible" />
-        </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/filesIdProp"
-            android:layout_gravity="center_horizontal">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/idPropPhotoLayout"></LinearLayout>
-        </HorizontalScrollView>
     </LinearLayout>
 </ScrollView>

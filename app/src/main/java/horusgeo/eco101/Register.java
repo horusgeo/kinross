@@ -142,6 +142,7 @@ public class Register {
     private String _tel_prop_1;
     private String _tel_prop_2;
     private String _email_prop;
+    private String _possProp;
     private String _anotacoes_prop;
 
     private String _nome_conj;
@@ -189,6 +190,8 @@ public class Register {
     private ArrayList<Double> lat = new ArrayList<Double>();
     private ArrayList<Double> lng = new ArrayList<Double>();
     private String tipoLatLng;
+
+    private String observacao;
 
     public Register() {
 
@@ -649,6 +652,22 @@ public class Register {
 
     public void set_status(String _status) {
         this._status = _status;
+    }
+
+    public String get_possProp() {
+        return _possProp;
+    }
+
+    public void set_possProp(String _possProp) {
+        this._possProp = _possProp;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 }
 
