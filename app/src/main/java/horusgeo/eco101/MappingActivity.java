@@ -242,9 +242,10 @@ public class MappingActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed(){
 
-
-
+    }
 
     public class WebAppInterface {
         Context mContext;

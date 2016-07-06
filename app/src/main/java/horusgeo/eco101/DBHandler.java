@@ -987,7 +987,6 @@ public class DBHandler extends SQLiteOpenHelper {
             register.set_responsavel(cursor.getString(4));
             cursor.close();
         }
-        db.close();
 
         query = "SELECT * FROM " + TABLE_LATLNG + " WHERE " + ID_LATLNG + " = " + idProp;
 
@@ -1566,9 +1565,32 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return list;
 
-
-
     }
+
+    public ArrayList<Docs> getDBDocs(String idProp) {
+        ArrayList<Docs> list = new ArrayList<Docs>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_DOCS + " WHERE " + ID_DOC + " = " + idProp;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Docs doc = new Docs();
+                doc.setPath(cursor.getString(1));
+                doc.setType(cursor.getString(2));
+                doc.setName(cursor.getString(3));
+
+                list.add(doc);
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+        return list;
+    }
+
 
     public Boolean checkIfPropExists(String id){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1602,6 +1624,12 @@ public class DBHandler extends SQLiteOpenHelper {
     public void removeDocs(String idProp){
         SQLiteDatabase db = this.getReadableDatabase();
         db.delete(TABLE_DOCS, ID_DOC + " = " + idProp, null);
+        db.close();
+    }
+
+    public void removeDoc(String file){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(TABLE_DOCS, PATH + " = " + file, null);
         db.close();
     }
 

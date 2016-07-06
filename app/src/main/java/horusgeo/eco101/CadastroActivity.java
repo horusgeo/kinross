@@ -149,7 +149,6 @@ public class CadastroActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         cadastro = new Register();
         benfs = new ArrayList<Benfeitoria>();
         docs = new ArrayList<Docs>();
@@ -344,8 +343,23 @@ public class CadastroActivity extends AppCompatActivity {
             }
         });
 
+        assert toolbar != null;
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                Intent intent = new Intent(CadastroActivity.this, DocumentosActivity.class);
+                intent.putExtra("idProp", cadastro.get_id_prop());
+                db.addDoc(docs);
+                startActivity(intent);
+
+                return false;
+            }
+        });
+
 
     }
+
 
     public void callPhotos(){
 
@@ -1288,9 +1302,9 @@ public class CadastroActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-
-            callAddThumb(requestCode, fileUri.getPath());
+        if (resultCode == RESULT_OK){
+            if(requestCode <= CAPTURE_IMAGE_CPF_CONJ)
+                callAddThumb(requestCode, fileUri.getPath());
 
         } else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "Foto cancelada!", Toast.LENGTH_LONG).show();

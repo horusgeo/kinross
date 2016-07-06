@@ -26,5 +26,4 @@ public class FotoTypes {
                                                 121, 122, 123, 124, 125, 126, 127, 128, 129,
                                                 130, 131);
 
-    private static String teste = "asa";
 }
