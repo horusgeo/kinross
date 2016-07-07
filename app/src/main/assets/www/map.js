@@ -1,11 +1,24 @@
-//myMap = L.map('mapDiv',{}).setView([-19.315, -43.636], 15);
-myMap = L.map('mapDiv',{});
+myMap = L.map('mapDiv',{}).setView([-19.315, -43.636], 15);
+//myMap = L.map('mapDiv',{});
 
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+}).addTo(myMap);
+
+
+myMap.attributionControl.setPosition('bottomleft');
+L.control.scale().addTo(myMap);
+
+/* *********************** LOCATE *********************** */
 
 function onLocationFound(e) {
 //    var radius = e.accuracy / 2;
 
-    L.marker(e.latlng, {icon: iconPosePin}).addTo(myMap);
+    if(poseMarker) {
+        myMap.removeLayer(poseMarker);
+    }
+
+    poseMarker = L.marker(e.latlng, {icon: iconPosePin}).addTo(myMap);
 //           .bindPopup("You are within " + radius + " meters from this point").openPopup();
 
 //    L.circle(e.latlng, radius).addTo(myMap);
@@ -18,24 +31,34 @@ function onLocationError(e) {
 myMap.on('locationfound', onLocationFound);
 myMap.on('locationerror', onLocationError);
 
-myMap.locate({setView: true, maxZoom: 30});
+myMap.locate({watch: true, enableHighAccuracy: true});
+
+function findLocation(){
+    myMap.setView(poseMarker.getLatLng(), 18)
+}
 
 
-var options = {
+/* *********************** Load IMGS *********************** */
+
+function loadImg(imgPath){
+
+    console.log(imgPath);
+
+    var options = {
                 minZoom: 0,
                 maxZoom: 30,
                 opacity: 1.0,
                 tms: false
-                };
+    };
 
-L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-}).addTo(myMap);
+    var path = imgPath + '/{z}/{x}/{y}.png';
 
-//L.tileLayer('{z}/{x}/{y}.png', options).addTo(myMap);
+    console.log(path);
 
-myMap.attributionControl.setPosition('bottomleft');
+    L.tileLayer(path, options).addTo(myMap);
+    //L.tileLayer('{z}/{x}/{y}.png', options).addTo(myMap);
 
+}
 /* *********************** Load KML *********************** */
 
 var runLayer = omnivore.kml('./kml/fd.kml')
@@ -43,7 +66,7 @@ var runLayer = omnivore.kml('./kml/fd.kml')
 //         myMap.fitBounds(runLayer.getBounds());
 //    })
     .addTo(myMap);
-L.control.scale().addTo(myMap);
+
 
 
 /* *********************** Click Points *********************** */

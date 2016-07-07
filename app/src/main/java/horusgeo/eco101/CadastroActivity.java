@@ -551,7 +551,7 @@ public class CadastroActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(getActivity(), MappingActivity.class);
-                            intent.putExtra("idProp", idPropBenf);
+                            intent.putExtra("id", idPropBenf);
                             startActivity(intent);
                         }
                     });

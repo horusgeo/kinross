@@ -17,5 +17,7 @@ var centerMarker;
 var pinMarker;
 var popup;
 
+var poseMarker;
+
 
 

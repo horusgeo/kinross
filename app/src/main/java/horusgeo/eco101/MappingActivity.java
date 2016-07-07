@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -45,6 +47,8 @@ public class MappingActivity extends AppCompatActivity {
     FloatingActionButton fabPointsOk;
     FloatingActionButton fabPinOk;
     FloatingActionButton fabPinCancel;
+    FloatingActionButton fabPose;
+    FloatingActionButton fabReturn;
 
     FloatingActionsMenu fabMenu;
 
@@ -119,6 +123,8 @@ public class MappingActivity extends AppCompatActivity {
         fabPin = (FloatingActionButton) findViewById(R.id.actionPin);
         fabPinOk = (FloatingActionButton) findViewById(R.id.fabPinOk);
         fabPinCancel = (FloatingActionButton) findViewById(R.id.fabPinCancel);
+        fabPose = (FloatingActionButton) findViewById(R.id.poseFab);
+        fabReturn = (FloatingActionButton) findViewById(R.id.fabReturn);
 
         fabPoints.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -126,6 +132,9 @@ public class MappingActivity extends AppCompatActivity {
                 fabMenu.collapse();
                 fabMenu.setVisibility(View.INVISIBLE);
                 fabMenu.setClickable(false);
+
+                fabPose.setVisibility(View.INVISIBLE);
+                fabPose.setClickable(false);
 
                 fabPointsCancel.setVisibility(View.VISIBLE);
                 fabPointsCancel.setClickable(true);
@@ -153,6 +162,9 @@ public class MappingActivity extends AppCompatActivity {
                 fabMenu.setVisibility(View.VISIBLE);
                 fabMenu.setClickable(true);
 
+                fabPose.setVisibility(View.VISIBLE);
+                fabPose.setClickable(true);
+
                 fabPointsCancel.setVisibility(View.INVISIBLE);
                 fabPointsCancel.setClickable(false);
 
@@ -175,6 +187,9 @@ public class MappingActivity extends AppCompatActivity {
                 fabMenu.setVisibility(View.VISIBLE);
                 fabMenu.setClickable(true);
 
+                fabPose.setVisibility(View.VISIBLE);
+                fabPose.setClickable(true);
+
                 fabPointsCancel.setVisibility(View.INVISIBLE);
                 fabPointsCancel.setClickable(false);
 
@@ -193,6 +208,8 @@ public class MappingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 fabMenu.collapse();
                 fabMenu.setClickable(false);
+                fabPose.setVisibility(View.INVISIBLE);
+                fabPose.setClickable(false);
                 fabReguaCancel.setVisibility(View.VISIBLE);
                 fabReguaCancel.setClickable(true);
                 clickRegua(true);
@@ -205,6 +222,8 @@ public class MappingActivity extends AppCompatActivity {
                 fabReguaCancel.setVisibility(View.INVISIBLE);
                 fabReguaCancel.setClickable(false);
                 fabMenu.setClickable(true);
+                fabPose.setVisibility(View.VISIBLE);
+                fabPose.setClickable(true);
                 clickRegua(false);
             }
         });
@@ -214,6 +233,9 @@ public class MappingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 fabMenu.collapse();
                 fabMenu.setClickable(false);
+
+                fabPose.setVisibility(View.INVISIBLE);
+                fabPose.setClickable(false);
 
                 fabPinOk.setVisibility(View.VISIBLE);
                 fabPinOk.setClickable(true);
@@ -237,6 +259,32 @@ public class MappingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 callPin(false);
+            }
+        });
+
+        fabPose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myWebView.loadUrl("javascript:findLocation()");
+            }
+        });
+
+        fabReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(idProp.equals("-1")){
+                    Intent intent = new Intent(MappingActivity.this, InitialActivity.class);
+                    intent.putExtra("tipo", "ok");
+                    intent.putExtra("texto", "Mapa atualizado!");
+                    intent.putExtra("user", "");
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(MappingActivity.this, CadastroActivity.class);
+                    intent.putExtra("tipo", "edit");
+                    intent.putExtra("string", idProp);
+                    intent.putExtra("user", "");
+                    startActivity(intent);
+                }
             }
         });
 
@@ -317,6 +365,14 @@ public class MappingActivity extends AppCompatActivity {
             }
         }
 
+//        File f = new File(Environment.getExternalStorageDirectory().getPath());
+//        File file[] = f.listFiles();
+//        for(File temp : file){
+//            Log.d("HorusGeo", temp.getPath());
+//        }
+
+//        myWebView.loadUrl("javascript:loadImg('"+ Environment.getExternalStorageDirectory() +"')");
+        myWebView.loadUrl("javascript:loadImg('/storage/extSdCard/www')");
         myWebView.loadUrl("javascript:addProp()");
 
     }
@@ -425,6 +481,9 @@ public class MappingActivity extends AppCompatActivity {
 
     private void callPin(Boolean bool){
         fabMenu.setClickable(true);
+
+        fabPose.setVisibility(View.VISIBLE);
+        fabPose.setClickable(true);
 
         fabPinOk.setVisibility(View.INVISIBLE);
         fabPinOk.setClickable(false);
