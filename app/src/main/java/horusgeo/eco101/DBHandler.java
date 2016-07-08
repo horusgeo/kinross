@@ -574,12 +574,9 @@ public class DBHandler extends SQLiteOpenHelper {
         updateRegisterDesc(cadastro, idBck);
         updateRegisterObs(cadastro, idBck);
         updateRegisterPins(cadastro, idBck);
-//        updateRegisterDoc(cadastro, docs, idBck);
-//        updateRegisterBenf(cadastro, benf, idBck);
-//        updateRegisterPlant(cadastro, plants, idBck);
-        addBenf(benf);
-        addPlant(plants);
-        addDoc(docs);
+        updateRegisterBenf(cadastro, benf, idBck);
+        updateRegisterPlant(cadastro, plants, idBck);
+        updateRegisterDoc(cadastro, docs, idBck);
 
     }
 
@@ -780,6 +777,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void updateRegisterDoc(Register cadastro, ArrayList<Docs> docs, String idBck){
 
+        if(cadastro.get_id_prop().equals(idBck))
+            removeDocs(cadastro.get_id_prop());
+        else
+            removeDocs(idBck);
+
         ContentValues values = new ContentValues();
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -789,13 +791,41 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(TYPE, temp.getType());
             values.put(NAME, temp.getName());
             values.put(ID_DOC, cadastro.get_id_prop());
-            db.update(TABLE_DOCS, values, NAME + "=" + temp.getName(), null);
+            db.insert(TABLE_DOCS, null, values);
 
         }
+
+        db.close();
+
+    }
+
+    public void updateRegisterDoc(ArrayList<Docs> docs, String idBck){
+
+        removeDocs(idBck);
+
+        ContentValues values = new ContentValues();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for(Docs temp : docs){
+            values.put(PATH, temp.getPath());
+            values.put(TYPE, temp.getType());
+            values.put(NAME, temp.getName());
+            values.put(ID_DOC, idBck);
+            db.insert(TABLE_DOCS, null, values);
+
+        }
+
+        db.close();
 
     }
 
     public void updateRegisterBenf(Register cadastro, ArrayList<Benfeitoria> benfs, String idBck){
+
+        if(cadastro.get_id_prop().equals(idBck))
+            removeBenfeitorias(cadastro.get_id_prop());
+        else
+            removeBenfeitorias(idBck);
 
         ContentValues values = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
@@ -807,18 +837,61 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(CONSERVACAO_BENF, temp.getConservacao());
             values.put(ID_BENF_PHOTOS, temp.getIdBenf());
             values.put(ID_BENF, cadastro.get_id_prop());
-            if (cadastro.get_id_prop().equals(idBck)) {
-                db.update(TABLE_BENF, values, ID_BENF_PHOTOS + "=" + temp.getIdBenf() + " AND " + ID_BENF + "=" + cadastro.get_id_prop(), null);
-            }else{
-                db.update(TABLE_BENF, values, ID_BENF_PHOTOS + "=" + temp.getIdBenf() + " AND " + ID_BENF + "=" + idBck, null);
-            }
+            db.insert(TABLE_BENF, null, values);
 
         }
         db.close();
 
     }
 
+    public void updateRegisterBenf(ArrayList<Benfeitoria> benfs, String idProp){
+        removeBenfeitorias(idProp);
+
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for(Benfeitoria temp : benfs){
+            values.clear();
+            values.put(TIPO_BENF, temp.getTipo());
+            values.put(IDADE_BENF, temp.getIdade());
+            values.put(CONSERVACAO_BENF, temp.getConservacao());
+            values.put(ID_BENF_PHOTOS, temp.getIdBenf());
+            values.put(ID_BENF, idProp);
+            db.insert(TABLE_BENF, null, values);
+
+        }
+        db.close();
+
+    }
+
+    public void updateRegisterPlants(ArrayList<Benfeitoria> plants, String idProp){
+        removePlant(idProp);
+
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for(Benfeitoria temp : plants){
+            values.clear();
+            values.put(TIPO_PLANT, temp.getTipo());
+            values.put(IDADE_PLANT, temp.getIdade());
+            values.put(COMPLEMENTO_PLANT, temp.getConservacao());
+            values.put(ID_PLANT_PHOTOS, temp.getIdBenf());
+            values.put(ID_PLANT, idProp);
+            db.insert(TABLE_PLANT, null, values);
+
+        }
+        db.close();
+
+    }
+
+
+
     public void updateRegisterPlant(Register cadastro, ArrayList<Benfeitoria> plants, String idBck){
+
+        if(cadastro.get_id_prop().equals(idBck))
+            removePlant(cadastro.get_id_prop());
+        else
+            removePlant(idBck);
 
         ContentValues values = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
@@ -830,12 +903,7 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(COMPLEMENTO_PLANT, temp.getConservacao());
             values.put(ID_PLANT_PHOTOS, temp.getIdBenf());
             values.put(ID_PLANT, cadastro.get_id_prop());
-
-            if (cadastro.get_id_prop().equals(idBck)) {
-                db.update(TABLE_PLANT, values, ID_PLANT_PHOTOS + "=" + temp.getIdBenf() + " AND " + ID_PLANT + "=" + cadastro.get_id_prop(), null);
-            }else{
-                db.update(TABLE_PLANT, values, ID_PLANT_PHOTOS + "=" + temp.getIdBenf() + " AND " + ID_PLANT + "=" + idBck, null);
-            }
+            db.insert(TABLE_PLANT, null, values);
 
         }
         db.close();

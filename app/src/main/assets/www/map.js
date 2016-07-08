@@ -22,6 +22,10 @@ function onLocationFound(e) {
 //           .bindPopup("You are within " + radius + " meters from this point").openPopup();
 
 //    L.circle(e.latlng, radius).addTo(myMap);
+
+    if(locateFlag==1){
+        myMap.setView(poseMarker.getLatLng(), 18);
+    }
 }
 
 function onLocationError(e) {
@@ -34,7 +38,19 @@ myMap.on('locationerror', onLocationError);
 myMap.locate({watch: true, enableHighAccuracy: true});
 
 function findLocation(){
-    myMap.setView(poseMarker.getLatLng(), 18)
+    myMap.setView(poseMarker.getLatLng(), 18);
+    locateFlag = 1;
+
+    function stopLocate(){
+        console.log("locateFlag");
+        locateFlag=0;
+        myMap.off('click', stopLocate);
+        myMap.off('dragstart', stopLocate);
+    }
+
+    myMap.on('click', stopLocate);
+    myMap.on('dragstart', stopLocate);
+
 }
 
 

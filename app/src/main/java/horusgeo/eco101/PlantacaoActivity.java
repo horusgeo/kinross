@@ -54,8 +54,8 @@ public class PlantacaoActivity extends AppCompatActivity {
         plants = db.getPlants(idProp);
         docs = db.getDocs(idProp);
 
-        db.removePlant(idProp);
-        db.removeDocs(idProp);
+//        db.removePlant(idProp);
+//        db.removeDocs(idProp);
 
         plantAddButton = (ImageButton) findViewById(R.id.addBenfButton);
 
@@ -342,8 +342,8 @@ public class PlantacaoActivity extends AppCompatActivity {
 
     public void returnToCadastro(){
 
-        db.addPlant(plants);
-        db.addDoc(docs);
+        db.updateRegisterDoc(docs, idProp);
+        db.updateRegisterPlants(plants, idProp);
 
         Intent intent = new Intent(PlantacaoActivity.this, CadastroActivity.class);
         intent.putExtra("tipo", "edit");

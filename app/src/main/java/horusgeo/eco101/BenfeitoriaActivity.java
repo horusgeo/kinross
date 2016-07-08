@@ -64,8 +64,8 @@ public class BenfeitoriaActivity extends AppCompatActivity {
         Log.d("Benfeitorias", "benfs size = " + benfs.size());
         Log.d("Benfeitorias", "docs size = " + docs.size());
 
-        db.removeBenfeitorias(idProp);
-        db.removeDocs(idProp);
+//        db.removeBenfeitorias(idProp);
+//        db.removeDocs(idProp);
 
         benfAddButton = (ImageButton) findViewById(R.id.addBenfButton);
 
@@ -441,8 +441,9 @@ public class BenfeitoriaActivity extends AppCompatActivity {
 
     public void returnToCadastro(){
 
-        db.addBenf(benfs);
-        db.addDoc(docs);
+
+        db.updateRegisterDoc(docs, idProp);
+        db.updateRegisterBenf(benfs, idProp);
 
         Intent intent = new Intent(BenfeitoriaActivity.this, CadastroActivity.class);
         intent.putExtra("tipo", "edit");

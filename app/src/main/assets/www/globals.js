@@ -18,6 +18,8 @@ var pinMarker;
 var popup;
 
 var poseMarker;
+var locateFlag=0;
+
 
 
 

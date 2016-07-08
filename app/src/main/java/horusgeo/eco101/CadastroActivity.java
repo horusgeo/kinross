@@ -150,9 +150,9 @@ public class CadastroActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         cadastro = new Register();
-        benfs = new ArrayList<Benfeitoria>();
+//        benfs = new ArrayList<Benfeitoria>();
         docs = new ArrayList<Docs>();
-        plants = new ArrayList<Benfeitoria>();
+//        plants = new ArrayList<Benfeitoria>();
 
         db = new DBHandler(this, null, null, 1);
 
@@ -180,9 +180,6 @@ public class CadastroActivity extends AppCompatActivity {
             Log.d("HorusGeo", String.valueOf(docs.size()));
             setTitle(cadastro.get_nome_proprietario());
             idBck = cadastro.get_id_prop();
-            db.removeBenfeitorias(text1);
-            db.removePlant(text1);
-            db.removeDocs(text1);
             editTable = true;
         }
 
@@ -235,6 +232,9 @@ public class CadastroActivity extends AppCompatActivity {
                                 break;
                             case 11:
                                 loadCadastroObs();
+                                break;
+                            case 12:
+                                saveCadastroToBenfsPlants();
                                 break;
                         }
                     }
@@ -685,6 +685,8 @@ public class CadastroActivity extends AppCompatActivity {
                     break;
             }
         }
+
+        idPropBenf = cadastro.get_id_prop();
 
     }
 
@@ -1293,8 +1295,6 @@ public class CadastroActivity extends AppCompatActivity {
             db.addEndObj(cadastro);
             db.addIdProp(cadastro);
             db.addDesc(cadastro);
-            db.addBenf(benfs);
-            db.addPlant(plants);
             db.addDoc(docs);
         }
     }
