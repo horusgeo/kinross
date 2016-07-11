@@ -750,24 +750,31 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void updateRegisterPins(Register cadastro, String idBck){
 
+        ArrayList<Double> lat;
+        ArrayList<Double> lng;
+
+        if(cadastro.get_id_prop().equals(idBck)) {
+            lat = getLats(cadastro.get_id_prop());
+            lng = getLngs(cadastro.get_id_prop());
+            removePins(cadastro.get_id_prop());
+        } else {
+            lat = getLats(idBck);
+            lng = getLngs(idBck);
+            removePins(idBck);
+        }
         ContentValues values = new ContentValues();
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        int tam = cadastro.getLat().size();
+        int tam = lat.size();
 
         for(int i = 0; i < tam; i++){
-            values.put(LAT, String.valueOf(cadastro.getLat().get(i)));
-            values.put(LNG, String.valueOf(cadastro.getLng().get(i)));
+            values.put(LAT, String.valueOf(lat.get(i)));
+            values.put(LNG, String.valueOf(lng.get(i)));
             values.put(TYPE_LATLNG, cadastro.getTipoLatLng());
             values.put(TEXT_LATLNG, cadastro.get_nome_proprietario());
             values.put(ID_LATLNG, cadastro.get_id_prop());
-
-            if(cadastro.get_id_prop().equals(idBck)){
-                db.update(TABLE_LATLNG, values, ID_LATLNG + "=" + cadastro.get_id_prop(), null);
-            } else {
-                db.update(TABLE_LATLNG, values, ID_LATLNG + "=" + idBck, null);
-            }
+            db.insert(TABLE_LATLNG, null, values);
 
         }
 
@@ -1695,6 +1702,12 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void removePins(String idProp){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(TABLE_LATLNG, ID_LATLNG + " = " + idProp, null);
+        db.close();
+    }
+
     public void removeDoc(String file){
         SQLiteDatabase db = this.getReadableDatabase();
         db.delete(TABLE_DOCS, PATH + " = " + file, null);
@@ -1712,13 +1725,27 @@ public class DBHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(query, null);
 
+        if(cursor.moveToFirst()){
+            do{
+                lats.add(Double.parseDouble(cursor.getString(0)));
+            }while(cursor.moveToNext());
+        }
+        db.close();
+        return lats;
+    }
 
-        int count = 0;
+    public ArrayList<Double> getLats(String idProp){
+        ArrayList<Double> lats = new ArrayList<Double>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT " + LAT + " FROM " + TABLE_LATLNG + " WHERE " + ID_LATLNG + " = " + idProp;
+
+        Cursor cursor = db.rawQuery(query, null);
 
         if(cursor.moveToFirst()){
             do{
                 lats.add(Double.parseDouble(cursor.getString(0)));
-                count++;
             }while(cursor.moveToNext());
         }
         db.close();
@@ -1734,12 +1761,27 @@ public class DBHandler extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(query, null);
 
-        int count = 0;
+        if(cursor.moveToFirst()){
+            do{
+                lngs.add(Double.parseDouble(cursor.getString(0)));
+            }while(cursor.moveToNext());
+        }
+        db.close();
+        return lngs;
+    }
+
+    public ArrayList<Double> getLngs(String idProp){
+        ArrayList<Double> lngs = new ArrayList<Double>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT " + LNG + " FROM " + TABLE_LATLNG + " WHERE " + ID_LATLNG + " = " + idProp;
+
+        Cursor cursor = db.rawQuery(query, null);
 
         if(cursor.moveToFirst()){
             do{
                 lngs.add(Double.parseDouble(cursor.getString(0)));
-                count++;
             }while(cursor.moveToNext());
         }
         db.close();
@@ -1797,6 +1839,9 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         cursor.moveToFirst();
+
+        if(cursor.getString(0) == null)
+            return 0;
 
         return Integer.valueOf(cursor.getString(0));
 

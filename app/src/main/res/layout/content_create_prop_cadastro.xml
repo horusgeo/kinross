@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="horusgeo.eco101.CreatePropCadastroActivity"
+    tools:showIn="@layout/activity_create_prop_cadastro">
+
+
+    <WebView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/mapView"
+        android:layout_centerHorizontal="true"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+    <!--android:layout_marginTop="65dp" />-->
+
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/poseFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_colorNormal="@color/transparente"
+        fab:fab_title="Desenhar Propriedade"
+        fab:fab_colorPressed="@color/transparente"
+        fab:fab_icon="@mipmap/ic_my_location_black_48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp" />
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/pointsCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@mipmap/ic_clear_white_24dp"
+        fab:fab_colorNormal="@color/red"
+        fab:fab_colorPressed="@color/red_pressed"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp" />
+
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/pointsNew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@mipmap/ic_place_white_24dp"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/colorPrimaryDark"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp" />
+
+    <com.getbase.floatingactionbutton.FloatingActionButton
+        android:id="@+id/pointsOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fab:fab_icon="@mipmap/ic_done_white_24dp"
+        fab:fab_colorNormal="@color/green"
+        fab:fab_colorPressed="@color/green_pressed"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp" />
+
+
+</RelativeLayout>

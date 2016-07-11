@@ -35,9 +35,6 @@ public class MappingActivity extends AppCompatActivity {
 
     WebView myWebView;
 
-    LatLngPoints points[];
-    int pointCount = 1;
-
     FloatingActionButton fabPoints;
     FloatingActionButton fabRegua;
     FloatingActionButton fabPin;
@@ -136,6 +133,9 @@ public class MappingActivity extends AppCompatActivity {
                 fabPose.setVisibility(View.INVISIBLE);
                 fabPose.setClickable(false);
 
+                fabReturn.setVisibility(View.INVISIBLE);
+                fabReturn.setClickable(false);
+
                 fabPointsCancel.setVisibility(View.VISIBLE);
                 fabPointsCancel.setClickable(true);
 
@@ -165,6 +165,9 @@ public class MappingActivity extends AppCompatActivity {
                 fabPose.setVisibility(View.VISIBLE);
                 fabPose.setClickable(true);
 
+                fabReturn.setVisibility(View.VISIBLE);
+                fabReturn.setClickable(true);
+
                 fabPointsCancel.setVisibility(View.INVISIBLE);
                 fabPointsCancel.setClickable(false);
 
@@ -190,6 +193,9 @@ public class MappingActivity extends AppCompatActivity {
                 fabPose.setVisibility(View.VISIBLE);
                 fabPose.setClickable(true);
 
+                fabReturn.setVisibility(View.VISIBLE);
+                fabReturn.setClickable(true);
+
                 fabPointsCancel.setVisibility(View.INVISIBLE);
                 fabPointsCancel.setClickable(false);
 
@@ -208,8 +214,13 @@ public class MappingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 fabMenu.collapse();
                 fabMenu.setClickable(false);
+
                 fabPose.setVisibility(View.INVISIBLE);
                 fabPose.setClickable(false);
+
+                fabReturn.setVisibility(View.INVISIBLE);
+                fabReturn.setClickable(false);
+
                 fabReguaCancel.setVisibility(View.VISIBLE);
                 fabReguaCancel.setClickable(true);
                 clickRegua(true);
@@ -221,9 +232,15 @@ public class MappingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 fabReguaCancel.setVisibility(View.INVISIBLE);
                 fabReguaCancel.setClickable(false);
+
                 fabMenu.setClickable(true);
+
                 fabPose.setVisibility(View.VISIBLE);
                 fabPose.setClickable(true);
+
+                fabReturn.setVisibility(View.VISIBLE);
+                fabReturn.setClickable(true);
+
                 clickRegua(false);
             }
         });
@@ -236,6 +253,9 @@ public class MappingActivity extends AppCompatActivity {
 
                 fabPose.setVisibility(View.INVISIBLE);
                 fabPose.setClickable(false);
+
+                fabReturn.setVisibility(View.INVISIBLE);
+                fabReturn.setClickable(false);
 
                 fabPinOk.setVisibility(View.VISIBLE);
                 fabPinOk.setClickable(true);
@@ -365,13 +385,6 @@ public class MappingActivity extends AppCompatActivity {
             }
         }
 
-//        File f = new File(Environment.getExternalStorageDirectory().getPath());
-//        File file[] = f.listFiles();
-//        for(File temp : file){
-//            Log.d("HorusGeo", temp.getPath());
-//        }
-
-//        myWebView.loadUrl("javascript:loadImg('"+ Environment.getExternalStorageDirectory() +"')");
         myWebView.loadUrl("javascript:loadImg('/storage/extSdCard/www')");
         myWebView.loadUrl("javascript:addProp()");
 
@@ -485,6 +498,9 @@ public class MappingActivity extends AppCompatActivity {
         fabPose.setVisibility(View.VISIBLE);
         fabPose.setClickable(true);
 
+        fabReturn.setVisibility(View.VISIBLE);
+        fabReturn.setClickable(true);
+
         fabPinOk.setVisibility(View.INVISIBLE);
         fabPinOk.setClickable(false);
 
@@ -506,11 +522,6 @@ public class MappingActivity extends AppCompatActivity {
             myWebView.loadUrl("javascript:clickRegua()");
         else
             myWebView.loadUrl("javascript:closeRegua()");
-    }
-
-    public class LatLngPoints{
-        public double lat;
-        public double lng;
     }
 
 }

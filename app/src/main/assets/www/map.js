@@ -1,13 +1,13 @@
 myMap = L.map('mapDiv',{}).setView([-19.315, -43.636], 15);
 //myMap = L.map('mapDiv',{});
 
-L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-}).addTo(myMap);
+//L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+//    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+//}).addTo(myMap);
 
 
 myMap.attributionControl.setPosition('bottomleft');
-L.control.scale().addTo(myMap);
+//L.control.scale().addTo(myMap);
 
 /* *********************** LOCATE *********************** */
 
@@ -58,7 +58,6 @@ function findLocation(){
 
 function loadImg(imgPath){
 
-    console.log(imgPath);
 
     var options = {
                 minZoom: 0,
@@ -69,7 +68,6 @@ function loadImg(imgPath){
 
     var path = imgPath + '/{z}/{x}/{y}.png';
 
-    console.log(path);
 
     L.tileLayer(path, options).addTo(myMap);
     //L.tileLayer('{z}/{x}/{y}.png', options).addTo(myMap);
@@ -78,9 +76,9 @@ function loadImg(imgPath){
 /* *********************** Load KML *********************** */
 
 var runLayer = omnivore.kml('./kml/fd.kml')
-//    .on('ready', function() {
-//         myMap.fitBounds(runLayer.getBounds());
-//    })
+    .on('ready', function() {
+         myMap.fitBounds(runLayer.getBounds());
+    })
     .addTo(myMap);
 
 

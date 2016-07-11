@@ -64,7 +64,11 @@
             android:name=".DocumentosActivity"
             android:label="Documentos"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CreatePropCadastroActivity"
+            android:label="@string/title_activity_create_prop_cadastro"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
