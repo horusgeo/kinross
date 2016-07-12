@@ -130,11 +130,9 @@ public class CadastroActivity extends AppCompatActivity {
     private static final int CAPTURE_IMAGE_CCIR = 130;
     private static final int CAPTURE_IMAGE_ITR = 131;
 
-
     private static Uri fileUri;
 
     static ImageHelper imgPhoto;
-
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -162,7 +160,6 @@ public class CadastroActivity extends AppCompatActivity {
 
         String tipo = intent.getStringExtra("tipo");
         String text1 = intent.getStringExtra("string");
-        String user = intent.getStringExtra("user");
 
         if(tipo.equals("new")){
             setTitle(text1);
@@ -181,6 +178,7 @@ public class CadastroActivity extends AppCompatActivity {
             setTitle(cadastro.get_nome_proprietario());
             idBck = cadastro.get_id_prop();
             editTable = true;
+
         }
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -550,7 +548,8 @@ public class CadastroActivity extends AppCompatActivity {
                     mapButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), MappingActivity.class);
+
+                            Intent intent = new Intent(getActivity(), CreatePropCadastroActivity.class);
                             intent.putExtra("id", idPropBenf);
                             startActivity(intent);
                         }
@@ -788,10 +787,10 @@ public class CadastroActivity extends AppCompatActivity {
         if(cadastro.get_possProp()!=null){
             switch (cadastro.get_possProp()){
                 case "1":
-                    est.check(R.id.possRadioButton);
+                    pos.check(R.id.possRadioButton);
                     break;
                 case "2":
-                    est.check(R.id.propRadioButton);
+                    pos.check(R.id.propRadioButton);
                     break;
             }
         }
@@ -1176,7 +1175,7 @@ public class CadastroActivity extends AppCompatActivity {
                     checkBox = (CheckBox) findViewById(R.id.checkListIDHerd);
                     break;
                 case CAPTURE_IMAGE_CPF_HERD:
-                    checkBox = (CheckBox) findViewById(R.id.checkListCPFProp);
+                    checkBox = (CheckBox) findViewById(R.id.checkListCPFHerd);
                     break;
                 case CAPTURE_IMAGE_PART_HERD:
                     checkBox = (CheckBox) findViewById(R.id.checkListPartHerd);
@@ -1257,6 +1256,8 @@ public class CadastroActivity extends AppCompatActivity {
             saveCadastroIdProp();
         if(tabSelected==9)
             saveCadastroDesc();
+        if(tabSelected==11)
+            saveCadastroObs();
         Intent intent = new Intent(CadastroActivity.this, InitialActivity.class);
 
         Log.d("HorusGeo", "save: " + String.valueOf(docs.size()));
@@ -1276,6 +1277,7 @@ public class CadastroActivity extends AppCompatActivity {
             db.addBenf(benfs);
             db.addPlant(plants);
             db.addDoc(docs);
+            db.addObs(cadastro);
             intent.putExtra("tipo", "ok");
             intent.putExtra("texto", "Cadastro atualizado com sucesso!");
         }
@@ -1296,6 +1298,7 @@ public class CadastroActivity extends AppCompatActivity {
             db.addIdProp(cadastro);
             db.addDesc(cadastro);
             db.addDoc(docs);
+            db.addObs(cadastro);
         }
     }
 

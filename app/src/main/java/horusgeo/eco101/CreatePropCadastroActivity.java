@@ -1,12 +1,17 @@
 package horusgeo.eco101;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
@@ -14,6 +19,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +40,8 @@ public class CreatePropCadastroActivity extends AppCompatActivity {
     DBHandler db;
 
     Register cadastro;
+
+    Boolean criarProp = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +75,7 @@ public class CreatePropCadastroActivity extends AppCompatActivity {
 
             @Override
             public void onPageFinished(WebView view, String url){
-                populateMap();
+                callCheckDialog();
             }
         });
 
@@ -79,27 +87,104 @@ public class CreatePropCadastroActivity extends AppCompatActivity {
             }
         });
 
+        myWebView.addJavascriptInterface(new WebAppInterface(this), "Android");
+
+        fabPointsCancel = (FloatingActionButton) findViewById(R.id.pointsCancel);
+        fabPointsNew = (FloatingActionButton) findViewById(R.id.pointsNew);
+        fabPointsOk = (FloatingActionButton) findViewById(R.id.pointsOk);
+        fabPose = (FloatingActionButton) findViewById(R.id.poseFab);
+
+
         fabPointsNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickPoints(1);
+                myWebView.loadUrl("javascript:clickPoints()");
             }
         });
 
         fabPointsOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickPoints(2);
+                Integer tipo;
+                if(cadastro.getTipoLatLng()!=null)
+                    tipo = Integer.parseInt(cadastro.getTipoLatLng());
+                else
+                    tipo = 1;
+                myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + tipo + ")");
             }
         });
 
         fabPointsCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickPoints(3);
+                myWebView.loadUrl("javascript:clearPoints()");
+                Intent intent = new Intent(CreatePropCadastroActivity.this, CadastroActivity.class);
+                intent.putExtra("tipo", "edit");
+                intent.putExtra("string", idProp);
+                startActivity(intent);
+
             }
         });
 
+        fabPose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myWebView.loadUrl("javascript:findLocation()");
+            }
+        });
+
+
+
+    }
+
+    private void callCheckDialog(){
+
+        if(db.hasLatLng(idProp)){
+            AlertDialog.Builder builder = new AlertDialog.Builder(CreatePropCadastroActivity.this);
+            //builder.setTitle("!!! ATENÇÃO !!!");
+            builder.setMessage("Este proprietário já possui uma propriedade cadastrada!\n" +
+                    "Você deseja MANTER esta propriedade ou CRIAR uma nova?")
+                    .setPositiveButton("CRIAR", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            fabPointsCancel.setVisibility(View.INVISIBLE);
+                            fabPointsCancel.setClickable(false);
+
+                            db.removePins(idProp);
+                            populateMap();
+                            dialog.dismiss();
+
+                        }
+                    })
+                    .setNegativeButton("MANTER", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            fabPointsNew.setVisibility(View.INVISIBLE);
+                            fabPointsNew.setClickable(false);
+
+                            fabPointsOk.setVisibility(View.INVISIBLE);
+                            fabPointsOk.setClickable(false);
+                            criarProp = false;
+                            populateMap();
+                            dialog.dismiss();
+                        }
+                    });
+            TextView title = new TextView(CreatePropCadastroActivity.this);
+            title.setText("!!! ATENÇÃO !!!");
+            title.setGravity(Gravity.CENTER_HORIZONTAL);
+            title.setTextSize(30);
+            title.setTextColor(Color.RED);
+
+            builder.setCustomTitle(title);
+
+            Dialog d = builder.show();
+
+            TextView textView = (TextView) d.findViewById(android.R.id.message);
+
+            textView.setGravity(Gravity.CENTER);
+
+
+        }else{
+            populateMap();
+        }
 
 
     }
@@ -131,6 +216,12 @@ public class CreatePropCadastroActivity extends AppCompatActivity {
             cadastro.setLng(lngs);
 
             db.addLatLng(cadastro);
+
+            Intent intent = new Intent(CreatePropCadastroActivity.this, CadastroActivity.class);
+            intent.putExtra("tipo", "edit");
+            intent.putExtra("string", idProp);
+            startActivity(intent);
+
         }
     }
 
@@ -143,8 +234,9 @@ public class CreatePropCadastroActivity extends AppCompatActivity {
         ArrayList<String> texts = db.getTexts();
         String idBck = "a";
 
-
         int tam = lat.size();
+
+        myWebView.loadUrl("javascript:removeLayers()");
 
         for (int i = 0; i < tam; i++){
             if(ids.get(i).equals("-1")){
@@ -160,32 +252,11 @@ public class CreatePropCadastroActivity extends AppCompatActivity {
         }
 
         myWebView.loadUrl("javascript:loadImg('/storage/extSdCard/www')");
+        myWebView.loadUrl("javascript:loadKml()");
         myWebView.loadUrl("javascript:addProp()");
 
-        myWebView.loadUrl("javascript:startPoints()");
-
-    }
-
-    private void clickPoints(Integer which){
-
-        Integer tipo;
-
-        if(cadastro.getTipoLatLng()!=null)
-            tipo = Integer.parseInt(cadastro.getTipoLatLng());
-        else
-            tipo = 1;
-
-        switch (which){
-            case 1:
-                myWebView.loadUrl("javascript:clickPoints()");
-                break;
-            case 2:
-                myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + tipo + ")");
-                break;
-            case 3:
-                myWebView.loadUrl("javascript:clearPoints()");
-                break;
-        }
+        if(criarProp)
+            myWebView.loadUrl("javascript:startPoints()");
 
     }
 

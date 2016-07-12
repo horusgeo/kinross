@@ -37,8 +37,11 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String TABLE_DOCS = "documentos";
     private static final String TABLE_LATLNG = "latlng";
     private static final String TABLE_OBS = "observacao";
+    private static final String TABLE_USER = "users";
 
     private static final String ID = "_id";
+
+    private static final String USER = "user";
 
     private static final String NOME_PROJETO = "nome_projeto";
     private static final String ID_PROPRIETARIO = "id_proprietario";
@@ -287,6 +290,13 @@ public class DBHandler extends SQLiteOpenHelper {
                 ID_OBS + " TEXT" +
                 ")";
         db.execSQL(CREATE_OBS_TABLE);
+
+        String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "(" +
+                ID + " INTEGER PRIMARY KEY," +
+                USER + " TEXT" +
+                ")";
+        db.execSQL(CREATE_USER_TABLE);
+
     }
 
     @Override
@@ -303,6 +313,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLANT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LATLNG);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OBS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         onCreate(db);
     }
 
@@ -577,6 +588,7 @@ public class DBHandler extends SQLiteOpenHelper {
         updateRegisterBenf(cadastro, benf, idBck);
         updateRegisterPlant(cadastro, plants, idBck);
         updateRegisterDoc(cadastro, docs, idBck);
+        updateRegisterObs(cadastro, idBck);
 
     }
 
@@ -1844,6 +1856,51 @@ public class DBHandler extends SQLiteOpenHelper {
             return 0;
 
         return Integer.valueOf(cursor.getString(0));
+
+    }
+
+    public Boolean hasLatLng(String idProp){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_LATLNG + " WHERE " + ID_LATLNG + " = " + idProp;
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.getCount() > 0)
+            return true;
+
+        return false;
+
+    }
+
+    public void setUser(String user){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_USER, null, null);
+
+        ContentValues values = new ContentValues();
+
+        values.put(USER, user);
+
+        db.insert(TABLE_USER, null, values);
+        db.close();
+
+    }
+
+    public String getUser(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_USER;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+        String user = cursor.getString(1);
+
+        db.close();
+        return user;
 
     }
 

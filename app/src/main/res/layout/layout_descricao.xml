@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/descricaoText"
             android:layout_gravity="center_horizontal"
-            android:inputType="textCapSentences|textImeMultiLine|text"
+            android:inputType="textCapSentences|textImeMultiLine|text|textMultiLine"
             android:imeOptions="actionDone"/>
 
         <Space

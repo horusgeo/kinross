@@ -17,9 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,8 +39,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -55,6 +60,8 @@ public class InitialActivity extends AppCompatActivity {
     String tipo;
     String texto;
     String user;
+
+    Register cadastro;
 
 
 
@@ -75,7 +82,12 @@ public class InitialActivity extends AppCompatActivity {
         Intent intent = getIntent();
         tipo = intent.getStringExtra("tipo");
         texto = intent.getStringExtra("texto");
-        user = intent.getStringExtra("user");
+
+        db = new DBHandler(this, null, null, 1);
+
+        user = db.getUser();
+
+        Log.d("HorusGeo", user);
 
         warnInitialText = (TextView) findViewById(R.id.warnInitialText);
 
@@ -90,8 +102,7 @@ public class InitialActivity extends AppCompatActivity {
             warnInitialText.setTextColor(Color.RED);
         }
 
-
-        db = new DBHandler(this, null, null, 1);
+        cadastro = new Register();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,11 +116,10 @@ public class InitialActivity extends AppCompatActivity {
         addCadastro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(InitialActivity.this, CadastroActivity.class);
-                intent.putExtra("tipo", "new");
-                intent.putExtra("string", "Novo Cadatro");
-                intent.putExtra("user", user);
-                startActivity(intent);
+
+                callPropDialog();
+
+
             }
         });
 
@@ -226,7 +236,6 @@ public class InitialActivity extends AppCompatActivity {
                         Intent intent = new Intent(InitialActivity.this, CadastroActivity.class);
                         intent.putExtra("tipo", "edit");
                         intent.putExtra("string", strName);
-                        intent.putExtra("user", user);
                         startActivity(intent);
                     }
                 });
@@ -269,6 +278,56 @@ public class InitialActivity extends AppCompatActivity {
                 });
         builderSingle.show();
 
+    }
+
+    private void callPropDialog(){
+        final AlertDialog.Builder builderSingle = new AlertDialog.Builder(InitialActivity.this);
+        builderSingle.setTitle("Defina o nome e o número de identificação do proprietário:");
+        builderSingle.setCancelable(false);
+        LayoutInflater inflater = getLayoutInflater();
+        final View rootView = inflater.inflate(R.layout.latlng_dialog, null);
+        final EditText nameText = (EditText) rootView.findViewById(R.id.latlngNameText);;
+        final EditText idText = (EditText) rootView.findViewById(R.id.latlngIdText);
+
+        builderSingle.setView(rootView);
+
+        builderSingle.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (nameText.getText().toString().equals("")) {
+                    callPropDialog();
+                } else if (idText.getText().toString().equals("")) {
+                    callPropDialog();
+                } else {
+                    cadastro.set_nome_proprietario(nameText.getText().toString());
+                    cadastro.set_id_prop(idText.getText().toString());
+                    cadastro.set_data_visita(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));
+                    cadastro.set_horario_chegada(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));
+                    cadastro.set_responsavel(Responsavel.TESTE);
+                    db.addRegister(cadastro);
+                    db.addProp(cadastro);
+                    db.addConj(cadastro);
+                    db.addEndRes(cadastro);
+                    db.addEndObj(cadastro);
+                    db.addIdProp(cadastro);
+                    db.addDesc(cadastro);
+                    db.addObs(cadastro);
+
+                    Intent intent = new Intent(InitialActivity.this, CadastroActivity.class);
+                    intent.putExtra("tipo", "edit");
+                    intent.putExtra("string", cadastro.get_id_prop());
+                    startActivity(intent);
+
+                }
+            }
+        });
+        builderSingle.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
     }
 
 
@@ -335,7 +394,7 @@ public class InitialActivity extends AppCompatActivity {
                     inputStream.close();
                     count++;
                     progress = 100*(count/numFiles);
-
+                    Log.d("HorusGeo", name[name.length-1]);
                     Log.d("HorusGeo", "progress = " + progress);
                     publishProgress((int)(progress));
                 }

@@ -1,10 +1,15 @@
 myMap = L.map('mapDiv',{}).setView([-19.315, -43.636], 15);
 //myMap = L.map('mapDiv',{});
 
-//L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-//    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-//}).addTo(myMap);
 
+
+function removeLayers(){
+
+    myMap.eachLayer(function(layer){
+        myMap.removeLayer(layer);
+    });
+
+}
 
 myMap.attributionControl.setPosition('bottomleft');
 //L.control.scale().addTo(myMap);
@@ -75,12 +80,17 @@ function loadImg(imgPath){
 }
 /* *********************** Load KML *********************** */
 
-var runLayer = omnivore.kml('./kml/fd.kml')
-    .on('ready', function() {
-         myMap.fitBounds(runLayer.getBounds());
-    })
-    .addTo(myMap);
+function loadKml(){
+    var runLayer = omnivore.kml('./kml/fd.kml')
+        .on('ready', function() {
+            myMap.fitBounds(runLayer.getBounds());
+        }).addTo(myMap);
 
+//    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+//        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+//        opacity: 0.2,
+//    }).addTo(myMap);
+}
 
 
 /* *********************** Click Points *********************** */
@@ -279,3 +289,4 @@ function addProp(){
     }
 
 }
+

@@ -57,9 +57,9 @@ public class PlantacaoActivity extends AppCompatActivity {
 //        db.removePlant(idProp);
 //        db.removeDocs(idProp);
 
-        plantAddButton = (ImageButton) findViewById(R.id.addBenfButton);
+        plantAddButton = (ImageButton) findViewById(R.id.addPlantsButton);
 
-        plantsLayout = (LinearLayout) findViewById(R.id.benfsVertLayout);
+        plantsLayout = (LinearLayout) findViewById(R.id.plantsVertLayout);
 
         imgPhoto = new ImageHelper();
 

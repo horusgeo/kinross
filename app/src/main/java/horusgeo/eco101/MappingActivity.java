@@ -296,13 +296,11 @@ public class MappingActivity extends AppCompatActivity {
                     Intent intent = new Intent(MappingActivity.this, InitialActivity.class);
                     intent.putExtra("tipo", "ok");
                     intent.putExtra("texto", "Mapa atualizado!");
-                    intent.putExtra("user", "");
                     startActivity(intent);
                 }else{
                     Intent intent = new Intent(MappingActivity.this, CadastroActivity.class);
                     intent.putExtra("tipo", "edit");
                     intent.putExtra("string", idProp);
-                    intent.putExtra("user", "");
                     startActivity(intent);
                 }
             }
@@ -372,6 +370,8 @@ public class MappingActivity extends AppCompatActivity {
 
         int tam = lat.size();
 
+        myWebView.loadUrl("javascript:removeLayers()");
+
         for (int i = 0; i < tam; i++){
             if(ids.get(i).equals("-1")){
                 myWebView.loadUrl("javascript:populatePin('" + texts.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + " )");
@@ -386,6 +386,7 @@ public class MappingActivity extends AppCompatActivity {
         }
 
         myWebView.loadUrl("javascript:loadImg('/storage/extSdCard/www')");
+        myWebView.loadUrl("javascript:loadKml()");
         myWebView.loadUrl("javascript:addProp()");
 
     }
