@@ -108,7 +108,7 @@ public class InitialActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(InitialActivity.this, MappingActivity.class);
-                intent.putExtra("id", "-1");
+                intent.putExtra("idProp", "-1");
                 startActivity(intent);
             }
         });

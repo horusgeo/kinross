@@ -150,12 +150,12 @@
                 android:layout_weight="0.8"
                 android:imeOptions="actionNext"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/identPhotoButton"
-                android:src="@mipmap/ic_photo_camera_black_36dp"
-                android:background="@android:color/transparent" />
+            <!--<ImageButton-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/identPhotoButton"-->
+                <!--android:src="@mipmap/ic_photo_camera_black_36dp"-->
+                <!--android:background="@android:color/transparent" />-->
 
         </LinearLayout>
 
@@ -194,12 +194,12 @@
                 android:layout_weight="0.003"
                 android:imeOptions="actionNext"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/cpfPhotoButton"
-                android:src="@mipmap/ic_photo_camera_black_36dp"
-                android:background="@android:color/transparent" />
+            <!--<ImageButton-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/cpfPhotoButton"-->
+                <!--android:src="@mipmap/ic_photo_camera_black_36dp"-->
+                <!--android:background="@android:color/transparent" />-->
         </LinearLayout>
 
         <Space
@@ -316,36 +316,36 @@
             android:layout_height="20dp"
             android:layout_gravity="center_horizontal" />
 
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/horizontalScrollView"
-            android:layout_gravity="center_horizontal" >
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/idPropLayout"></LinearLayout>
-        </HorizontalScrollView>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_gravity="center_horizontal" />
-
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/horizontalScrollView2"
-            android:layout_gravity="center_horizontal" >
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/cpfPropLayout"></LinearLayout>
-        </HorizontalScrollView>
+        <!--<HorizontalScrollView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/horizontalScrollView"-->
+            <!--android:layout_gravity="center_horizontal" >-->
+<!---->
+            <!--<LinearLayout-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/idPropLayout"></LinearLayout>-->
+        <!--</HorizontalScrollView>-->
+<!---->
+        <!--<Space-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:layout_gravity="center_horizontal" />-->
+<!---->
+        <!--<HorizontalScrollView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/horizontalScrollView2"-->
+            <!--android:layout_gravity="center_horizontal" >-->
+<!---->
+            <!--<LinearLayout-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/cpfPropLayout"></LinearLayout>-->
+        <!--</HorizontalScrollView>-->
     </LinearLayout>
 
 </ScrollView>

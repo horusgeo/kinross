@@ -111,7 +111,8 @@ public class PlantacaoActivity extends AppCompatActivity {
     public void callAddPlantDialog(final int pose, final int arrayPose, final String ID){
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(PlantacaoActivity.this);
-        builderSingle.setTitle("Selecione o Proprietário");
+        builderSingle.setTitle("Adicionar Plantação:");
+        builderSingle.setCancelable(false);
 
         LayoutInflater inflater = this.getLayoutInflater();
         final View rootView = inflater.inflate(R.layout.plant_dialog, null);

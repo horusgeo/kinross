@@ -69,7 +69,7 @@ public class MappingActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        idProp = intent.getStringExtra("id");
+        idProp = intent.getStringExtra("idProp");
 
         db = new DBHandler(this, null, null, 1);
 

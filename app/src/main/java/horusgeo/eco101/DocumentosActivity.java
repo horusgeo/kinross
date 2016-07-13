@@ -44,9 +44,9 @@ public class DocumentosActivity extends AppCompatActivity {
         final String idProp = intent.getStringExtra("idProp");
 
         db = new DBHandler(this, null, null, 1);
-        docs = db.getDBDocs(idProp);
+        docs = new ArrayList<Docs>();
 
-        db.removeDocs(idProp);
+        docs = db.getDocs(idProp);
 
         spinner = (Spinner) findViewById(R.id.docSpinner);
 
@@ -59,11 +59,10 @@ public class DocumentosActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.addDoc(docs);
+                db.updateRegisterDoc(docs, idProp);
                 Intent intent = new Intent(DocumentosActivity.this, CadastroActivity.class);
                 intent.putExtra("tipo", "edit");
                 intent.putExtra("string", idProp);
-                intent.putExtra("user", "");
                 startActivity(intent);
             }
         });
@@ -81,8 +80,10 @@ public class DocumentosActivity extends AppCompatActivity {
         final List<String> list = new ArrayList<String>();
         for(Docs temp : docs){
             Integer id = FotoTypes.CODES.indexOf(Integer.parseInt(temp.getType()));
-            if(!list.contains(FotoTypes.NAMES.get(id)))
-                list.add(FotoTypes.NAMES.get(id));
+            if(id>=0) {
+                if (!list.contains(FotoTypes.NAMES.get(id)))
+                    list.add(FotoTypes.NAMES.get(id));
+            }
         }
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,list);

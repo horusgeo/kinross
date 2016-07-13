@@ -132,7 +132,8 @@ public class BenfeitoriaActivity extends AppCompatActivity {
     public void callAddBenfDialog(final int pose, final int arrayPose, final String ID){
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(BenfeitoriaActivity.this);
-        builderSingle.setTitle("Selecione o Proprietário");
+        builderSingle.setTitle("Adicionar Benfeitoria:");
+        builderSingle.setCancelable(false);
 
         LayoutInflater inflater = this.getLayoutInflater();
         final View rootView = inflater.inflate(R.layout.benf_dialog, null);

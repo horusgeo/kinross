@@ -25,19 +25,22 @@
         android:layout_height="wrap_content"
         android:id="@+id/logoEco101"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/logoeco101" />
+        android:src="@drawable/eco101_trans" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
 
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
 
             <android.support.design.widget.TextInputLayout
@@ -85,5 +88,32 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:id="@+id/imageView3"
+            android:src="@drawable/logoquadrado"
+            android:maxHeight="200dp"
+            android:maxWidth="200dp"
+            android:layout_weight="0.5" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:id="@+id/imageView4"
+            android:src="@drawable/logotransp"
+            android:layout_weight="0.5"
+            android:maxHeight="200dp" />
+    </LinearLayout>
 
 </LinearLayout>

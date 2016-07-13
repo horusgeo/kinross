@@ -214,26 +214,26 @@ public class CadastroActivity extends AppCompatActivity {
                             case 6:
                                 loadCadastroIdProp();
                                 break;
+//                            case 7:
+//                                saveCadastroToBenfsPlants();
+//                                loadCadastroBenf();
+//                                break;
+//                            case 8:
+//                                saveCadastroToBenfsPlants();
+//                                loadCadastroPlant();
+//                                break;
                             case 7:
-                                saveCadastroToBenfsPlants();
-                                loadCadastroBenf();
-                                break;
-                            case 8:
-                                saveCadastroToBenfsPlants();
-                                loadCadastroPlant();
-                                break;
-                            case 9:
                                 loadCadastroDesc();
                                 break;
-                            case 10:
+                            case 8:
                                 loadCadastroCheckList();
                                 break;
-                            case 11:
+                            case 9:
                                 loadCadastroObs();
                                 break;
-                            case 12:
-                                saveCadastroToBenfsPlants();
-                                break;
+//                            case 12:
+//                                saveCadastroToBenfsPlants();
+//                                break;
                         }
                     }
 
@@ -260,19 +260,19 @@ public class CadastroActivity extends AppCompatActivity {
                             case 6:
                                 saveCadastroIdProp();
                                 break;
-                            case 7:
-                                saveCadastroBenf();
-                                break;
+//                            case 7:
+//                                saveCadastroBenf();
+//                                break;
+//                            case 8:
+//                                saveCadastroPlant();
+//                                break;
                             case 8:
-                                saveCadastroPlant();
-                                break;
-                            case 9:
                                 saveCadastroDesc();
                                 break;
-                            case 10:
+                            case 9:
                                 saveCadastrocheckList();
                                 break;
-                            case 11:
+                            case 10:
                                 saveCadastroObs();
                                 break;
                         }
@@ -345,10 +345,26 @@ public class CadastroActivity extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = null;
+                switch(item.getTitle().toString()){
+                    case "Documentos":
+                        intent = new Intent(CadastroActivity.this, DocumentosActivity.class);
+                        break;
+                    case "Benfeitorias":
+                        intent = new Intent(CadastroActivity.this, BenfeitoriaActivity.class);
+                        break;
+                    case "Plantações":
+                        intent = new Intent(CadastroActivity.this, PlantacaoActivity.class);
+                        break;
+                    case "Mapa":
+                        intent = new Intent(CadastroActivity.this, CreatePropCadastroActivity.class);
+                        break;
+                }
 
-                Intent intent = new Intent(CadastroActivity.this, DocumentosActivity.class);
                 intent.putExtra("idProp", cadastro.get_id_prop());
-                db.addDoc(docs);
+//                db.addDoc(docs);
+//                db.updateRegisterDoc(docs, cadastro.get_id_prop());
+                saveCadastroToBenfsPlants();
                 startActivity(intent);
 
                 return false;
@@ -419,7 +435,7 @@ public class CadastroActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings1) {
             return true;
         }
 
@@ -464,41 +480,41 @@ public class CadastroActivity extends AppCompatActivity {
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.layout_dados_prop, container, false);
-                    ImageButton idPropPhoto = (ImageButton) rootView.findViewById(R.id.identPhotoButton);
-                    ImageButton cpfPropPhoto = (ImageButton) rootView.findViewById(R.id.cpfPhotoButton);
-
-                    idPropPhoto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            takePhoto(getActivity(), CAPTURE_IMAGE_ID_PROP);
-                        }
-                    });
-
-                    cpfPropPhoto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            takePhoto(getActivity(), CAPTURE_IMAGE_CPF_PROP);
-                        }
-                    });
+//                    ImageButton idPropPhoto = (ImageButton) rootView.findViewById(R.id.identPhotoButton);
+//                    ImageButton cpfPropPhoto = (ImageButton) rootView.findViewById(R.id.cpfPhotoButton);
+//
+//                    idPropPhoto.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            takePhoto(getActivity(), CAPTURE_IMAGE_ID_PROP);
+//                        }
+//                    });
+//
+//                    cpfPropPhoto.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            takePhoto(getActivity(), CAPTURE_IMAGE_CPF_PROP);
+//                        }
+//                    });
                     break;
                 case 4:
                     rootView = inflater.inflate(R.layout.layout_dados_conj, container, false);
-                    ImageButton idConjPhoto = (ImageButton) rootView.findViewById(R.id.conjDocIdButton);
-                    ImageButton cpfConjPhoto = (ImageButton) rootView.findViewById(R.id.conjCPFButton);
-
-                    idConjPhoto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            takePhoto(getActivity(), CAPTURE_IMAGE_ID_CONJ);
-                        }
-                    });
-
-                    cpfConjPhoto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            takePhoto(getActivity(), CAPTURE_IMAGE_CPF_CONJ);
-                        }
-                    });
+//                    ImageButton idConjPhoto = (ImageButton) rootView.findViewById(R.id.conjDocIdButton);
+//                    ImageButton cpfConjPhoto = (ImageButton) rootView.findViewById(R.id.conjCPFButton);
+//
+//                    idConjPhoto.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            takePhoto(getActivity(), CAPTURE_IMAGE_ID_CONJ);
+//                        }
+//                    });
+//
+//                    cpfConjPhoto.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            takePhoto(getActivity(), CAPTURE_IMAGE_CPF_CONJ);
+//                        }
+//                    });
                     break;
                 case 5:
                     rootView = inflater.inflate(R.layout.layout_end_residencial, container, false);
@@ -509,52 +525,52 @@ public class CadastroActivity extends AppCompatActivity {
                 case 7:
                     rootView = inflater.inflate(R.layout.layout_id_prop, container, false);
                     break;
+//                case 8:
+//                    rootView = inflater.inflate(R.layout.layout_benf, container, false);
+//                    Button benfButton = (Button) rootView.findViewById(R.id.benfButton);
+//                    benfButton.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            Intent intent = new Intent(getActivity(), BenfeitoriaActivity.class);
+//                            intent.putExtra("idProp", idPropBenf);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                    break;
+//                case 9:
+//                    rootView = inflater.inflate(R.layout.layout_plant, container, false);
+//                    Button plantButton = (Button) rootView.findViewById(R.id.plantButton);
+//                    plantButton.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            Intent intent = new Intent(getActivity(), PlantacaoActivity.class);
+//                            intent.putExtra("idProp", idPropBenf);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                    break;
                 case 8:
-                    rootView = inflater.inflate(R.layout.layout_benf, container, false);
-                    Button benfButton = (Button) rootView.findViewById(R.id.benfButton);
-                    benfButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), BenfeitoriaActivity.class);
-                            intent.putExtra("idProp", idPropBenf);
-                            startActivity(intent);
-                        }
-                    });
-                    break;
-                case 9:
-                    rootView = inflater.inflate(R.layout.layout_plant, container, false);
-                    Button plantButton = (Button) rootView.findViewById(R.id.plantButton);
-                    plantButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), PlantacaoActivity.class);
-                            intent.putExtra("idProp", idPropBenf);
-                            startActivity(intent);
-                        }
-                    });
-                    break;
-                case 10:
                     rootView = inflater.inflate(R.layout.layout_descricao, container, false);
                     break;
-                case 11:
+                case 9:
                     rootView = inflater.inflate(R.layout.layout_checklist, container, false);
                     break;
-                case 12:
+                case 10:
                     rootView = inflater.inflate(R.layout.layout_obs, container, false);
                     break;
-                case 13:
-                    rootView = inflater.inflate(R.layout.layout_map, container, false);
-                    Button mapButton = (Button) rootView.findViewById(R.id.mapButtonCadastro);
-                    mapButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            Intent intent = new Intent(getActivity(), CreatePropCadastroActivity.class);
-                            intent.putExtra("id", idPropBenf);
-                            startActivity(intent);
-                        }
-                    });
-                    break;
+//                case 13:
+//                    rootView = inflater.inflate(R.layout.layout_map, container, false);
+//                    Button mapButton = (Button) rootView.findViewById(R.id.mapButtonCadastro);
+//                    mapButton.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//
+//                            Intent intent = new Intent(getActivity(), CreatePropCadastroActivity.class);
+//                            intent.putExtra("id", idPropBenf);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                    break;
                 default:
                     rootView = inflater.inflate(R.layout.layout_relatorio, container, false);
 
@@ -584,7 +600,7 @@ public class CadastroActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 13;
+            return 10;
         }
 
         @Override
@@ -604,18 +620,18 @@ public class CadastroActivity extends AppCompatActivity {
                     return "Endereço Objeto";
                 case 6:
                     return "Identificação da Propriedade";
+//                case 7:
+//                    return "Benfeitoria";
+//                case 8:
+//                    return "Plantações";
                 case 7:
-                    return "Benfeitoria";
-                case 8:
-                    return "Plantações";
-                case 9:
                     return "Descrição da Visita";
-                case 10:
+                case 8:
                     return "Check list";
-                case 11:
+                case 9:
                     return "Observações";
-                case 12:
-                    return "Mapa";
+//                case 12:
+//                    return "Mapa";
             }
             return null;
         }
@@ -799,27 +815,27 @@ public class CadastroActivity extends AppCompatActivity {
         tel1.setText(cadastro.get_tel_prop_1());
         tel2.setText(cadastro.get_tel_prop_2());
         email.setText(cadastro.get_email_prop());
-        Log.d("HorusGeo", "Docs size = " + String.valueOf(docs.size()));
+//        Log.d("HorusGeo", "Docs size = " + String.valueOf(docs.size()));
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.idPropLayout);
-        LinearLayout layout2 = (LinearLayout) findViewById(R.id.cpfPropLayout);
-
-        layout.removeAllViews();
-        layout2.removeAllViews();
-
-        if(docs.size() > 0) {
-            for (Docs temp : docs) {
-                Log.d("HorusGeo", temp.getIdProp() + " " + cadastro.get_id_prop());
-                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
-                    Log.d("HorusGeo", temp.getType() + " " + String.valueOf(CAPTURE_IMAGE_ID_PROP));
-                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_PROP))) {
-                        callAddThumb(CAPTURE_IMAGE_ID_PROP, temp.getPath());
-                    } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_PROP))) {
-                        callAddThumb(CAPTURE_IMAGE_CPF_PROP, temp.getPath());
-                    }
-                }
-            }
-        }
+//        LinearLayout layout = (LinearLayout) findViewById(R.id.idPropLayout);
+//        LinearLayout layout2 = (LinearLayout) findViewById(R.id.cpfPropLayout);
+//
+//        layout.removeAllViews();
+//        layout2.removeAllViews();
+//
+//        if(docs.size() > 0) {
+//            for (Docs temp : docs) {
+//                Log.d("HorusGeo", temp.getIdProp() + " " + cadastro.get_id_prop());
+//                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
+//                    Log.d("HorusGeo", temp.getType() + " " + String.valueOf(CAPTURE_IMAGE_ID_PROP));
+//                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_PROP))) {
+//                        callAddThumb(CAPTURE_IMAGE_ID_PROP, temp.getPath());
+//                    } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_PROP))) {
+//                        callAddThumb(CAPTURE_IMAGE_CPF_PROP, temp.getPath());
+//                    }
+//                }
+//            }
+//        }
     }
 
     void saveCadastroConj(){
@@ -863,25 +879,25 @@ public class CadastroActivity extends AppCompatActivity {
         tel1.setText(cadastro.get_tel_conj_1());
         tel2.setText(cadastro.get_tel_conj_2());
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.idConjLayout);
-        LinearLayout layout2 = (LinearLayout) findViewById(R.id.cpfConjLayout);
-
-        layout.removeAllViews();
-        layout2.removeAllViews();
-
-        if(docs.size() > 0) {
-            for (Docs temp : docs) {
-                Log.d("HorusGeo", temp.getIdProp() + " " + cadastro.get_id_prop());
-                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
-                    Log.d("HorusGeo", temp.getType() + " " + String.valueOf(CAPTURE_IMAGE_ID_CONJ));
-                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_CONJ))) {
-                        callAddThumb(CAPTURE_IMAGE_ID_CONJ, temp.getPath());
-                    } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_CONJ))) {
-                        callAddThumb(CAPTURE_IMAGE_CPF_CONJ, temp.getPath());
-                    }
-                }
-            }
-        }
+//        LinearLayout layout = (LinearLayout) findViewById(R.id.idConjLayout);
+//        LinearLayout layout2 = (LinearLayout) findViewById(R.id.cpfConjLayout);
+//
+//        layout.removeAllViews();
+//        layout2.removeAllViews();
+//
+//        if(docs.size() > 0) {
+//            for (Docs temp : docs) {
+//                Log.d("HorusGeo", temp.getIdProp() + " " + cadastro.get_id_prop());
+//                if(temp.getIdProp().equals(cadastro.get_id_prop())) {
+//                    Log.d("HorusGeo", temp.getType() + " " + String.valueOf(CAPTURE_IMAGE_ID_CONJ));
+//                    if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_ID_CONJ))) {
+//                        callAddThumb(CAPTURE_IMAGE_ID_CONJ, temp.getPath());
+//                    } else if (temp.getType().equals(String.valueOf(CAPTURE_IMAGE_CPF_CONJ))) {
+//                        callAddThumb(CAPTURE_IMAGE_CPF_CONJ, temp.getPath());
+//                    }
+//                }
+//            }
+//        }
     }
 
     public void saveCadastroEndRes(){
@@ -1306,16 +1322,17 @@ public class CadastroActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK){
-            if(requestCode <= CAPTURE_IMAGE_CPF_CONJ)
-                callAddThumb(requestCode, fileUri.getPath());
-
+            String[] name = fileUri.getPath().split("/");
+            docs.add(new Docs(fileUri.getPath(), String.valueOf(requestCode), name[name.length-1], cadastro.get_id_prop()));
+//            if(requestCode <= CAPTURE_IMAGE_CPF_CONJ)
+//                callAddThumb(requestCode, fileUri.getPath());
+//
         } else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "Foto cancelada!", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Alguma coisa deu errado!", Toast.LENGTH_LONG).show();
         }
-        String[] name = fileUri.getPath().split("/");
-        docs.add(new Docs(fileUri.getPath(), String.valueOf(requestCode), name[name.length-1], cadastro.get_id_prop()));
+
     }
 
     public static void takePhoto(Activity activity, int type){
@@ -1330,30 +1347,30 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
-    public void callAddThumb(int type, final String file){
-        ImageButton img = new ImageButton(this);
-        img.setImageBitmap(imgPhoto.decodeSampledBitmapFromFile(file, 100, 100));
+//    public void callAddThumb(int type, final String file){
+//        ImageButton img = new ImageButton(this);
+//        img.setImageBitmap(imgPhoto.decodeSampledBitmapFromFile(file, 100, 100));
+//
+//        LinearLayout layout = null;
+//
+//        switch (type){
+//            case CAPTURE_IMAGE_ID_PROP:
+//                layout = (LinearLayout) findViewById(R.id.idPropLayout);
+//                break;
+//            case CAPTURE_IMAGE_CPF_PROP:
+//                layout = (LinearLayout) findViewById(R.id.cpfPropLayout);
+//                break;
+//            case CAPTURE_IMAGE_ID_CONJ:
+//                layout = (LinearLayout) findViewById(R.id.idConjLayout);
+//                break;
+//            case CAPTURE_IMAGE_CPF_CONJ:
+//                layout = (LinearLayout) findViewById(R.id.cpfConjLayout);
+//                break;
+//
+//        }
+//        layout.addView(img);
 
-        LinearLayout layout = null;
-
-        switch (type){
-            case CAPTURE_IMAGE_ID_PROP:
-                layout = (LinearLayout) findViewById(R.id.idPropLayout);
-                break;
-            case CAPTURE_IMAGE_CPF_PROP:
-                layout = (LinearLayout) findViewById(R.id.cpfPropLayout);
-                break;
-            case CAPTURE_IMAGE_ID_CONJ:
-                layout = (LinearLayout) findViewById(R.id.idConjLayout);
-                break;
-            case CAPTURE_IMAGE_CPF_CONJ:
-                layout = (LinearLayout) findViewById(R.id.cpfConjLayout);
-                break;
-
-        }
-        layout.addView(img);
-
-    }
+//    }
 
 
 }
