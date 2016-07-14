@@ -14,7 +14,7 @@ var iconBluePin = new LeafIcon({iconUrl: './markers/marker_blue.png'});
 var iconBlackPin = new LeafIcon({iconUrl: './markers/marker_black.png'});
 var iconYellowPin = new LeafIcon({iconUrl: './markers/marker_yellow.png'});
 
-var iconPosePin = new LeafIcon({iconUrl: './markers/navigation-arrow.png'});
+var iconPosePin = new LeafIcon({iconUrl: './markers/navigation-arrow-color.png'});
 
 
 

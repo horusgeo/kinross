@@ -43,6 +43,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.ViewStub;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -146,6 +147,7 @@ public class CadastroActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         cadastro = new Register();
 //        benfs = new ArrayList<Benfeitoria>();
@@ -165,7 +167,7 @@ public class CadastroActivity extends AppCompatActivity {
             setTitle(text1);
             cadastro.set_data_visita(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));
             cadastro.set_horario_chegada(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));
-            cadastro.set_responsavel(Responsavel.TESTE);
+//            cadastro.set_responsavel(Responsavel.TESTE);
             editTable = false;
         }else if(tipo.equals("edit")){
             cadastro = db.getRegister(text1);
@@ -1031,7 +1033,7 @@ public class CadastroActivity extends AppCompatActivity {
                 cadastro.set_manacial("2");
                 break;
             default:
-                cadastro.set_topografia("0");
+                cadastro.set_manacial("0");
                 break;
         }
 

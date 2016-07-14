@@ -1,4 +1,7 @@
-myMap = L.map('mapDiv',{}).setView([-19.315, -43.636], 15);
+myMap = L.map('mapDiv',{
+                minZoom: 9,
+                maxZoom: 21})
+                .setView([-19.315, -43.636], 15);
 //myMap = L.map('mapDiv',{});
 
 
@@ -65,8 +68,8 @@ function loadImg(imgPath){
 
 
     var options = {
-                minZoom: 0,
-                maxZoom: 30,
+                minZoom: 9,
+                maxZoom: 21,
                 opacity: 1.0,
                 tms: false
     };
@@ -86,10 +89,10 @@ function loadKml(){
             myMap.fitBounds(runLayer.getBounds());
         }).addTo(myMap);
 
-//    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-//        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-//        opacity: 0.2,
-//    }).addTo(myMap);
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        opacity: 0.2,
+    }).addTo(myMap);
 }
 
 
