@@ -89,8 +89,6 @@ public class InitialActivity extends AppCompatActivity {
 
         user = db.getUser();
 
-        Log.d("HorusGeo", user);
-
         warnInitialText = (TextView) findViewById(R.id.warnInitialText);
 
         if(tipo.equals("ok")) {
@@ -351,32 +349,18 @@ public class InitialActivity extends AppCompatActivity {
             this.dialogProgress.setCancelable(false);
         }
 
-
-
-//        private void updateProgress(int count, int numFiles){
-//            this.dialogProgress.setMessage("Enviando arquivos! Por Favor, aguarde!\n" +
-//                    count + " / " + numFiles);
-//            this.dialogProgress.setMax(numFiles);
-//            this.dialogProgress.incrementProgressBy(100/numFiles);
-//        }
-
-
         @Override
         protected Boolean doInBackground(Void... params){
 
-            //Log.d("HorusGeo", "Antes do try");
 
             FTPClient client = new FTPClient();
             Boolean teste;
-            Log.d("HorusGeo", "Entrando...");
             ArrayList<String> list = db.getAllDocs();
             int ntables = db.getNTables();
             double numFiles = list.size() + ntables;
 
             try{
-                Log.d("HorusGeo", "Conectando...");
                 client.connect("ftp.horusgeo.com.br", 21);
-                Log.d("HorusGeo", "Login...");
                 teste = client.login("horusgeo", "eco101web");
 
                 client.enterLocalPassiveMode();
@@ -388,34 +372,26 @@ public class InitialActivity extends AppCompatActivity {
                 double progress = 0.0;
                 while(count < ntables){
                     File file = db.generateCSV(count);
-                    Log.d("HorusGeo", String.valueOf(count));
-                    Log.d("HorusGeo", file.getPath());
                     FileInputStream inputStream = new FileInputStream(file);
                     String[] name = file.getPath().split("/");
                     result = client.storeFile("/public_ftp/incoming/"+ user + "_" + name[name.length-1], inputStream);
                     inputStream.close();
                     count++;
                     progress = 100*(count/numFiles);
-                    Log.d("HorusGeo", name[name.length-1]);
-                    Log.d("HorusGeo", "progress = " + progress);
                     publishProgress((int)(progress));
                 }
                 count = 0;
 
                 while(count < list.size()){
                     File file = new File(list.get(count));
-                    Log.d("HorusGeo", String.valueOf(count));
-                    Log.d("HorusGeo", file.getPath());
                     FileInputStream inputStream = new FileInputStream(file);
                     String[] name = file.getPath().split("/");
                     result = client.storeFile("/public_ftp/incoming/img/"+ name[name.length-1], inputStream);
                     inputStream.close();
                     count++;
                     progress = 100*((count+ntables)/numFiles);
-                    Log.d("HorusGeo", "progress = " + progress);
                     publishProgress((int)(progress));
                 }
-
 
                 client.logout();
 
@@ -424,12 +400,10 @@ public class InitialActivity extends AppCompatActivity {
             }catch (IOException ex) {
                 ex.printStackTrace();
             }
-            Log.d("HorusGeo", "Return False");
             return false;
         }
         @Override
         protected void onProgressUpdate(Integer... progress) {
-            Log.d("HorusGeo", "Progress Called = " + progress[0]);
 
             this.dialogProgress.setProgress(progress[0]);
         }
@@ -441,19 +415,14 @@ public class InitialActivity extends AppCompatActivity {
                 dialogProgress.dismiss();
             }
             Toast toast;
-            Log.d("HorusGeo", "Toast");
             if(result){
-                Log.d("HorusGeo", "Toast True");
                 toast = Toast.makeText(getApplicationContext(), "Upload ok!", Toast.LENGTH_LONG);
             }else{
-                Log.d("HorusGeo", "Toast False");
                 toast = Toast.makeText(getApplicationContext(), "Upload not ok!", Toast.LENGTH_LONG);
             }
             toast.show();
 
         }
-
-
 
     }
 

@@ -176,7 +176,6 @@ public class CadastroActivity extends AppCompatActivity {
             plants = db.getPlants(text1);
             idPropBenf = cadastro.get_id_prop();
 
-            Log.d("HorusGeo", String.valueOf(docs.size()));
             setTitle(cadastro.get_nome_proprietario());
             idBck = cadastro.get_id_prop();
             editTable = true;
@@ -1277,8 +1276,6 @@ public class CadastroActivity extends AppCompatActivity {
         if(tabSelected==11)
             saveCadastroObs();
         Intent intent = new Intent(CadastroActivity.this, InitialActivity.class);
-
-        Log.d("HorusGeo", "save: " + String.valueOf(docs.size()));
 
         if(editTable){
             db.updateRegister(cadastro, benfs, plants, docs, idBck);

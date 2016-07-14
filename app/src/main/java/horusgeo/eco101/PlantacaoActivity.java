@@ -103,7 +103,6 @@ public class PlantacaoActivity extends AppCompatActivity {
                 addPlant(temp, plantsLayout.getChildCount()-1, -1);
                 for(Docs temp2 : docs){
                     if(temp2.getType().equals(temp.getIdBenf())){
-                        Log.d("HorusGeo", "OnCreate " + temp2.getPath());
                         callAddThumb(Integer.parseInt(temp2.getType()), temp2.getPath());
                     }
                 }
@@ -306,7 +305,6 @@ public class PlantacaoActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Alguma coisa deu errado!", Toast.LENGTH_LONG).show();
         }
-        Log.d("HorusGeo", "onActivityResult " + fileUri.getPath());
         String[] name = fileUri.getPath().split("/");
         docs.add(new Docs(fileUri.getPath(), String.valueOf(requestCode), name[name.length-1], idProp));
     }

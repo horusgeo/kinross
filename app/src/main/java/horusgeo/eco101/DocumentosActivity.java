@@ -100,7 +100,6 @@ public class DocumentosActivity extends AppCompatActivity {
                 Integer type = FotoTypes.CODES.get(FotoTypes.NAMES.indexOf(list.get(position)));
                 while(layout.getChildCount() > 1)
                     layout.removeViewAt(1);
-                Log.d("HorusGeo", "type = " + type);
                 callThumbs(type);
             }
 
@@ -127,7 +126,6 @@ public class DocumentosActivity extends AppCompatActivity {
 
         ImageView img = (ImageView) rootView.findViewById(R.id.docShow);
         ImageButton button = (ImageButton) rootView.findViewById(R.id.delDoc);
-        Log.d("HorusGeo", file);
         img.setImageBitmap(imgPhoto.decodeSampledBitmapFromFile(file, 300, 300));
 
         button.setOnClickListener(new View.OnClickListener() {
