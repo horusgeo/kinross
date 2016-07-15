@@ -53,11 +53,13 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="number"
+                android:inputType="none"
                 android:ems="10"
                 android:id="@+id/idPropText"
                 android:layout_weight="1"
-                android:imeOptions="actionNext"/>
+                android:imeOptions="actionNext"
+                android:enabled="true"
+                android:focusable="false" />
         </LinearLayout>
 
         <Space

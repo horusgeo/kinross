@@ -444,12 +444,13 @@ public class MappingActivity extends AppCompatActivity {
     private void callPropDialog(){
         if(idProp.equals("-1")) {
             AlertDialog.Builder builderSingle = new AlertDialog.Builder(MappingActivity.this);
-            builderSingle.setTitle("Defina o nome e o número de identificação do proprietário:");
+//            builderSingle.setTitle("Defina o nome e o número de identificação do proprietário:");
+            builderSingle.setTitle("Defina o nome do proprietário:");
             builderSingle.setCancelable(false);
             LayoutInflater inflater = this.getLayoutInflater();
             final View rootView = inflater.inflate(R.layout.latlng_dialog, null);
             nameText = (EditText) rootView.findViewById(R.id.latlngNameText);
-            idText = (EditText) rootView.findViewById(R.id.latlngIdText);
+//            idText = (EditText) rootView.findViewById(R.id.latlngIdText);
 
             builderSingle.setView(rootView);
 
@@ -458,11 +459,12 @@ public class MappingActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     if (nameText.getText().toString().equals("")) {
                         callPropDialog();
-                    } else if (idText.getText().toString().equals("")) {
-                        callPropDialog();
+//                    } else if (idText.getText().toString().equals("")) {
+//                        callPropDialog();
                     } else {
                         cadastro.set_nome_proprietario(nameText.getText().toString());
-                        cadastro.set_id_prop(idText.getText().toString());
+//                        cadastro.set_id_prop(idText.getText().toString());
+                        cadastro.set_id_prop(db.getNextID());
                         myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + " 1)");
                     }
                 }

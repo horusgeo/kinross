@@ -282,12 +282,13 @@ public class InitialActivity extends AppCompatActivity {
 
     private void callPropDialog(){
         final AlertDialog.Builder builderSingle = new AlertDialog.Builder(InitialActivity.this);
-        builderSingle.setTitle("Defina o nome e o número de identificação do proprietário:");
+//        builderSingle.setTitle("Defina o nome e o número de identificação do proprietário:");
+        builderSingle.setTitle("Defina o nome do proprietário:");
         builderSingle.setCancelable(false);
         LayoutInflater inflater = getLayoutInflater();
         final View rootView = inflater.inflate(R.layout.latlng_dialog, null);
         final EditText nameText = (EditText) rootView.findViewById(R.id.latlngNameText);;
-        final EditText idText = (EditText) rootView.findViewById(R.id.latlngIdText);
+//        final EditText idText = (EditText) rootView.findViewById(R.id.latlngIdText);
 
         builderSingle.setView(rootView);
 
@@ -296,11 +297,12 @@ public class InitialActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (nameText.getText().toString().equals("")) {
                     callPropDialog();
-                } else if (idText.getText().toString().equals("")) {
-                    callPropDialog();
+//                } else if (idText.getText().toString().equals("")) {
+//                    callPropDialog();
                 } else {
                     cadastro.set_nome_proprietario(nameText.getText().toString());
-                    cadastro.set_id_prop(idText.getText().toString());
+//                    cadastro.set_id_prop(idText.getText().toString());
+                    cadastro.set_id_prop(db.getNextID());
                     cadastro.set_data_visita(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));
                     cadastro.set_horario_chegada(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));
                     cadastro.set_responsavel(Responsavel.TESTE);

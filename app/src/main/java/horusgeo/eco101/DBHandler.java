@@ -1904,4 +1904,27 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    public String getNextID(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT " + ID_PROPRIETARIO + " FROM " + TABLE_REGISTERS;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        String id = "0";
+
+        if(cursor.getCount()>0) {
+            cursor.moveToLast();
+            id = String.valueOf(Integer.parseInt(cursor.getString(0)) + 1);
+        }else{
+            id = "1";
+        }
+
+        db.close();
+
+        return id;
+
+    }
+
 }
