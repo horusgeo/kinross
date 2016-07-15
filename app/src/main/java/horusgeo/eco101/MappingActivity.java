@@ -40,11 +40,13 @@ public class MappingActivity extends AppCompatActivity {
     FloatingActionButton fabRegua;
     FloatingActionButton fabPin;
     FloatingActionButton fabReguaCancel;
+    FloatingActionButton fabReguaNew;
     FloatingActionButton fabPointsCancel;
     FloatingActionButton fabPointsNew;
     FloatingActionButton fabPointsOk;
     FloatingActionButton fabPinOk;
     FloatingActionButton fabPinCancel;
+    FloatingActionButton fabPinNew;
     FloatingActionButton fabPose;
     FloatingActionButton fabReturn;
 
@@ -115,6 +117,7 @@ public class MappingActivity extends AppCompatActivity {
 
         fabPoints = (FloatingActionButton) findViewById(R.id.actionPoint);
         fabRegua = (FloatingActionButton) findViewById(R.id.actionRegua);
+        fabReguaNew = (FloatingActionButton) findViewById(R.id.fabReguaNew);
         fabReguaCancel = (FloatingActionButton) findViewById(R.id.fabReguaCancel);
         fabPointsCancel = (FloatingActionButton) findViewById(R.id.fabPointsCancel);
         fabPointsNew = (FloatingActionButton) findViewById(R.id.fabPointsNew);
@@ -122,6 +125,7 @@ public class MappingActivity extends AppCompatActivity {
         fabPin = (FloatingActionButton) findViewById(R.id.actionPin);
         fabPinOk = (FloatingActionButton) findViewById(R.id.fabPinOk);
         fabPinCancel = (FloatingActionButton) findViewById(R.id.fabPinCancel);
+        fabPinNew = (FloatingActionButton) findViewById(R.id.fabPinNew);
         fabPose = (FloatingActionButton) findViewById(R.id.poseFab);
         fabReturn = (FloatingActionButton) findViewById(R.id.fabReturn);
 
@@ -216,6 +220,7 @@ public class MappingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 fabMenu.collapse();
                 fabMenu.setClickable(false);
+                fabMenu.setVisibility(View.INVISIBLE);
 
                 fabPose.setVisibility(View.INVISIBLE);
                 fabPose.setClickable(false);
@@ -223,9 +228,19 @@ public class MappingActivity extends AppCompatActivity {
                 fabReturn.setVisibility(View.INVISIBLE);
                 fabReturn.setClickable(false);
 
+                fabReguaNew.setVisibility(View.VISIBLE);
+                fabReguaNew.setClickable(true);
+
                 fabReguaCancel.setVisibility(View.VISIBLE);
                 fabReguaCancel.setClickable(true);
                 clickRegua(true);
+            }
+        });
+
+        fabReguaNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myWebView.loadUrl("javascript:clickPinRegua()");
             }
         });
 
@@ -235,7 +250,11 @@ public class MappingActivity extends AppCompatActivity {
                 fabReguaCancel.setVisibility(View.INVISIBLE);
                 fabReguaCancel.setClickable(false);
 
+                fabReguaNew.setVisibility(View.INVISIBLE);
+                fabReguaNew.setClickable(false);
+
                 fabMenu.setClickable(true);
+                fabMenu.setVisibility(View.VISIBLE);
 
                 fabPose.setVisibility(View.VISIBLE);
                 fabPose.setClickable(true);
@@ -252,6 +271,7 @@ public class MappingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 fabMenu.collapse();
                 fabMenu.setClickable(false);
+                fabMenu.setVisibility(View.INVISIBLE);
 
                 fabPose.setVisibility(View.INVISIBLE);
                 fabPose.setClickable(false);
@@ -262,11 +282,21 @@ public class MappingActivity extends AppCompatActivity {
                 fabPinOk.setVisibility(View.VISIBLE);
                 fabPinOk.setClickable(true);
 
+                fabPinNew.setVisibility(View.VISIBLE);
+                fabPinNew.setClickable(true);
+
                 fabPinCancel.setVisibility(View.VISIBLE);
                 fabPinCancel.setClickable(true);
 
-                callPinDialog();
+                myWebView.loadUrl("javascript:startPin()");
 
+            }
+        });
+
+        fabPinNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callPinDialog();
             }
         });
 
@@ -454,7 +484,7 @@ public class MappingActivity extends AppCompatActivity {
     private void clickPoints(Integer which){
         switch (which){
             case 0:
-                myWebView.loadUrl("javascript:startPoints()");
+                myWebView.loadUrl("javascript:startCentralPin()");
                 break;
             case 1:
                 myWebView.loadUrl("javascript:clickPoints()");
@@ -497,6 +527,7 @@ public class MappingActivity extends AppCompatActivity {
 
     private void callPin(Boolean bool){
         fabMenu.setClickable(true);
+        fabMenu.setVisibility(View.VISIBLE);
 
         fabPose.setVisibility(View.VISIBLE);
         fabPose.setClickable(true);
@@ -506,6 +537,9 @@ public class MappingActivity extends AppCompatActivity {
 
         fabPinOk.setVisibility(View.INVISIBLE);
         fabPinOk.setClickable(false);
+
+        fabPinNew.setVisibility(View.INVISIBLE);
+        fabPinNew.setClickable(false);
 
         fabPinCancel.setVisibility(View.INVISIBLE);
         fabPinCancel.setClickable(false);

@@ -95,10 +95,9 @@ function loadKml(){
 //    }).addTo(myMap);
 }
 
+/* *********************** Central Pin *********************** */
 
-/* *********************** Click Points *********************** */
-
-function startPoints(){
+function startCentralPin(){
     centerMarker = L.marker(myMap.getCenter(), {icon: iconBlackPin})
                         .addTo(myMap)
                         .bindPopup(myMap.getCenter().toString())
@@ -110,6 +109,14 @@ function startPoints(){
 	});
 }
 
+function removeCentralPin(){
+    myMap.removeLayer(centerMarker);
+    myMap.off('move', null);
+}
+
+/* *********************** Click Points *********************** */
+
+
 function clickPoints(){
     clickPointsArray.push(centerMarker.getLatLng());
     propertyPolygon.addLatLng(centerMarker.getLatLng()).addTo(myMap);
@@ -118,9 +125,8 @@ function clickPoints(){
 function clearPoints(){
     clickPointsArray = [];
     propertyPolygon.setLatLngs([]);
-    myMap.removeLayer(centerMarker);
-    myMap.removeLayer(reguaPolygon);
-    myMap.off('move', null);
+    removeCentralPin();
+    myMap.removeLayer(propertyPolygon);
 }
 
 function createProperty(id, nome, tipo){
@@ -151,16 +157,18 @@ function createProperty(id, nome, tipo){
 
 /* *********************** Pin *********************** */
 
-function setPin(Text){
+function startPin(){
     pinMarker = L.marker({}, {icon: iconYellowPin});
-    function onMapClick(e) {
-        pinMarker.setLatLng(e.latlng)
-        myMap.removeLayer(pinMarker);
-        pinMarker.addTo(myMap)
-                 .bindPopup(generatePinText(Text, e.latlng))
-                 .openPopup();
-    }
-    myMap.on('click', onMapClick);
+    startCentralPin();
+}
+
+function setPin(Text){
+
+    pinMarker.setLatLng(centerMarker.getLatLng())
+    myMap.removeLayer(pinMarker);
+    pinMarker.addTo(myMap)
+             .bindPopup(generatePinText(Text, centerMarker.getLatLng()))
+             .openPopup();
 }
 
 function keepPin(){
@@ -176,55 +184,54 @@ function keepPin(){
 }
 
 function cancelPin(){
+    removeCentralPin();
     myMap.removeLayer(pinMarker);
-    myMap.off('click', null);
 }
 
 /* *********************** Regua *********************** */
 
 function clickRegua(){
+    startCentralPin();
     popup = L.popup({closeButton: false});
 
     clickReguaArray = [];
     reguaPolygon.setLatLngs([]);
+}
 
-    function onMapClick(e) {
+function clickPinRegua(){
 
-        if(clickReguaArray.length == 2){
-            clickReguaArray.pop();
-            clickReguaArray.push(e.latlng);
-            var latlng = reguaPolygon.getLatLngs();
-            latlng.pop();
-            latlng.push(e.latlng);
-            reguaPolygon.setLatLngs(latlng);
+    if(clickReguaArray.length == 2){
+        clickReguaArray.pop();
+        clickReguaArray.push(centerMarker.getLatLng());
+        var latlng = reguaPolygon.getLatLngs();
+        latlng.pop();
+        latlng.push(centerMarker.getLatLng());
+        reguaPolygon.setLatLngs(latlng);
+        popup
+            .setLatLng(centerMarker.getLatLng())
+            .openOn(myMap)
+            .setContent(calcula_dist());
+    }else{
+        clickReguaArray.push(centerMarker.getLatLng());
+
+        latlngBck = centerMarker.getLatLng();
+
+        if(clickReguaArray.length==1){
+            reguaPolygon.addLatLng(centerMarker.getLatLng()).addTo(myMap);
+        }else if(clickReguaArray.length==2){
             popup
-                .setLatLng(e.latlng)
+                .setLatLng(centerMarker.getLatLng())
                 .openOn(myMap)
                 .setContent(calcula_dist());
-        }else{
-            clickReguaArray.push(e.latlng);
-
-            latlngBck = e.latlng;
-
-            if(clickReguaArray.length==1){
-                reguaPolygon.addLatLng(e.latlng).addTo(myMap);
-            }else if(clickReguaArray.length==2){
-                popup
-                    .setLatLng(e.latlng)
-                    .openOn(myMap)
-                    .setContent(calcula_dist());
-                reguaPolygon.addLatLng(e.latlng).addTo(myMap);
-            }
+            reguaPolygon.addLatLng(centerMarker.getLatLng()).addTo(myMap);
         }
     }
-
-    myMap.on('click', onMapClick);
 }
 
 function closeRegua(){
     clickReguaArray = [];
     reguaPolygon.setLatLngs([]);
-    myMap.off('click', null);
+    removeCentralPin();
     myMap.removeLayer(reguaPolygon);
     myMap.closePopup(popup);
 }
