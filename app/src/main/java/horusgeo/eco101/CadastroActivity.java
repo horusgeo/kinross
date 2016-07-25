@@ -654,16 +654,16 @@ public class CadastroActivity extends AppCompatActivity {
 
         switch(statusVisita.getCheckedRadioButtonId()){
             case R.id.accRadioButton:
-                cadastro.set_status("1");
+                cadastro.set_status("Aceito");
                 break;
             case R.id.negRadioButton:
-                cadastro.set_status("2");
+                cadastro.set_status("CasoEspecial");
                 break;
             case R.id.rejRadioButton:
-                cadastro.set_status("3");
+                cadastro.set_status("Recusado");
                 break;
             case R.id.indRadioButton:
-                cadastro.set_status("0");
+                cadastro.set_status("Indefinido");
                 break;
         }
 
@@ -686,17 +686,17 @@ public class CadastroActivity extends AppCompatActivity {
         if(cadastro.get_status() == null){
             statusVisita.check(R.id.indRadioButton);
         }else{
-            switch(Integer.valueOf(cadastro.get_status())){
-                case 1:
+            switch(cadastro.get_status()){
+                case "Aceito":
                     statusVisita.check(R.id.accRadioButton);
                     break;
-                case 2:
+                case "CasoEspecial":
                     statusVisita.check(R.id.negRadioButton);
                     break;
-                case 3:
+                case "Recusado":
                     statusVisita.check(R.id.rejRadioButton);
                     break;
-                case 4:
+                case "Indefinido":
                     statusVisita.check(R.id.indRadioButton);
                     break;
             }
@@ -732,31 +732,31 @@ public class CadastroActivity extends AppCompatActivity {
 
         switch(est.getCheckedRadioButtonId()){
             case R.id.casadoRadio:
-                cadastro.set_estado_civil("1");
+                cadastro.set_estado_civil("Casado");
                 break;
             case R.id.divorciadoRadio:
-                cadastro.set_estado_civil("2");
+                cadastro.set_estado_civil("Divorciado");
                 break;
             case R.id.viuvoRadio:
-                cadastro.set_estado_civil("3");
+                cadastro.set_estado_civil("Viúvo");
                 break;
             case R.id.solteiroRadio:
-                cadastro.set_estado_civil("4");
+                cadastro.set_estado_civil("Solteiro");
                 break;
             default:
-                cadastro.set_estado_civil("0");
+                cadastro.set_estado_civil("Indefinido");
                 break;
         }
 
         switch(poss.getCheckedRadioButtonId()){
             case R.id.possRadioButton:
-                cadastro.set_possProp("1");
+                cadastro.set_possProp("Posseiro");
                 break;
             case R.id.propRadioButton:
-                cadastro.set_possProp("2");
+                cadastro.set_possProp("Proprietário");
                 break;
             default:
-                cadastro.set_possProp("0");
+                cadastro.set_possProp("Indefinido");
                 break;
         }
 
@@ -785,16 +785,16 @@ public class CadastroActivity extends AppCompatActivity {
 
         if(cadastro.get_estado_civil()!= null){
             switch (cadastro.get_estado_civil()){
-                case "1":
+                case "Casado":
                     est.check(R.id.casadoRadio);
                     break;
-                case "2":
+                case "Divorciado":
                     est.check(R.id.divorciadoRadio);
                     break;
-                case "3":
+                case "Viúvo":
                     est.check(R.id.viuvoRadio);
                     break;
-                case "4":
+                case "Solteiro":
                     est.check(R.id.solteiroRadio);
                     break;
             }
@@ -803,10 +803,10 @@ public class CadastroActivity extends AppCompatActivity {
 
         if(cadastro.get_possProp()!=null){
             switch (cadastro.get_possProp()){
-                case "1":
+                case "Posseiro":
                     pos.check(R.id.possRadioButton);
                     break;
-                case "2":
+                case "Proprietário":
                     pos.check(R.id.propRadioButton);
                     break;
             }
@@ -996,43 +996,43 @@ public class CadastroActivity extends AppCompatActivity {
 
         switch(zon.getCheckedRadioButtonId()){
             case R.id.zoneRuralRadio:
-                cadastro.set_zoneamento("1");
+                cadastro.set_zoneamento("Rural");
                 break;
             case R.id.zoneUrbRadio:
-                cadastro.set_zoneamento("2");
+                cadastro.set_zoneamento("Urbano");
                 break;
             case R.id.zoneExpRadio:
-                cadastro.set_zoneamento("3");
+                cadastro.set_zoneamento("Expansão Urbana");
                 break;
             default:
-                cadastro.set_zoneamento("0");
+                cadastro.set_zoneamento("Indefinido");
                 break;
         }
 
         switch(topo.getCheckedRadioButtonId()){
             case R.id.topoPlanoRadio:
-                cadastro.set_topografia("1");
+                cadastro.set_topografia("Plano");
                 break;
             case R.id.topoOndRadio:
-                cadastro.set_topografia("2");
+                cadastro.set_topografia("Ondulado");
                 break;
             case R.id.topoMontRadio:
-                cadastro.set_topografia("3");
+                cadastro.set_topografia("Montanhoso");
                 break;
             default:
-                cadastro.set_topografia("0");
+                cadastro.set_topografia("Indefinido");
                 break;
         }
 
         switch(man.getCheckedRadioButtonId()){
             case R.id.manaSimRadio:
-                cadastro.set_manacial("1");
+                cadastro.set_manacial("Sim");
                 break;
             case R.id.mananNaoRadio:
-                cadastro.set_manacial("2");
+                cadastro.set_manacial("Não");
                 break;
             default:
-                cadastro.set_manacial("0");
+                cadastro.set_manacial("Indefinido");
                 break;
         }
 
@@ -1054,13 +1054,13 @@ public class CadastroActivity extends AppCompatActivity {
 
         if(cadastro.get_zoneamento() != null){
             switch(cadastro.get_zoneamento()){
-                case "1":
+                case "Rural":
                     zon.check(R.id.zoneRuralRadio);
                     break;
-                case "2":
+                case "Urbano":
                     zon.check(R.id.zoneUrbRadio);
                     break;
-                case "3":
+                case "Expansão Urbana":
                     zon.check(R.id.zoneExpRadio);
                     break;
             }
@@ -1068,13 +1068,13 @@ public class CadastroActivity extends AppCompatActivity {
 
         if(cadastro.get_topografia() != null){
             switch(cadastro.get_topografia()){
-                case "1":
+                case "Plano":
                     topo.check(R.id.topoPlanoRadio);
                     break;
-                case "2":
+                case "Ondulado":
                     topo.check(R.id.topoOndRadio);
                     break;
-                case "3":
+                case "Montanhoso":
                     topo.check(R.id.topoMontRadio);
                     break;
             }
@@ -1082,10 +1082,10 @@ public class CadastroActivity extends AppCompatActivity {
 
         if(cadastro.get_manacial() != null){
             switch(cadastro.get_manacial()){
-                case "1":
+                case "Sim":
                     man.check(R.id.manaSimRadio);
                     break;
-                case "2":
+                case "Não":
                     man.check(R.id.mananNaoRadio);
                     break;
             }

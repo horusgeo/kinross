@@ -135,13 +135,13 @@ function createProperty(id, nome, tipo){
 
     console.log(id);
 
-    if(tipo==0)
+    if(tipo=="Indefinido")
         p.color = "blue";
-    if(tipo==1)
+    if(tipo=="Aceito")
         p.color = "green";
-    if(tipo==2)
+    if(tipo=="CasoEspecial")
         p.color = "yellow";
-    if(tipo==3)
+    if(tipo=="Recusado")
         p.color = "red";
 
     console.log(id);
@@ -271,13 +271,13 @@ function newProp(id, lat, lng, nome, tipo){
     latlng.push(L.latLng(lat,lng));
     var p;
 
-    if(tipo==0)
+    if(tipo=="Indefinido")
         p = L.polygon(latlng, {color:"blue"});
-    if(tipo==1)
+    if(tipo=="Aceito")
         p = L.polygon(latlng, {color:"green"});
-    if(tipo==2)
+    if(tipo=="CasoEspecial")
         p = L.polygon(latlng, {color:"yellow"});
-    if(tipo==3)
+    if(tipo=="Recusado")
         p = L.polygon(latlng, {color:"red"});
 
     var aux = new Prop(p, id, tipo, nome);

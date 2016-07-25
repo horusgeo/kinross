@@ -25,15 +25,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "eco101.db";
     private static final int DATABASE_VERSION = 1;
-    private static final String TABLE_REGISTERS = "registers";
-    private static final String TABLE_PROP = "proprietarios";
-    private static final String TABLE_CONJ = "conjuges";
+    private static final String TABLE_REGISTERS = "projeto";
+    private static final String TABLE_PROP = "proprietario";
+    private static final String TABLE_CONJ = "conjuge";
     private static final String TABLE_END_RES = "end_res";
     private static final String TABLE_END_OBJ = "end_obj";
     private static final String TABLE_ID_PROP = "id_prop";
-    private static final String TABLE_BENF = "benfeitorias";
-    private static final String TABLE_PLANT = "plantacoes";
-    private static final String TABLE_DESC = "descricao";
+    private static final String TABLE_BENF = "benfeitoria";
+    private static final String TABLE_PLANT = "plantacao";
+    private static final String TABLE_DESC = "relatorio";
     private static final String TABLE_DOCS = "documentos";
     private static final String TABLE_LATLNG = "latlng";
     private static final String TABLE_OBS = "observacao";
@@ -49,98 +49,88 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String DATA_VISITA = "data_visita";
     private static final String STATUS = "status";
 
-    private static final String ID_PROP = "_id_prop";
-    private static final String NOME_PROPRIETARIO = "nome_proprietario";
-    private static final String NACIONALIDADE_PROPRIETARIO = "nacionalidade_proprietario";
-    private static final String PROFISSAO_PROPRIETARIO = "profissao_proprietario";
+    private static final String ID_PROP = "id_proprietario";
+    private static final String NOME_PROPRIETARIO = "nome";
+    private static final String NACIONALIDADE_PROPRIETARIO = "nacionalidade";
+    private static final String PROFISSAO_PROPRIETARIO = "profissao";
     private static final String ESTADO_CIVIL = "estado_civil";
-    private static final String DOC_ID_PROPRIETARIO = "doc_id_proprietario";
-    private static final String DOC_ID_TIPO_PROPRIETARIO = "doc_id_tipo_proprietario";
-    private static final String CPF_PROPRIETARIO = "cpf_proprietario";
-    private static final String CPF_PHOTO_PROPRIETARIO = "cpf_photo_proprietario";
-    private static final String TEL_PROPRIETARIO_1 = "tel_proprietario_1";
-    private static final String TEL_PROPRIETARIO_2 = "tel_proprietario_2";
-    private static final String EMAIL_PROPRIETARIO = "email_proprietario";
+    private static final String DOC_ID_PROPRIETARIO = "num_id";
+    private static final String DOC_ID_TIPO_PROPRIETARIO = "tipo_id";
+    private static final String CPF_PROPRIETARIO = "cpf";
+    private static final String TEL_PROPRIETARIO_1 = "tel_1";
+    private static final String TEL_PROPRIETARIO_2 = "tel_2";
+    private static final String EMAIL_PROPRIETARIO = "email";
     private static final String POSSPROP = "poss_prop";
-    private static final String ARQUIVOS_PROPRIETARIO = "arquivos_proprietario";
 
-    private static final String ID_CONJ = "_id_conj";
-    private static final String NOME_CONJ = "nome_conj";
-    private static final String NACIONALIDADE_CONJ = "nacionalidade_conj";
-    private static final String PROFISSAO_CONJ = "profissao_conj";
-    private static final String DOC_ID_CONJ = "doc_id_conj";
-    private static final String DOC_ID_TIPO_CONJ = "doc_id_tipo_conj";
-    private static final String CPF_CONJ = "cpf_conj";
-    private static final String CPF_PHOTO_CONJ = "cpf_photo_conj";
-    private static final String TEL_CONJ_1 = "tel_conj_1";
-    private static final String TEL_CONJ_2 = "tel_conj_2";
-    private static final String ARQUIVOS_CONJ = "arquivos_conj";
+    private static final String ID_CONJ = "id_proprietario";
+    private static final String NOME_CONJ = "nome";
+    private static final String NACIONALIDADE_CONJ = "nacionalidade";
+    private static final String PROFISSAO_CONJ = "profissao";
+    private static final String DOC_ID_CONJ = "num_id";
+    private static final String DOC_ID_TIPO_CONJ = "tipo_id";
+    private static final String CPF_CONJ = "cpf";
+    private static final String TEL_CONJ_1 = "tel_1";
+    private static final String TEL_CONJ_2 = "tel_2";
 
-    private static final String ID_END_RES = "_id_end_res";
-    private static final String RUA_END_RES = "rua_end_res";
-    private static final String N_END_RES = "n_end_res";
-    private static final String COMPL_END_RES = "compl_end_res";
-    private static final String BAIRRO_END_RES = "bairro_end_res";
-    private static final String CEP_END_RES = "cep_end_res";
-    private static final String MUNICIPIO_END_RES = "municipio_end_res";
-    private static final String UF_MUN_END_RES = "uf_mun_end_res";
-    private static final String COMARCA_END_RES = "comarca_end_res";
-    private static final String UF_COM_END_RES = "uf_com_end_res";
-    private static final String P_REF_END_RES = "p_ref_end_res";
-    private static final String ARQUIVOS_END_RES = "arquivos_end_res";
+    private static final String ID_END_RES = "id_proprietario";
+    private static final String RUA_END_RES = "rua";
+    private static final String N_END_RES = "num";
+    private static final String COMPL_END_RES = "compl";
+    private static final String BAIRRO_END_RES = "bairro";
+    private static final String CEP_END_RES = "cep";
+    private static final String MUNICIPIO_END_RES = "municipio";
+    private static final String UF_MUN_END_RES = "uf_1";
+    private static final String COMARCA_END_RES = "comarca_";
+    private static final String UF_COM_END_RES = "uf_2";
+    private static final String P_REF_END_RES = "p_ref";
 
-    private static final String ID_END_OBJ = "_id_end_obj";
-    private static final String RUA_END_OBJ = "rua_end_obj";
-    private static final String N_END_OBJ = "n_end_obj";
-    private static final String COMPL_END_OBJ = "compl_end_obj";
-    private static final String BAIRRO_END_OBJ = "bairro_end_obj";
-    private static final String CEP_END_OBJ = "cep_end_obj";
-    private static final String P_REF_END_OBJ = "p_ref_end_obj";
-    private static final String ARQUIVOS_END_OBJ = "arquivos_end_obj";
+    private static final String ID_END_OBJ = "id_proprietario";
+    private static final String RUA_END_OBJ = "rua";
+    private static final String N_END_OBJ = "num";
+    private static final String COMPL_END_OBJ = "compl";
+    private static final String BAIRRO_END_OBJ = "bairro";
+    private static final String CEP_END_OBJ = "cep";
+    private static final String P_REF_END_OBJ = "p_ref";
 
-    private static final String ID_ID_PROP = "_id_id_prop";
+    private static final String ID_ID_PROP = "id_proprietario";
     private static final String ZONEAMENTO = "zoneamento";
     private static final String TOPOGRAFIA = "topografia";
-    private static final String INFRAREDEEL = "infraredeel";
-    private static final String INFRASINTEL = "infrasintel";
-    private static final String INFRAABASAGUA = "infraabasagua";
+    private static final String INFRAREDEEL = "rede_eletrica";
+    private static final String INFRASINTEL = "sinal_telefone";
+    private static final String INFRAABASAGUA = "abastecimento_agua";
     private static final String MANANCIAL = "manancial";
     private static final String OBS_ID_PROP = "obs_id_prop";
-    private static final String ARQUIVOS_ID_PROP = "arquivos_id_prop";
 
-    private static final String ID_BENF = "_id_benf";
-    private static final String TIPO_BENF = "tipo_benf";
-    private static final String IDADE_BENF = "idade_benf";
-    private static final String CONSERVACAO_BENF = "conservacao_benf";
-    private static final String ID_BENF_PHOTOS = "id_benf_photos";
+    private static final String ID_BENF = "id_proprietario";
+    private static final String TIPO_BENF = "tipo";
+    private static final String IDADE_BENF = "idade";
+    private static final String CONSERVACAO_BENF = "conservacao";
+    private static final String ID_BENF_PHOTOS = "id_fotos";
     private static final String OBS_BENF = "obs_benf";
-    private static final String ARQUIVOS_BENF = "arquivos_benf";
 
-    private static final String ID_PLANT = "_id_plant";
-    private static final String TIPO_PLANT = "tipo_plant";
-    private static final String IDADE_PLANT = "idade_plant";
-    private static final String COMPLEMENTO_PLANT = "conservacao_plant";
-    private static final String ID_PLANT_PHOTOS = "id_plant_photos";
-    private static final String PHOTO_PLANT = "photo_plant";
+    private static final String ID_PLANT = "id_proprietario";
+    private static final String TIPO_PLANT = "tipo";
+    private static final String IDADE_PLANT = "idade";
+    private static final String COMPLEMENTO_PLANT = "conservacao";
+    private static final String ID_PLANT_PHOTOS = "id_fotos";
     private static final String OBS_PLANT = "obs_plant";
-    private static final String ARQUIVOS_PLANT = "arquivos_plant";
 
-    private static final String ID_DESC = "_id_desc";
+    private static final String ID_DESC = "id_proprietario";
     private static final String HORARIO_CHEGADA = "horario_chegada";
     private static final String HORARIO_SAIDA = "horario_saida";
     private static final String DESCRICAO_VISITA = "descricao_visita";
     private static final String RESPONSAVEL = "responsavel";
 
-    private static final String PATH = "path";
-    private static final String ID_DOC = "_id_doc";
-    private static final String TYPE = "type";
-    private static final String NAME = "name";
+    private static final String PATH = "caminho";
+    private static final String ID_DOC = "id_proprietario";
+    private static final String TYPE = "tipo";
+    private static final String NAME = "nome";
 
     private static final String LAT = "lat";
     private static final String LNG = "lng";
     private static final String TYPE_LATLNG = "tipo";
     private static final String TEXT_LATLNG = "texto_pin";
-    private static final String ID_LATLNG = "_id_latlng";
+    private static final String ID_LATLNG = "id_proprietario";
 
     private static final String OBS = "obs";
     private static final String ID_OBS = "_id_obs";
@@ -1918,7 +1908,7 @@ public class DBHandler extends SQLiteOpenHelper {
             cursor.moveToLast();
             id = String.valueOf(Integer.parseInt(cursor.getString(0)) + 1);
         }else{
-            id = "1";
+            id = "100000";
         }
 
         db.close();

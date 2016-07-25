@@ -412,7 +412,7 @@ public class MappingActivity extends AppCompatActivity {
                     myWebView.loadUrl("javascript:continueProp(" + lat.get(i) + ", " + lng.get(i) + " )");
                 }else{
                     idBck = ids.get(i);
-                    myWebView.loadUrl("javascript:newProp('" + ids.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + ", '" + texts.get(i) + "'," + db.getStatus(ids.get(i)) + ")");
+                    myWebView.loadUrl("javascript:newProp('" + ids.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + ", '" + texts.get(i) + "','" + db.getStatus(ids.get(i)) + "')");
                 }
             }
         }
@@ -465,7 +465,7 @@ public class MappingActivity extends AppCompatActivity {
                         cadastro.set_nome_proprietario(nameText.getText().toString());
 //                        cadastro.set_id_prop(idText.getText().toString());
                         cadastro.set_id_prop(db.getNextID());
-                        myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + " 1)");
+                        myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + " Indefinido)");
                     }
                 }
             });
@@ -477,7 +477,7 @@ public class MappingActivity extends AppCompatActivity {
             });
             builderSingle.show();
         }else{
-            myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + " 1)");
+            myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + " Indefinido)");
         }
 
     }

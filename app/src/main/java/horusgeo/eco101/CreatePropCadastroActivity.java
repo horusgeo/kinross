@@ -112,7 +112,7 @@ public class CreatePropCadastroActivity extends AppCompatActivity {
                     tipo = Integer.parseInt(cadastro.getTipoLatLng());
                 else
                     tipo = 1;
-                myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + tipo + ")");
+                myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', '" + tipo + "')");
             }
         });
 
@@ -248,7 +248,7 @@ public class CreatePropCadastroActivity extends AppCompatActivity {
                     myWebView.loadUrl("javascript:continueProp(" + lat.get(i) + ", " + lng.get(i) + " )");
                 }else{
                     idBck = ids.get(i);
-                    myWebView.loadUrl("javascript:newProp('" + ids.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + ", '" + texts.get(i) + "'," + db.getStatus(ids.get(i)) + ")");
+                    myWebView.loadUrl("javascript:newProp('" + ids.get(i) + "', " + lat.get(i) + ", " + lng.get(i) + ", '" + texts.get(i) + "','" + db.getStatus(ids.get(i)) + "')");
                 }
             }
         }
