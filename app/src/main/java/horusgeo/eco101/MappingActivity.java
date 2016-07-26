@@ -368,19 +368,19 @@ public class MappingActivity extends AppCompatActivity {
 
             cadastro.setLat(lats);
             cadastro.setLng(lngs);
+            cadastro.setRegisterStatus(0);
 
             db.addLatLng(cadastro);
+            db.addRegister(cadastro);
+            db.addProp(cadastro);
+            db.addConj(cadastro);
+            db.addEndRes(cadastro);
+            db.addEndObj(cadastro);
+            db.addIdProp(cadastro);
+            db.addDesc(cadastro);
+            db.addObs(cadastro);
 
-            if(idProp.equals("-1")){
-                db.addRegister(cadastro);
-                db.addProp(cadastro);
-                db.addConj(cadastro);
-                db.addEndRes(cadastro);
-                db.addEndObj(cadastro);
-                db.addIdProp(cadastro);
-                db.addDesc(cadastro);
 
-            }
         }
 
         @JavascriptInterface
@@ -465,7 +465,7 @@ public class MappingActivity extends AppCompatActivity {
                         cadastro.set_nome_proprietario(nameText.getText().toString());
 //                        cadastro.set_id_prop(idText.getText().toString());
                         cadastro.set_id_prop(db.getNextID());
-                        myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + " Indefinido)");
+                        myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + " 'Indefinido')");
                     }
                 }
             });
@@ -477,7 +477,7 @@ public class MappingActivity extends AppCompatActivity {
             });
             builderSingle.show();
         }else{
-            myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + " Indefinido)");
+            myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', " + " 'Indefinido')");
         }
 
     }

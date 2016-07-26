@@ -133,6 +133,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String ID_LATLNG = "id_proprietario";
 
     private static final String OBS = "obs";
+    private static final String REGISTERSTATUS = "registerstatus";
     private static final String ID_OBS = "_id_obs";
 
     public DBHandler(Context context, String name,
@@ -277,6 +278,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String CREATE_OBS_TABLE = "CREATE TABLE " + TABLE_OBS + "(" +
                 ID + " INTEGER PRIMARY KEY," +
                 OBS + " TEXT," +
+                REGISTERSTATUS + " TEXT," +
                 ID_OBS + " TEXT" +
                 ")";
         db.execSQL(CREATE_OBS_TABLE);
@@ -543,6 +545,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         values.put(OBS, cadastro.getObservacao());
+        values.put(REGISTERSTATUS, String.valueOf(cadastro.getRegisterStatus()));
         values.put(ID_OBS, cadastro.get_id_prop());
 
         db.insert(TABLE_OBS, null, values);
@@ -737,6 +740,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put(OBS, cadastro.getObservacao());
+        values.put(REGISTERSTATUS, String.valueOf(cadastro.getRegisterStatus()));
         values.put(ID_OBS, cadastro.get_id_prop());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -938,6 +942,12 @@ public class DBHandler extends SQLiteOpenHelper {
                 Cursor cursorProp = db.rawQuery(query, null);
                 cursorProp.moveToFirst();
                 register.set_nome_proprietario(cursorProp.getString(0));
+
+                query = "SELECT " + REGISTERSTATUS +" FROM " + TABLE_OBS + " WHERE " + register.get_id_prop() + " = " + ID_OBS;
+                cursorProp = db.rawQuery(query, null);
+                cursorProp.moveToFirst();
+                register.setRegisterStatus(Integer.parseInt(cursorProp.getString(0)));
+
                 registerList.add(register);
             }while(cursor.moveToNext());
         }
@@ -1090,6 +1100,7 @@ public class DBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             register.setObservacao(cursor.getString(1));
+            register.setRegisterStatus(Integer.parseInt(cursor.getString(2)));
             cursor.close();
         }
 
@@ -1832,7 +1843,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return texts;
     }
 
-    public int getStatus(String id){
+    public String getStatus(String id){
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -1843,9 +1854,9 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
 
         if(cursor.getString(0) == null)
-            return 0;
+            return "Indefinido";
 
-        return Integer.valueOf(cursor.getString(0));
+        return cursor.getString(0);
 
     }
 

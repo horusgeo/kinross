@@ -107,11 +107,11 @@ public class CreatePropCadastroActivity extends AppCompatActivity {
         fabPointsOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer tipo;
+                String tipo;
                 if(cadastro.getTipoLatLng()!=null)
-                    tipo = Integer.parseInt(cadastro.getTipoLatLng());
+                    tipo = cadastro.getTipoLatLng();
                 else
-                    tipo = 1;
+                    tipo = "Indefinido";
                 myWebView.loadUrl("javascript:createProperty(" + cadastro.get_id_prop() + ", '" + cadastro.get_nome_proprietario() + "', '" + tipo + "')");
             }
         });
@@ -258,7 +258,7 @@ public class CreatePropCadastroActivity extends AppCompatActivity {
         myWebView.loadUrl("javascript:addProp()");
 
         if(criarProp)
-            myWebView.loadUrl("javascript:startPoints()");
+            myWebView.loadUrl("javascript:startCentralPin()");
 
     }
 

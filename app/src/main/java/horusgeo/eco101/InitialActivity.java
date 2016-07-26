@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -212,7 +213,22 @@ public class InitialActivity extends AppCompatActivity {
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 InitialActivity.this,
-                android.R.layout.select_dialog_singlechoice);
+                android.R.layout.select_dialog_singlechoice){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                View view = super.getView(position, convertView, parent);
+                TextView text = (TextView) view.findViewById(android.R.id.text1);
+
+                if (registers.get(position).getRegisterStatus() == 1) {
+                    text.setTextColor(Color.BLACK);
+                } else {
+                    text.setTextColor(Color.RED);
+                }
+
+                return view;
+            }
+        };
 
         for(Register temp : registers){
             arrayAdapter.add(temp.get_nome_proprietario());

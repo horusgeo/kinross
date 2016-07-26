@@ -125,6 +125,7 @@ class Benfeitoria{
 public class Register {
 
     private int _id;
+    private int registerStatus;
 
     private String _nome_projeto;
     private String _id_prop;
@@ -668,6 +669,14 @@ public class Register {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    public int getRegisterStatus() {
+        return registerStatus;
+    }
+
+    public void setRegisterStatus(int registerStatus) {
+        this.registerStatus = registerStatus;
     }
 }
 

@@ -35,6 +35,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -293,7 +294,7 @@ public class CadastroActivity extends AppCompatActivity {
                     saveCadastroProp();
 
                 if(cadastro.get_id_prop()!=null && cadastro.get_nome_proprietario()!=null) {
-                    saveCadastro();
+                    callSaveCadastroDialog();
                 }else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(CadastroActivity.this);
                     builder.setMessage("Por Favor, Defina um número de identificação e \n" +
@@ -371,6 +372,47 @@ public class CadastroActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
+    }
+
+    public void callSaveCadastroDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CadastroActivity.this);
+        //builder.setTitle("!!! ATENÇÃO !!!");
+        builder.setMessage("Você está tentando salvar o relatório referente ao proprietário\n"+
+                            cadastro.get_nome_proprietario() + "\n" +
+                            "Por favor, selecione a opção que melhor descreve o status do relatório:")
+                .setPositiveButton("Completo - salvar!", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        cadastro.setRegisterStatus(1);
+                        saveCadastro();
+                    }
+                })
+                .setNeutralButton("Não salvar - retornar para o cadastro!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Incompleto - salvar mesmo assim!", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        cadastro.setRegisterStatus(0);
+                        saveCadastro();
+                    }
+                });
+        TextView title = new TextView(CadastroActivity.this);
+        title.setText("!!! ATENÇÃO !!!");
+        title.setGravity(Gravity.CENTER_HORIZONTAL);
+        title.setTextSize(30);
+        title.setTextColor(Color.RED);
+
+        builder.setCustomTitle(title);
+
+        Dialog d = builder.show();
+
+        TextView textView = (TextView) d.findViewById(android.R.id.message);
+
+        textView.setGravity(Gravity.CENTER);
 
 
     }
