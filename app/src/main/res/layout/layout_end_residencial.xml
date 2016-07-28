@@ -211,7 +211,8 @@
                 android:id="@+id/ptoRefEndResText"
                 android:layout_weight="1"
                 android:imeOptions="actionDone"
-                android:inputType="textCapSentences|text" />
+                android:inputType="number"
+                android:hint="Km" />
         </LinearLayout>
 
         <Space

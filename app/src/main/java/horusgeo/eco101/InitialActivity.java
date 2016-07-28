@@ -321,7 +321,7 @@ public class InitialActivity extends AppCompatActivity {
                     cadastro.set_id_prop(db.getNextID());
                     cadastro.set_data_visita(DateFormat.getDateInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));
                     cadastro.set_horario_chegada(DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE).format(new Date()));
-                    cadastro.set_responsavel(Responsavel.TESTE);
+                    //cadastro.set_responsavel(Responsavel.TESTE);
                     db.addRegister(cadastro);
                     db.addProp(cadastro);
                     db.addConj(cadastro);

@@ -126,8 +126,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/ptoRefEndObjText"
                 android:layout_weight="1"
-                android:inputType="textCapSentences|text"
-                android:imeOptions="actionDone"/>
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:hint="Km" />
         </LinearLayout>
 
         <Space
