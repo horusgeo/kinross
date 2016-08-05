@@ -67,10 +67,10 @@
             <EditText
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:ems="10"
                 android:id="@+id/complEndResText"
-                android:imeOptions="actionNext"/>
+                android:imeOptions="actionNext"
+                android:inputType="text" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -211,7 +211,7 @@
                 android:id="@+id/ptoRefEndResText"
                 android:layout_weight="1"
                 android:imeOptions="actionDone"
-                android:inputType="number"
+                android:inputType="text"
                 android:hint="Km" />
         </LinearLayout>
 

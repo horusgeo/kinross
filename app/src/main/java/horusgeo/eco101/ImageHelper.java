@@ -67,6 +67,8 @@ public class ImageHelper {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
+        //File mediaStorageDir = new File("/storage/extSdCard/", "Eco101");
+        //Log.d("HorusGeo", String.valueOf(mediaStorageDir.exists()));
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "Eco101");
         // This location works best if you want the created images to be shared

@@ -1919,7 +1919,7 @@ public class DBHandler extends SQLiteOpenHelper {
             cursor.moveToLast();
             id = String.valueOf(Integer.parseInt(cursor.getString(0)) + 1);
         }else{
-            id = "200000";
+            id = "100000";
         }
 
         db.close();

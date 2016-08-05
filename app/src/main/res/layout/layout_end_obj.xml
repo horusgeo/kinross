@@ -67,7 +67,7 @@
             <EditText
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:inputType="number"
+                android:inputType="text"
                 android:ems="10"
                 android:id="@+id/complEndObjText"
                 android:imeOptions="actionNext"/>
@@ -127,8 +127,8 @@
                 android:id="@+id/ptoRefEndObjText"
                 android:layout_weight="1"
                 android:imeOptions="actionDone"
-                android:inputType="number"
-                android:hint="Km" />
+                android:hint="Km"
+                android:inputType="text" />
         </LinearLayout>
 
         <Space

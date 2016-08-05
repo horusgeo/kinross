@@ -110,10 +110,10 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="date"
                 android:ems="10"
                 android:id="@+id/dataText"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:inputType="text" />
         </LinearLayout>
 
         <Space
