@@ -81,6 +81,7 @@ function loadImg(imgPath){
     //L.tileLayer('{z}/{x}/{y}.png', options).addTo(myMap);
 
 }
+
 /* *********************** Load KML *********************** */
 
 function loadKml(){
@@ -88,6 +89,11 @@ function loadKml(){
         .on('ready', function() {
             myMap.fitBounds(runLayer.getBounds());
         }).addTo(myMap);
+
+    var kmLayer = omnivore.kml('./kml/KM.kml')
+        .on('ready', function() {
+            myMap.fitBounds(runLayer.getBounds());
+    }).addTo(myMap);
 
 //    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 //        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',

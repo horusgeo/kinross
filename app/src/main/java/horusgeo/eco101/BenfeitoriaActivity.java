@@ -313,7 +313,6 @@ public class BenfeitoriaActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-
             callAddThumb(requestCode, fileUri.getPath());
 
         } else if (resultCode == RESULT_CANCELED) {
@@ -336,7 +335,7 @@ public class BenfeitoriaActivity extends AppCompatActivity {
     }
 
     public void callAddThumb(int type, String file){
-
+        Log.d("HorusGeo", file);
         int viewId = -1;
         ImageButton img = new ImageButton(this);
         String id = String.valueOf(type);

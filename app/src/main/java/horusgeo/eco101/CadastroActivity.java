@@ -268,13 +268,13 @@ public class CadastroActivity extends AppCompatActivity {
 //                            case 8:
 //                                saveCadastroPlant();
 //                                break;
-                            case 8:
+                            case 7:
                                 saveCadastroDesc();
                                 break;
-                            case 9:
+                            case 8:
                                 saveCadastrocheckList();
                                 break;
-                            case 10:
+                            case 9:
                                 saveCadastroObs();
                                 break;
                         }
@@ -1294,7 +1294,8 @@ public class CadastroActivity extends AppCompatActivity {
                     checkBox = (CheckBox) findViewById(R.id.checkListITRImovel);
                     break;
             }
-            checkBox.setChecked(true);
+            if(checkBox!=null)
+                checkBox.setChecked(true);
         }
 
     }
@@ -1313,9 +1314,9 @@ public class CadastroActivity extends AppCompatActivity {
             saveCadastroEndObj();
         if(tabSelected==6)
             saveCadastroIdProp();
-        if(tabSelected==9)
+        if(tabSelected==7)
             saveCadastroDesc();
-        if(tabSelected==11)
+        if(tabSelected==9)
             saveCadastroObs();
         Intent intent = new Intent(CadastroActivity.this, InitialActivity.class);
 

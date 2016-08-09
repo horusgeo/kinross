@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final int nTables = 11;
+    private static final int nTables = 12;
 
     private static final String DATABASE_NAME = "eco101.db";
     private static final int DATABASE_VERSION = 1;
@@ -1314,6 +1314,9 @@ public class DBHandler extends SQLiteOpenHelper {
             case 10:
                 file = tableLatLngToCSV();
                 break;
+            case 11:
+                file = tableObsToCSV();
+                break;
         }
         return file;
     }
@@ -1624,6 +1627,34 @@ public class DBHandler extends SQLiteOpenHelper {
                     //Which column you want to export
                     String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
                             cursor.getString(3), cursor.getString(4), cursor.getString(5)};
+                    csvWrite.writeNext(arrStr);
+                } while (cursor.moveToNext());
+            }
+            csvWrite.close();
+            cursor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public File tableObsToCSV(){
+        File file = new File(Environment.getExternalStorageDirectory(), TABLE_OBS + ".csv");
+
+        String query = "SELECT * FROM " + TABLE_OBS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        CSVWriter csvWrite;
+        try {
+//            file.mkdirs();
+            file.createNewFile();
+            csvWrite = new CSVWriter(new FileWriter(file), ';', CSVWriter.NO_QUOTE_CHARACTER);
+//            csvWrite.writeNext(cursor.getColumnNames());
+            if (cursor.moveToFirst()){
+                do {
+                    //Which column you want to export
+                    String arrStr[] = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                            cursor.getString(3)};
                     csvWrite.writeNext(arrStr);
                 } while (cursor.moveToNext());
             }
