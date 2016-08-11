@@ -1205,6 +1205,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.delete(TABLE_DOCS, ID_DOC + " = " + idProp, null);
         db.delete(TABLE_BENF, ID_BENF + " = " + idProp, null);
         db.delete(TABLE_PLANT, ID_PLANT + " = " + idProp, null);
+        db.delete(TABLE_LATLNG, ID_LATLNG + " = " + idProp, null);
         db.delete(TABLE_OBS, ID_OBS + " = " + idProp, null);
         db.close();
 
@@ -1950,7 +1951,7 @@ public class DBHandler extends SQLiteOpenHelper {
             cursor.moveToLast();
             id = String.valueOf(Integer.parseInt(cursor.getString(0)) + 1);
         }else{
-            id = "100000";
+            id = "200000";
         }
 
         db.close();
@@ -1958,5 +1959,25 @@ public class DBHandler extends SQLiteOpenHelper {
         return id;
 
     }
+    public void removeTrash(){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "SELECT " + ID_LATLNG + " FROM " + TABLE_LATLNG;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                String queryProp = "SELECT " + ID_PROP + " FROM " + TABLE_PROP + " WHERE " + ID_PROP + " = " + cursor.getString(0);
+                Cursor prop = db.rawQuery(queryProp, null);
+                if(prop.getCount()==0){
+                    db.delete(TABLE_LATLNG, ID_LATLNG + " = " + cursor.getString(0), null);
+                }
+            }while(cursor.moveToNext());
+        }
+        db.close();
+
+    }
+
 
 }

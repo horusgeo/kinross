@@ -195,6 +195,8 @@ public class InitialActivity extends AppCompatActivity {
             }
         });
 
+        checkfForInconsistency();
+
 
     }
 
@@ -442,6 +444,10 @@ public class InitialActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    public void checkfForInconsistency(){
+        db.removeTrash();
     }
 
 }
