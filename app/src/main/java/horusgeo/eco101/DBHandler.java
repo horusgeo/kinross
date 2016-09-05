@@ -932,24 +932,36 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    Register register = new Register();
+                    register.set_id_prop(cursor.getString(2));
 
-        if(cursor.moveToFirst()){
-            do{
-                Register register = new Register();
-                register.set_id_prop(cursor.getString(2));
+                    String query = "SELECT " + NOME_PROPRIETARIO + " FROM " + TABLE_PROP + " WHERE " + register.get_id_prop() + " = " + ID_PROP;
 
-                String query = "SELECT " + NOME_PROPRIETARIO +" FROM " + TABLE_PROP + " WHERE " + register.get_id_prop() + " = " + ID_PROP;
-                Cursor cursorProp = db.rawQuery(query, null);
-                cursorProp.moveToFirst();
-                register.set_nome_proprietario(cursorProp.getString(0));
+                    Cursor cursorProp = db.rawQuery(query, null);
+                    try {
+                        cursorProp.moveToFirst();
+                        register.set_nome_proprietario(cursorProp.getString(0));
+                    }finally{
+                        cursorProp.close();
+                    }
 
-                query = "SELECT " + REGISTERSTATUS +" FROM " + TABLE_OBS + " WHERE " + register.get_id_prop() + " = " + ID_OBS;
-                cursorProp = db.rawQuery(query, null);
-                cursorProp.moveToFirst();
-                register.setRegisterStatus(Integer.parseInt(cursorProp.getString(0)));
+                    query = "SELECT " + REGISTERSTATUS + " FROM " + TABLE_OBS + " WHERE " + register.get_id_prop() + " = " + ID_OBS;
+                    cursorProp = db.rawQuery(query, null);
+                    try {
+                        cursorProp.moveToFirst();
+                        register.setRegisterStatus(Integer.parseInt(cursorProp.getString(0)));
+                    }finally{
+                        cursorProp.close();
+                    }
 
-                registerList.add(register);
-            }while(cursor.moveToNext());
+                    registerList.add(register);
+                } while (cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
         db.close();
         return registerList;
@@ -963,116 +975,135 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            register.set_id(Integer.parseInt(cursor.getString(0)));
-            register.set_nome_projeto(cursor.getString(1));
-            register.set_id_prop(cursor.getString(2));
-            register.set_local_visita(cursor.getString(3));
-            register.set_data_visita(cursor.getString(4));
-            register.set_status(cursor.getString(5));
-            cursor.close();
+        try {
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                register.set_id(Integer.parseInt(cursor.getString(0)));
+                register.set_nome_projeto(cursor.getString(1));
+                register.set_id_prop(cursor.getString(2));
+                register.set_local_visita(cursor.getString(3));
+                register.set_data_visita(cursor.getString(4));
+                register.set_status(cursor.getString(5));
+            }
+        }finally{
+                cursor.close();
         }
 
         query = "SELECT * FROM " + TABLE_PROP + " WHERE " + ID_PROP + " = " + idProp;
 
         cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            register.set_nome_proprietario(cursor.getString(1));
-            register.set_nacionalidade_prop(cursor.getString(2));
-            register.set_profissao_prop(cursor.getString(3));
-            register.set_estado_civil(cursor.getString(4));
-            register.set_doc_id_prop(cursor.getString(5));
-            register.set_doc_id_tipo_prop(cursor.getString(6));
-            register.set_cpf_prop(cursor.getString(7));
-            register.set_tel_prop_1(cursor.getString(8));
-            register.set_tel_prop_2(cursor.getString(9));
-            register.set_email_prop(cursor.getString(10));
-            register.set_possProp(cursor.getString(11));
-            cursor.close();
+        try{
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                register.set_nome_proprietario(cursor.getString(1));
+                register.set_nacionalidade_prop(cursor.getString(2));
+                register.set_profissao_prop(cursor.getString(3));
+                register.set_estado_civil(cursor.getString(4));
+                register.set_doc_id_prop(cursor.getString(5));
+                register.set_doc_id_tipo_prop(cursor.getString(6));
+                register.set_cpf_prop(cursor.getString(7));
+                register.set_tel_prop_1(cursor.getString(8));
+                register.set_tel_prop_2(cursor.getString(9));
+                register.set_email_prop(cursor.getString(10));
+                register.set_possProp(cursor.getString(11));
+            }
+        }finally{
+                cursor.close();
         }
 
         query = "SELECT * FROM " + TABLE_CONJ + " WHERE " + ID_CONJ + " = " + idProp;
 
         cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            register.set_nome_conj(cursor.getString(1));
-            register.set_nacionalidade_conj(cursor.getString(2));
-            register.set_profissao_conj(cursor.getString(3));
-            register.set_doc_id_conj(cursor.getString(4));
-            register.set_doc_id_tipo_conj(cursor.getString(5));
-            register.set_cpf_conj(cursor.getString(6));
-            register.set_tel_conj_1(cursor.getString(7));
-            register.set_tel_conj_2(cursor.getString(8));
-            cursor.close();
+        try{
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                register.set_nome_conj(cursor.getString(1));
+                register.set_nacionalidade_conj(cursor.getString(2));
+                register.set_profissao_conj(cursor.getString(3));
+                register.set_doc_id_conj(cursor.getString(4));
+                register.set_doc_id_tipo_conj(cursor.getString(5));
+                register.set_cpf_conj(cursor.getString(6));
+                register.set_tel_conj_1(cursor.getString(7));
+                register.set_tel_conj_2(cursor.getString(8));
+            }
+        }finally{
+            if(cursor != null)
+                cursor.close();
         }
 
         query = "SELECT * FROM " + TABLE_END_RES + " WHERE " + ID_END_RES + " = " + idProp;
 
         cursor = db.rawQuery(query, null);
 
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            register.set_rua_end_res(cursor.getString(1));
-            register.set_n_end_res(cursor.getString(2));
-            register.set_compl_end_res(cursor.getString(3));
-            register.set_bairro_end_res(cursor.getString(4));
-            register.set_cep_end_res(cursor.getString(5));
-            register.set_municipio_end_res(cursor.getString(6));
-            register.set_uf_mun_end_res(cursor.getString(7));
-            register.set_comarca_end_res(cursor.getString(8));
-            register.set_uf_com_end_res(cursor.getString(9));
-            register.set_p_ref_end_res(cursor.getString(10));
-            cursor.close();
+        try{
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                register.set_rua_end_res(cursor.getString(1));
+                register.set_n_end_res(cursor.getString(2));
+                register.set_compl_end_res(cursor.getString(3));
+                register.set_bairro_end_res(cursor.getString(4));
+                register.set_cep_end_res(cursor.getString(5));
+                register.set_municipio_end_res(cursor.getString(6));
+                register.set_uf_mun_end_res(cursor.getString(7));
+                register.set_comarca_end_res(cursor.getString(8));
+                register.set_uf_com_end_res(cursor.getString(9));
+                register.set_p_ref_end_res(cursor.getString(10));
+            }
+        }finally{
+                cursor.close();
         }
 
         query = "SELECT * FROM " + TABLE_END_OBJ + " WHERE " + ID_END_OBJ + " = " + idProp;
 
         cursor = db.rawQuery(query, null);
 
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            register.set_rua_end_obj(cursor.getString(1));
-            register.set_n_end_obj(cursor.getString(2));
-            register.set_compl_end_obj(cursor.getString(3));
-            register.set_bairro_end_obj(cursor.getString(4));
-            register.set_cep_end_obj(cursor.getString(5));
-            register.set_p_ref_end_obj(cursor.getString(6));
-            cursor.close();
+        try{
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                register.set_rua_end_obj(cursor.getString(1));
+                register.set_n_end_obj(cursor.getString(2));
+                register.set_compl_end_obj(cursor.getString(3));
+                register.set_bairro_end_obj(cursor.getString(4));
+                register.set_cep_end_obj(cursor.getString(5));
+                register.set_p_ref_end_obj(cursor.getString(6));
+            }
+        }finally{
+                cursor.close();
         }
 
         query = "SELECT * FROM " + TABLE_ID_PROP + " WHERE " + ID_ID_PROP + " = " + idProp;
 
         cursor = db.rawQuery(query, null);
 
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            register.set_zoneamento(cursor.getString(1));
-            register.set_topografia(cursor.getString(2));
-            register.set_infraredeel(cursor.getString(3));
-            register.set_infrasintel(cursor.getString(4));
-            register.set_infraabasagua(cursor.getString(5));
-            register.set_manacial(cursor.getString(6));
-            register.set_obs_id_prop(cursor.getString(7));
-            cursor.close();
+        try{
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                register.set_zoneamento(cursor.getString(1));
+                register.set_topografia(cursor.getString(2));
+                register.set_infraredeel(cursor.getString(3));
+                register.set_infrasintel(cursor.getString(4));
+                register.set_infraabasagua(cursor.getString(5));
+                register.set_manacial(cursor.getString(6));
+                register.set_obs_id_prop(cursor.getString(7));
+            }
+        }finally{
+                cursor.close();
         }
 
         query = "SELECT * FROM " + TABLE_DESC + " WHERE " + ID_DESC + " = " + idProp;
 
         cursor = db.rawQuery(query, null);
 
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            register.set_horario_chegada(cursor.getString(1));
-            register.set_horario_saida(cursor.getString(2));
-            register.set_descricao_visita(cursor.getString(3));
-            register.set_responsavel(cursor.getString(4));
-            cursor.close();
+        try {
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                register.set_horario_chegada(cursor.getString(1));
+                register.set_horario_saida(cursor.getString(2));
+                register.set_descricao_visita(cursor.getString(3));
+                register.set_responsavel(cursor.getString(4));
+            }
+        }finally{
+                cursor.close();
         }
 
         query = "SELECT * FROM " + TABLE_LATLNG + " WHERE " + ID_LATLNG + " = " + idProp;
@@ -1080,14 +1111,19 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor = db.rawQuery(query, null);
         ArrayList<Double> lat = new ArrayList<Double>();
         ArrayList<Double> lng = new ArrayList<Double>();
-        if (cursor.moveToFirst()) {
-            int count = 0;
-            do {
-                lat.add(Double.parseDouble(cursor.getString(1)));
-                lng.add(Double.valueOf(cursor.getString(2)));
-                register.setTipoLatLng(cursor.getString(3));
-                count++;
-            } while (cursor.moveToNext());
+
+        try{
+            if (cursor.moveToFirst()) {
+                int count = 0;
+                do {
+                    lat.add(Double.parseDouble(cursor.getString(1)));
+                    lng.add(Double.valueOf(cursor.getString(2)));
+                    register.setTipoLatLng(cursor.getString(3));
+                    count++;
+                } while (cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
 
         register.setLat(lat);
@@ -1096,14 +1132,15 @@ public class DBHandler extends SQLiteOpenHelper {
         query = "SELECT * FROM " + TABLE_OBS + " WHERE " + ID_OBS + " = " + idProp;
 
         cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            register.setObservacao(cursor.getString(1));
-            register.setRegisterStatus(Integer.parseInt(cursor.getString(2)));
-            cursor.close();
+        try{
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                register.setObservacao(cursor.getString(1));
+                register.setRegisterStatus(Integer.parseInt(cursor.getString(2)));
+            }
+        }finally{
+                cursor.close();
         }
-
         db.close();
 
         return register;
@@ -1118,19 +1155,21 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_BENF + " WHERE " + ID_BENF + " = " + idProp;
 
         Cursor cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                Benfeitoria benf = new Benfeitoria();
-                benf.setTipo(cursor.getString(1));
-                benf.setIdade(cursor.getString(2));
-                benf.setConservacao(cursor.getString(3));
-                benf.setIdBenf(cursor.getString(4));
-                benf.setIdProp(cursor.getString(5));
-                list.add(benf);
-            } while (cursor.moveToNext());
+        try{
+            if (cursor.moveToFirst()) {
+                do {
+                    Benfeitoria benf = new Benfeitoria();
+                    benf.setTipo(cursor.getString(1));
+                    benf.setIdade(cursor.getString(2));
+                    benf.setConservacao(cursor.getString(3));
+                    benf.setIdBenf(cursor.getString(4));
+                    benf.setIdProp(cursor.getString(5));
+                    list.add(benf);
+                } while (cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
-
         db.close();
         return list;
     }
@@ -1144,19 +1183,21 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_PLANT + " WHERE " + ID_PLANT + " = " + idProp;
 
         Cursor cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                Benfeitoria plant = new Benfeitoria();
-                plant.setTipo(cursor.getString(1));
-                plant.setIdade(cursor.getString(2));
-                plant.setConservacao(cursor.getString(3));
-                plant.setIdBenf(cursor.getString(4));
-                plant.setIdProp(cursor.getString(5));
-                list.add(plant);
-            } while (cursor.moveToNext());
+        try{
+            if (cursor.moveToFirst()) {
+                do {
+                    Benfeitoria plant = new Benfeitoria();
+                    plant.setTipo(cursor.getString(1));
+                    plant.setIdade(cursor.getString(2));
+                    plant.setConservacao(cursor.getString(3));
+                    plant.setIdBenf(cursor.getString(4));
+                    plant.setIdProp(cursor.getString(5));
+                    list.add(plant);
+                } while (cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
-
         db.close();
         return list;
     }
@@ -1170,18 +1211,20 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_DOCS + " WHERE " + ID_DOC + " = " + idProp;
 
         Cursor cursor = db.rawQuery(query, null);
-
-        if(cursor.moveToFirst()){
-            do{
-                Docs docs = new Docs();
-                docs.setPath(cursor.getString(1));
-                docs.setType(cursor.getString(2));
-                docs.setName(cursor.getString(3));
-                docs.setIdProp(cursor.getString(4));
-                list.add(docs);
-            }while(cursor.moveToNext());
+        try{
+            if(cursor.moveToFirst()){
+                do{
+                    Docs docs = new Docs();
+                    docs.setPath(cursor.getString(1));
+                    docs.setType(cursor.getString(2));
+                    docs.setName(cursor.getString(3));
+                    docs.setIdProp(cursor.getString(4));
+                    list.add(docs);
+                }while(cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
-
         db.close();
         return list;
 
@@ -1218,8 +1261,12 @@ public class DBHandler extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_REGISTERS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        int count = cursor.getCount();
-        cursor.close();
+        int count = -1;
+        try {
+            count = cursor.getCount();
+        }finally {
+            cursor.close();
+        }
         db.close();
         if(count == 0)
             return true;
@@ -1231,8 +1278,12 @@ public class DBHandler extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_REGISTERS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        int count = cursor.getCount();
-        cursor.close();
+        int count = -1;
+        try {
+            count = cursor.getCount();
+        }finally {
+            cursor.close();
+        }
 
         // return count
         db.close();
@@ -1243,8 +1294,12 @@ public class DBHandler extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_BENF;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        int count = cursor.getCount();
-        cursor.close();
+        int count = -1;
+        try {
+            count = cursor.getCount();
+        }finally {
+            cursor.close();
+        }
 
         // return count
         db.close();
@@ -1343,9 +1398,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1374,9 +1431,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1404,9 +1463,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1434,9 +1495,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1463,9 +1526,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1492,9 +1557,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1520,9 +1587,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1548,9 +1617,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1576,9 +1647,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1604,9 +1677,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1632,9 +1707,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1660,9 +1737,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 } while (cursor.moveToNext());
             }
             csvWrite.close();
-            cursor.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally{
+            cursor.close();
+            db.close();
         }
         return file;
     }
@@ -1675,13 +1754,15 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_DOCS;
 
         Cursor cursor = db.rawQuery(query, null);
-
-        if(cursor.moveToFirst()){
-            do{
-                list.add(cursor.getString(1));
-            }while(cursor.moveToNext());
+        try{
+            if(cursor.moveToFirst()){
+                do{
+                    list.add(cursor.getString(1));
+                }while(cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
-
         db.close();
         return list;
 
@@ -1695,18 +1776,20 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_DOCS + " WHERE " + ID_DOC + " = " + idProp;
 
         Cursor cursor = db.rawQuery(query, null);
+        try{
+            if (cursor.moveToFirst()) {
+                do {
+                    Docs doc = new Docs();
+                    doc.setPath(cursor.getString(1));
+                    doc.setType(cursor.getString(2));
+                    doc.setName(cursor.getString(3));
 
-        if (cursor.moveToFirst()) {
-            do {
-                Docs doc = new Docs();
-                doc.setPath(cursor.getString(1));
-                doc.setType(cursor.getString(2));
-                doc.setName(cursor.getString(3));
-
-                list.add(doc);
-            } while (cursor.moveToNext());
+                    list.add(doc);
+                } while (cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
-
         db.close();
         return list;
     }
@@ -1714,17 +1797,23 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Boolean checkIfPropExists(String id){
         SQLiteDatabase db = this.getWritableDatabase();
-
+        int flag = 0;
         if(id!=null) {
             String query = "SELECT * FROM " + TABLE_REGISTERS + " WHERE " + ID_PROPRIETARIO + " = " + id;
 
             Cursor cursor = db.rawQuery(query, null);
+            try{
+                if (cursor.getCount() > 0)
+                    flag = 1;
 
-            if (cursor.getCount() > 0)
-                return true;
+            }finally {
+                cursor.close();
+            }
         }
-
-        return false;
+        if(flag==1)
+            return true;
+        else
+            return false;
     }
 
 //    DB removes
@@ -1769,11 +1858,14 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT " + LAT + " FROM " + TABLE_LATLNG;
 
         Cursor cursor = db.rawQuery(query, null);
-
-        if(cursor.moveToFirst()){
-            do{
-                lats.add(Double.parseDouble(cursor.getString(0)));
-            }while(cursor.moveToNext());
+        try{
+            if(cursor.moveToFirst()){
+                do{
+                    lats.add(Double.parseDouble(cursor.getString(0)));
+                }while(cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
         db.close();
         return lats;
@@ -1787,11 +1879,14 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT " + LAT + " FROM " + TABLE_LATLNG + " WHERE " + ID_LATLNG + " = " + idProp;
 
         Cursor cursor = db.rawQuery(query, null);
-
-        if(cursor.moveToFirst()){
-            do{
-                lats.add(Double.parseDouble(cursor.getString(0)));
-            }while(cursor.moveToNext());
+        try{
+            if(cursor.moveToFirst()){
+                do{
+                    lats.add(Double.parseDouble(cursor.getString(0)));
+                }while(cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
         db.close();
         return lats;
@@ -1805,11 +1900,14 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT " + LNG + " FROM " + TABLE_LATLNG;
 
         Cursor cursor = db.rawQuery(query, null);
-
-        if(cursor.moveToFirst()){
-            do{
-                lngs.add(Double.parseDouble(cursor.getString(0)));
-            }while(cursor.moveToNext());
+        try{
+            if(cursor.moveToFirst()){
+                do{
+                    lngs.add(Double.parseDouble(cursor.getString(0)));
+                }while(cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
         db.close();
         return lngs;
@@ -1823,11 +1921,14 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT " + LNG + " FROM " + TABLE_LATLNG + " WHERE " + ID_LATLNG + " = " + idProp;
 
         Cursor cursor = db.rawQuery(query, null);
-
-        if(cursor.moveToFirst()){
-            do{
-                lngs.add(Double.parseDouble(cursor.getString(0)));
-            }while(cursor.moveToNext());
+        try{
+            if(cursor.moveToFirst()){
+                do{
+                    lngs.add(Double.parseDouble(cursor.getString(0)));
+                }while(cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
         db.close();
         return lngs;
@@ -1843,12 +1944,15 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         int count = 0;
-
-        if(cursor.moveToFirst()){
-            do{
-                ids.add(cursor.getString(0));
-                count++;
-            }while(cursor.moveToNext());
+        try{
+            if(cursor.moveToFirst()){
+                do{
+                    ids.add(cursor.getString(0));
+                    count++;
+                }while(cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
         db.close();
         return ids;
@@ -1864,12 +1968,15 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         int count = 0;
-
-        if(cursor.moveToFirst()){
-            do{
-                texts.add(cursor.getString(0));
-                count++;
-            }while(cursor.moveToNext());
+        try{
+            if(cursor.moveToFirst()){
+                do{
+                    texts.add(cursor.getString(0));
+                    count++;
+                }while(cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
         db.close();
         return texts;
@@ -1880,29 +1987,40 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String query = "SELECT " + STATUS + " FROM " + TABLE_REGISTERS + " WHERE " + ID_PROPRIETARIO + " = " + id;
-
+        String flag;
         Cursor cursor = db.rawQuery(query, null);
+        try {
+            cursor.moveToFirst();
 
-        cursor.moveToFirst();
+            if (cursor.getString(0) == null)
+                flag = "Indefinido";
+            else
+                flag = cursor.getString(0);
+        }finally{
+            cursor.close();
+        }
 
-        if(cursor.getString(0) == null)
-            return "Indefinido";
-
-        return cursor.getString(0);
+        return flag;
 
     }
 
     public Boolean hasLatLng(String idProp){
 
         SQLiteDatabase db = this.getWritableDatabase();
-
+        int flag=0;
         String query = "SELECT * FROM " + TABLE_LATLNG + " WHERE " + ID_LATLNG + " = " + idProp;
         Cursor cursor = db.rawQuery(query, null);
+        try {
+            if (cursor.getCount() > 0)
+                flag = 1;
+        }finally{
+            cursor.close();
 
-        if (cursor.getCount() > 0)
+        }
+        if(flag==1)
             return true;
-
-        return false;
+        else
+            return false;
 
     }
 
@@ -1928,10 +2046,13 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_USER;
 
         Cursor cursor = db.rawQuery(query, null);
-
-        cursor.moveToFirst();
-        String user = cursor.getString(1);
-
+        String user;
+        try {
+            cursor.moveToFirst();
+            user = cursor.getString(1);
+        }finally {
+            cursor.close();
+        }
         db.close();
         return user;
 
@@ -1946,12 +2067,15 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         String id = "0";
-
-        if(cursor.getCount()>0) {
-            cursor.moveToLast();
-            id = String.valueOf(Integer.parseInt(cursor.getString(0)) + 1);
-        }else{
-            id = "200000";
+        try {
+            if (cursor.getCount() > 0) {
+                cursor.moveToLast();
+                id = String.valueOf(Integer.parseInt(cursor.getString(0)) + 1);
+            } else {
+                id = "100000";
+            }
+        }finally{
+                cursor.close();
         }
 
         db.close();
@@ -1965,15 +2089,22 @@ public class DBHandler extends SQLiteOpenHelper {
         String query = "SELECT " + ID_LATLNG + " FROM " + TABLE_LATLNG;
 
         Cursor cursor = db.rawQuery(query, null);
-
-        if(cursor.moveToFirst()){
-            do{
-                String queryProp = "SELECT " + ID_PROP + " FROM " + TABLE_PROP + " WHERE " + ID_PROP + " = " + cursor.getString(0);
-                Cursor prop = db.rawQuery(queryProp, null);
-                if(prop.getCount()==0){
-                    db.delete(TABLE_LATLNG, ID_LATLNG + " = " + cursor.getString(0), null);
-                }
-            }while(cursor.moveToNext());
+        try{
+            if(cursor.moveToFirst()){
+                do{
+                    String queryProp = "SELECT " + ID_PROP + " FROM " + TABLE_PROP + " WHERE " + ID_PROP + " = " + cursor.getString(0);
+                    Cursor prop = db.rawQuery(queryProp, null);
+                    try {
+                        if (prop.getCount() == 0) {
+                            db.delete(TABLE_LATLNG, ID_LATLNG + " = " + cursor.getString(0), null);
+                        }
+                    }finally{
+                        prop.close();
+                    }
+                }while(cursor.moveToNext());
+            }
+        }finally{
+                cursor.close();
         }
         db.close();
 
