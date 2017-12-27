@@ -1,4 +1,4 @@
-package horusgeo.eco101;
+package horusgeo.kinross;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

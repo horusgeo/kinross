@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "horusgeo.eco101"
+        applicationId "horusgeo.kinross"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1

@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Projeto:  "
+                android:text="Projeto: "
                 android:id="@+id/textView20" />
 
             <EditText
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/projetoText"
                 android:layout_weight="1"
-                android:text="Eco 101"
+                android:text="Kinross"
                 android:inputType="textCapWords|text"
                 android:imeOptions="actionNext"/>
         </LinearLayout>

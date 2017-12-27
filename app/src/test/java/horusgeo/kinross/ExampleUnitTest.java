@@ -1,4 +1,4 @@
-package horusgeo.eco101;
+package horusgeo.kinross;
 
 import org.junit.Test;
 

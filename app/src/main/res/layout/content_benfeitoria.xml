@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="horusgeo.eco101.BenfeitoriaActivity"
+    tools:context="horusgeo.kinross.BenfeitoriaActivity"
     tools:showIn="@layout/activity_benfeitoria"
     android:fillViewport="false">
 

@@ -5,7 +5,7 @@
     android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="horusgeo.eco101.CreatePropCadastroActivity"
+    tools:context="horusgeo.kinross.CreatePropCadastroActivity"
     tools:showIn="@layout/activity_create_prop_cadastro">
 
 

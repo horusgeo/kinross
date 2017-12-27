@@ -1,7 +1,7 @@
 myMap = L.map('mapDiv',{
                 minZoom: 9,
                 maxZoom: 21})
-                .setView([-19.315, -43.636], 15);
+                .setView([-19.6807, -46.9050], 15);
 //myMap = L.map('mapDiv',{});
 
 
