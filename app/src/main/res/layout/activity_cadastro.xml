@@ -11,7 +11,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="96dp"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -22,13 +22,6 @@
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:contentDescription="Home"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/simbolo"/>
 
         </android.support.v7.widget.Toolbar>
 
@@ -66,13 +59,13 @@
         app:backgroundTint="@android:color/holo_blue_dark" />
 
     <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab_docs"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="right|top"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--android:src="@mipmap/ic_camera_alt_white_24dp"-->
-        <!--app:backgroundTint="@android:color/holo_blue_dark" />-->
+    <!--android:id="@+id/fab_docs"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="right|top"-->
+    <!--android:layout_margin="@dimen/fab_margin"-->
+    <!--android:src="@mipmap/ic_camera_alt_white_24dp"-->
+    <!--app:backgroundTint="@android:color/holo_blue_dark" />-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_ok"
