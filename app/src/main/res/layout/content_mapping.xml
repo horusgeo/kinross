@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         fab:fab_colorNormal="@color/transparente"
-        fab:fab_title="Desenhar Propriedade"
+        fab:fab_title="Desenhar"
         fab:fab_colorPressed="@color/transparente"
         fab:fab_icon="@mipmap/ic_my_location_black_48dp"
         android:layout_alignParentTop="true"
@@ -175,7 +175,7 @@
             fab:fab_colorNormal="@color/green"
             fab:fab_colorPressed="@color/green_pressed"
             fab:fab_icon="@android:drawable/ic_dialog_map"
-            fab:fab_title="Desenhar Propriedade" />
+            fab:fab_title="Desenhar" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/actionPin"

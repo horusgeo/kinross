@@ -1,7 +1,7 @@
 myMap = L.map('mapDiv',{
-                minZoom: 9,
-                maxZoom: 21})
-                .setView([-19.6807, -46.9050], 15);
+                minZoom: 10,
+                maxZoom: 22})
+                .setView([-17.1469, -46.8544], 14);
 //myMap = L.map('mapDiv',{});
 
 
@@ -68,8 +68,8 @@ function loadImg(imgPath){
 
 
     var options = {
-                minZoom: 9,
-                maxZoom: 21,
+                minZoom: 10,
+                maxZoom: 22,
                 opacity: 1.0,
                 tms: false
     };
